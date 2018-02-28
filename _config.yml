@@ -77,7 +77,10 @@ theme: next
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type:
+  type: git
+  repo: https://github.com/NoPPT/noppt.github.io.git
+  branch: master
+  message:
 
 algolia:
   applicationID: '25UTBQLQUF'

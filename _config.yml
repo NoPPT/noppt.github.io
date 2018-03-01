@@ -12,7 +12,7 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://noppt.github.io
+url: https://0x0803.com
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -85,5 +85,5 @@ deploy:
 algolia:
   applicationID: '25UTBQLQUF'
   indexName: 'blog'
-  apiKey: '3ab5f2d73e3d76407cf2ff890023a7ec'
+  apiKey: 'al_token'
   chunkSize: 5000

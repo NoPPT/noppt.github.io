@@ -10,9 +10,3 @@ categories: React Native
 
 
 <!-- more -->
-
-{% note default %} 
-本文作者： zhuang
-本文链接： http://0x0803.com/2018/02/28/react-native-code-push/
-版权声明： 本博客所有文章除特别声明外，均采用 CC BY-NC-SA 3.0 CN 许可协议。转载请注明出处！
-{% endnote %}

@@ -597,9 +597,9 @@ algolia_search:
   hits:
     per_page: 10
   labels:
-    input_placeholder: Search for Posts
-    hits_empty: "We didn't find any results for the search: ${query}"
-    hits_stats: "${hits} results found in ${time} ms"
+    input_placeholder: 搜索博客
+    hits_empty: "没有找到匹配项: ${query}"
+    hits_stats: "${time} ms 内找到 ${hits} 符合条件的内容"
 
 # Local search
 # Dependencies: https://github.com/flashlab/hexo-generator-search

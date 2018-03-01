@@ -237,14 +237,14 @@ post_wordcount:
 
 # Wechat Subscriber
 wechat_subscriber:
-  enabled: true
+  enabled: false
   qcode: /uploads/wx_public_code.jpg
   description: 欢迎您扫一扫上面的微信公众号，订阅我的博客！
 
 # Reward
-reward_comment: 
-wechatpay: /uploads/wepay.jpg
-alipay: /uploads/alipay.jpg
+# reward_comment: 
+# wechatpay: /uploads/wepay.jpg
+# alipay: /uploads/alipay.jpg
 #bitcoin: /images/bitcoin.png
 
 # Declare license on posts

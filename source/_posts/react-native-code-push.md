@@ -157,7 +157,7 @@ eg:
 <string>aE8BkGLYt9TIThA1gobiJjzfcflZ4ksvOXqog</string>
 ```
 
-### 配置启动路径 jsCodeLocation
+#### 配置启动路径 jsCodeLocation
 
 ```
 NSURL *jsCodeLocation = [CodePush bundleURL];

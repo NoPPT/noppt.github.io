@@ -3,7 +3,6 @@ title: Markdown 中表格使用及常见问题
 date: 2018-03-04 11:58:15
 tags:
     - Markdown
-    - table
 categories: Markdown
 ---
 

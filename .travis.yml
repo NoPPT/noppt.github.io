@@ -27,8 +27,8 @@ install:
 script:
   - hexo clean
   - hexo generate
-  - export HEXO_ALGOLIA_INDEXING_KEY=3ab5f2d73e3d76407cf2ff890023a7ec
-  - hexo algolia
+  # - export HEXO_ALGOLIA_INDEXING_KEY=3ab5f2d73e3d76407cf2ff890023a7ec
+  # - hexo algolia
 
 # 设置git提交名，邮箱；替换真实token到_config.yml文件，最后depoy部署
 after_script:

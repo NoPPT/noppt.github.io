@@ -82,8 +82,14 @@ deploy:
   branch: master
   message:
 
-algolia:
-  applicationID: '25UTBQLQUF'
-  indexName: 'blog'
-  apiKey: '3ab5f2d73e3d76407cf2ff890023a7ec'
-  chunkSize: 5000
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
+
+# algolia:
+#   applicationID: '25UTBQLQUF'
+#   indexName: 'blog'
+#   apiKey: '3ab5f2d73e3d76407cf2ff890023a7ec'
+#   chunkSize: 5000

@@ -12,7 +12,7 @@ categories: 其它
 
 ## 创建项目的 `package.json` 文件
 
-### 通过命令行创建`package.json`文件
+### 通过命令行创建 `package.json` 文件
 
 ```shell
 # 切换到项目目录
@@ -59,7 +59,7 @@ Is this ok? (yes)
 #此时目录中就有了package.json文件了
 ```
 
-### 自己创建`package.json`文件，并修改内容
+### 自己创建 `package.json` 文件，并修改内容
 
 ```json
 {
@@ -127,7 +127,7 @@ $ npm publish
 
 ## 查看项目
 
-可以在`https://npmjs.com/package/<package>`查看项目是否已经添加到 `npm` 服务器。
+可以在 `https://npmjs.com/package/<package>` 查看项目是否已经添加到 `npm` 服务器。
 
 ## 相关
 

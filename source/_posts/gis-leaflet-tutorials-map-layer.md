@@ -169,11 +169,11 @@ openPopup(<Popup> popup) | this | 打开 popup，并关闭其他 popup
 closePopup(<Popup> popup?) | this | 关闭 popup
 setView(<LatLng> center, <Number> zoom, <Zoom/pan options> options?) | this | 设置地图属性
 setZoom(<Number> zoom, <Zoom/pan options> options) | this | 设置地图缩放级别
-locate(<Locate options> options?) | this | 使用 Geolocation API 获取用户位置信息，成功时触发“locationfound“事件，失败触发“locationerror”事件。在现代浏览器（Chrome 50及更新版本）如果网站不是 `https` 则会获取失败。
+locate(<Locate options> options?) | this | 使用 Geolocation API 获取用户位置信息，成功时触发“locationfound“事件，失败触发“locationerror”事件。在现代浏览器（Chrome 50及更新版本）如果网站不是 `https` 则会获取失败。返回坐标为 `WGS84`，可以使用 [coordtransform][17] 转换为需要的坐标。
 remove() | this | 销毁地图并移除所有已监听的事件响应
 
 ``` js
-// 上面的加载图层也可以用这种写法，效果一样。
+  // 上面的加载图层也可以用这种写法，效果一样。
   mymap.addLayer(
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
     maxZoom: 18,
@@ -187,7 +187,7 @@ remove() | this | 销毁地图并移除所有已监听的事件响应
 
 ## 加载其他地图服务
 
-虽然 Leaflet 默认教程中使用的都是 OpenStreetMap，但是在国内使用的话，高德地图、百度地图更加实用，使用 Leaflet 可以很简单的加载高德地图，而[百度地图的瓦片规则和普通的互联网地图的瓦片规则][9]（[相关1][10]，[相关2][11]）不那么一样，需要进行转换后才能正常使用。不过 Leaflet 提供了 [CRS][7] 类定义坐标参考系统，用于将地理点投影到像素（屏幕）坐标和后面（以及用于WMS服务的其他单位的坐标）。配合使用 [Proj4Leaflet][8] 插件可以方便实现自定义 CRS。然后使用 [TileLayer][12] 加载地图图层。
+虽然 Leaflet 默认教程中使用的都是 OpenStreetMap，但是在国内使用的话，高德地图、百度地图更加实用，使用 Leaflet 可以很简单的加载高德地图，而[百度地图的瓦片规则和普通的互联网地图的瓦片规则][9]（[相关1][10]，[相关2][11]）不那么一样，需要进行转换后才能正常使用。不过 Leaflet 提供了 [CRS][7] 类定义坐标参考系统，用于将地理点投影到像素（屏幕）坐标（以及用于WMS服务的其他单位的坐标）。配合使用 [Proj4Leaflet][8] 插件可以方便实现自定义 CRS。然后使用 [TileLayer][12] 加载地图图层。
 
 ### 初始化方法
 
@@ -382,3 +382,4 @@ L.control.layers(baseLayers, overlays).addTo(map);
 [14]: https://blog.csdn.net/u012087400/article/details/53744756?utm_source=itdadao&utm_medium=referral
 [15]: https://blog.csdn.net/u012087400/article/details/52847614?locationNum=13&fps=1
 [16]: https://leafletjs.com/reference-1.0.3.html#control-layers
+[17]: https://github.com/wandergis/coordtransform

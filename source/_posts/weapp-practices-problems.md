@@ -36,7 +36,7 @@ categories: 微信小程序
 
 ### 添加 `overflow` 属性后，iOS 真机 `z-index` 失效
 
-```
+``` css
 .home-search-content {
   display: flex;
   margin-top: 300rpx;

@@ -54,7 +54,7 @@ ak | 填申请的密钥（和小程序不是同一个，控制台添加时选择
 
 实现代码就比较简单了，在 `success` 方法中处理返回数据，按照 `map` 组件 `polyline` 属性需要的参数格式，尽量使 `route` 方法回掉时的数据能够直接使用。
 
-```
+``` js
 route({ ori, des, success = function () { }, fail = function () { } }) {
   // http://lbsyun.baidu.com/index.php?title=webapi/direction-api-v2
   if (!ori || !des) {

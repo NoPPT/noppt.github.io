@@ -37,7 +37,7 @@ map | Map | 必要参数，用于设定相关联地图
 snapKey | dojo/keys | 当alwaysSnap设置为false时，使用此选项来定义关键用户按下以启用捕捉。默认值是dojo.copyKey。dojo.copyKey是一个虚拟键，映射到Windows上的CTRL和mac上的Command键。
 snapPointSymbol | SimpleMarkerSymbol |	定义捕捉位置的符号。默认符号是一个简单的标记符号，具有以下属性：size:15px, color:cyan, style:STYLE_CROSS。
 tolerance | Number | 响应范围，在指定像素的半径的圆内的话则为捕捉到。 默认值是15像素。
-``` 
+``` js
 # 调用地图的 enableSnapping 方法
 var snapManager = map.enableSnapping({
   alwaysSnap: false,
@@ -47,13 +47,13 @@ var snapManager = map.enableSnapping({
 
 ### destroy()
 
-```
+``` js
 snappingManager.destroy();
 ```
 
 ### getSnappingPoint(screenPoint)
 
-```
+``` js
 var deferred = snappingManager.getSnappingPoint(evt.screenPoint);
 
 deferred.then(function(value){
@@ -82,7 +82,7 @@ snapToEdge | Boolean | 默认 true, 对于 polyline or polygon 的边启用捕�
 snapToPoint | Boolean | 默认 true, 对于 point 的点启用捕捉
 snapToVertex | Boolean | 默认 true, 对于 polyline or polygon 的顶点启用捕捉
 
-```
+``` json
 # layerInfos like:
 [
   {
@@ -97,7 +97,7 @@ snapToVertex | Boolean | 默认 true, 对于 polyline or polygon 的顶点启用
 
 ```
 
-```
+``` js
 var layerInfos = [
 
   {layer:results[0].layer}

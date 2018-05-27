@@ -18,7 +18,7 @@ categories: 微信小程序
 
 创建一个自定义组件十分简单，只需要在项目中点击`右键=>新建=>Component`，输入组件名，就会生成相应的 `json`，`wxml`，`wxss`，`js` 文件（为了方便管理，建议把自定义组件相关代码文件放在同一文件夹下面）。我们可以看到在 `json` 文件中已经将 `component` 属性设置为 `true`，代表这组文件为自定义组件。
 
-``` index.json
+``` json index.json
 {
   "component": true,
   "usingComponents": {}
@@ -348,7 +348,7 @@ _changeDataChoose: function (lastIndex, currentIndex) {
 
 主要是使用 `scroll-view` 提供的属性 `scroll-into-view="{{defaultView}}"`，在每次打开 `picker-view` 时设置 `defaultView` 的值为当前选中的行，需要注意的一点是 `scroll-into-view` 对应的值值应为某子元素 id，id 不能以数字开头。
 
-```
+``` js
 show: function () {
   const { showAnimate, bgShowAnimate } = this._initShowAnimate();
   const defaultView = 'into-' + Number(this.data.current);

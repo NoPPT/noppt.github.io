@@ -28,10 +28,10 @@ categories: 微信小程序
 
 接下来，就要考虑下组件需要实现哪些功能。这里要实现的是一个 `PickerView`。设计如下：
 {% gp 4-3 %}
-![](http://p4wb4s2l1.bkt.clouddn.com/image/blog/2/1.png-blog)
-![](http://p4wb4s2l1.bkt.clouddn.com/image/blog/2/2.png-blog)
-![](http://p4wb4s2l1.bkt.clouddn.com/image/blog/2/3.png-blog)
-![](http://p4wb4s2l1.bkt.clouddn.com/image/blog/2/4.png-blog)
+![](http://p4wb4s2l1.bkt.clouddn.com/image/blog/2/1.png_blog)
+![](http://p4wb4s2l1.bkt.clouddn.com/image/blog/2/2.png_blog)
+![](http://p4wb4s2l1.bkt.clouddn.com/image/blog/2/3.png_blog)
+![](http://p4wb4s2l1.bkt.clouddn.com/image/blog/2/4.png_blog)
 {% endgp %}
 
 分析项目的实际需要，首先要有一套基本的样式，但是有些地方的高度不同，我们的项目只需要显示一列数据进行选择，暂时不需要级联的效果。需要单选和多选的功能，而且不同地方使用时对应的 `picker-item`（后面简称`行`） 显示的结构会有所不同。
@@ -494,8 +494,8 @@ Page({
 ```
 使用效果如下：
 
-![](http://p4wb4s2l1.bkt.clouddn.com/image/blog/2/8.gif-gif)
-![](http://p4wb4s2l1.bkt.clouddn.com/image/blog/2/7.gif-gif)
+![](http://p4wb4s2l1.bkt.clouddn.com/image/blog/2/8.gif_gif)
+![](http://p4wb4s2l1.bkt.clouddn.com/image/blog/2/7.gif_gif)
 
 到这里的话，自定义的 `picker-view` 已经基本满足项目的需求了。不过还是有一些细节需要完善。想想也是头疼，在通用性和个性化之间想要平衡好还是很麻烦的。需要花费时间在实际应用中不断完善，最终才能打造出一套符合公司使用的组件库。不过在小公司大部分项目都在不久之后就停掉了，希望小程序这个项目能从 1.0.0 版本开始，坚持下来。
 

@@ -278,7 +278,7 @@ L.TileLayer.BaiduLayer = L.TileLayer.extend({
   options: {
     minZoom: 3,
     maxZoom: 18,
-    subdomains: ["online1", "online2", "online3"],
+    // subdomains: ["online1", "online2", "online3"],
     // attribution:
     //   '&copy; <a href="http://www.ksudi.com">Ksudi</a> contributors',
     style: "normal",

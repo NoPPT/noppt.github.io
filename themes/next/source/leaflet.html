@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" integrity="sha256-bOWY8F32FGGbNDMPAnwWl/Lv9CKen4IQsNZ4RU9rcs0="
+    crossorigin="anonymous" />
+  <link rel="stylesheet" href="./js/leaflet/MarkerCluster.css" />
+  <link rel="stylesheet" href="./js/leaflet/MarkerCluster.Default.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" integrity="sha256-bOWY8F32FGGbNDMPAnwWl/Lv9CKen4IQsNZ4RU9rcs0="
+    crossorigin="anonymous" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.js" integrity="sha256-GXUdrV9FHGDyzoSGD3O+jR3eYZaZZsjbsMvFhK3C0qg="
+    crossorigin="anonymous"></script>
+  <script src="./js/leaflet/Leaflet.Editable.js"></script>
+  <script src="./js/leaflet/leaflet.geometryutil.js"></script>
+  <script src="./js/leaflet/leaflet.snap.js"></script>
+  <script src="./js/leaflet/realword.388.js"></script>
+  <script src="./js/leaflet/leaflet.markercluster.js"></script>
+  <title>Leaflet Demo</title>
+  <style>
+    #mapid {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="mapid"></div>
+</body>
+
+<script>
+  var mymap = L.map('mapid', {
+    editable: true
+  }).setView([31.23037, 121.47370], 15);
+
+  var amapOptions = {
+    subdomains: ['1', '2', '3', '4'],
+    minZoom: 1,
+    maxZoom: 18,
+    attribution: '高德地图',
+  };
+
+  var amap = L.tileLayer('http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', amapOptions);
+
+  var amapwx = L.tileLayer('http://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', amapOptions);
+
+  var amapwxan = L.tileLayer('http://webst0{s}.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}', amapOptions);
+  mymap.addLayer(amap);
+
+  var baseLayers = {
+    "高德地图": amap,
+    "高德卫星": amapwx
+  };
+  var overlays = {
+    "卫星标注": amapwxan
+  };
+  L.control.layers(baseLayers, overlays).addTo(mymap);
+
+  var marker = L.marker([31.23037, 121.47370]).addTo(mymap);
+
+  var icon = L.icon({
+    iconUrl: './images/apple-touch-icon-next.png',
+    iconSize: [60, 60],
+    iconAnchor: [30, 30],
+  });
+  var customMarker = L.marker([31.23037, 121.48370], {
+    icon
+  }).addTo(mymap);
+
+  var latlngs = [
+    [31.23337, 121.47370],
+    [31.23437, 121.47470],
+    [31.23537, 121.47270]
+  ];
+  var polyline = L.polyline(latlngs, { color: 'red' }).addTo(mymap);
+
+
+  var latlngs = [
+    [31.23437, 121.47570],
+    [31.23537, 121.47570],
+    [31.23637, 121.47470],
+    [31.23737, 121.47870]];
+  var polygon = L.polygon(latlngs, { color: 'blue' }).addTo(mymap);
+
+  var circle = L.circle([31.22537, 121.47270], { radius: 400, color: '#2af' }).addTo(mymap);
+
+
+  var popup = L.popup()
+    .setLatLng([31.23037, 121.46370])
+    .setContent('<p>Hello world!<br />This is a nice popup.</p>')
+    .openOn(mymap);
+
+  marker.bindTooltip("my tooltip text").openTooltip();
+
+
+  L.Control.Text = L.Control.extend({
+    options: {
+      position: "topleft"
+    },
+
+    onAdd: function (map) {
+      const that = this;
+      var container = L.DomUtil.create("div", "leaflet-control leaflet-bar"),
+        link = L.DomUtil.create("a", "", container);
+
+      link.href = "#";
+      link.title = that.options.tip;
+      link.innerHTML = that.options.innerHTML;
+      L.DomEvent.on(link, "click", L.DomEvent.stop).on(
+        link,
+        "click",
+        that.options.onclick
+      );
+      return container;
+    }
+  });
+
+  L.control.text = function (options) {
+    return new L.Control.Text(options);
+  };
+
+  mymap.addControl(
+    L.control.text({
+      tip: "添加一个几何图形",
+      innerHTML: "▱",
+      onclick: function () {
+        mymap.editTools.startPolygon();
+      }
+    })
+  );
+
+  var ismarker = false;
+  mymap.addControl(
+    L.control.text({
+      tip: "跳转至点聚合位置",
+      innerHTML: "M",
+      onclick: function () {
+        if (ismarker) {
+          mymap.setView([31.23037, 121.47370], 15)
+        } else {
+          mymap.setView([-37.8210922667, 175.2209316333], 13)
+        }
+        ismarker = !ismarker;
+      }
+    })
+  );
+
+  // 创建 snap 显示的方格，并添加计算的 layer，
+  var snapMarker = L.marker(mymap.getCenter(), {
+    icon: mymap.editTools.createVertexIcon({
+      className: "leaflet-div-icon leaflet-drawing-icon"
+    }),
+    opacity: 1,
+    zIndexOffset: 1000
+  });
+  var snap = new L.Handler.MarkerSnap(mymap);
+  snap.watchMarker(snapMarker);
+  // 如果符合可吸附的规则，则添加辅助标记到地图上，不符合则移除。
+  snapMarker.on("snap", function (e) {
+    snapMarker.addTo(mymap);
+  });
+  snapMarker.on("unsnap", function (e) {
+    snapMarker.remove();
+  });
+  var followMouse = function (e) {
+    snapMarker.setLatLng(e.latlng);
+  };
+  mymap.on("editable:vertex:dragstart", function (e) {
+    snap.watchMarker(e.vertex);
+  });
+  mymap.on("editable:vertex:dragend", function (e) {
+    snap.unwatchMarker(e.vertex);
+  });
+  mymap.on("editable:drawing:start", function () {
+    this.on("mousemove", followMouse);
+  });
+  mymap.on("editable:drawing:end", function (e) {
+    this.off("mousemove", followMouse);
+    snapMarker.remove();
+    snap.addGuideLayer(e.layer);
+    e.layer.disableEdit();
+  });
+  mymap.on("editable:drawing:click", function (e) {
+    //当处于新增状态是触发
+    var latlng = snapMarker.getLatLng();
+    e.latlng.lat = latlng.lat;
+    e.latlng.lng = latlng.lng;
+  });
+
+
+  var markers = L.markerClusterGroup();
+
+  for (var i = 0; i < addressPoints.length; i++) {
+    var a = addressPoints[i];
+    var title = a[2];
+    var marker = L.marker(new L.LatLng(a[0], a[1]), { title: title });
+    marker.bindPopup(title);
+    markers.addLayer(marker);
+  }
+
+  mymap.addLayer(markers);
+
+</script>
+
+</html>

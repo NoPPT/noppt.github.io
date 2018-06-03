@@ -364,7 +364,7 @@ L.control.layers(baseLayers, overlays).addTo(map);
 
 
 
-[0]: http://0x0803.com/2018/05/27/gis-leaflet-tutorials-map/
+[0]: /2018/05/27/gis-leaflet-tutorials-map/
 [1]: https://github.com/Leaflet/Leaflet/releases
 [2]: https://leafletjs.com/download.html
 [3]: https://leafletjs.com/reference-1.0.3.html#map-example

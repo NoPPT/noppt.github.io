@@ -34,12 +34,12 @@ categories: GIS
 
 ### 引用 CSS 文件
 
-在 `<head>` 标签里添加以下代码：
+从 [Leaflet 免费的 CDN ][18]获取想要使用的版本的文件地址，然后在 `<head>` 标签里添加以下代码：
 
 ``` html
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"
-   integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
-   crossorigin=""/>
+// integrity 和 crossorigin 如果不需要验证文件完整性也可以不添加
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" integrity="sha256-bOWY8F32FGGbNDMPAnwWl/Lv9CKen4IQsNZ4RU9rcs0="
+    crossorigin="anonymous" />
 ```
 
 或者[下载源码文件][1]后添加引用，如果你使用 `npm` 包管理可以[参考这里][2]
@@ -53,9 +53,8 @@ categories: GIS
 加载 CSS 之后添加 JavaScript 文件，记得 JS 文件的引用要放在 CSS 引用下面。
 
 ``` html
- <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
-   integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
-   crossorigin=""></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.js" integrity="sha256-GXUdrV9FHGDyzoSGD3O+jR3eYZaZZsjbsMvFhK3C0qg="
+    crossorigin="anonymous"></script>
 ```
 
 或者引用源文件
@@ -383,3 +382,4 @@ L.control.layers(baseLayers, overlays).addTo(map);
 [15]: https://blog.csdn.net/u012087400/article/details/52847614?locationNum=13&fps=1
 [16]: https://leafletjs.com/reference-1.0.3.html#control-layers
 [17]: https://github.com/wandergis/coordtransform
+[18]: https://cdnjs.com/libraries/leaflet

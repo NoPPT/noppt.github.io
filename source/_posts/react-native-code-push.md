@@ -15,7 +15,7 @@ categories: React Native
 
 ### 依赖环境
 
-``` json
+```json
 Python 2.7.10
 node v6.9.1
 npm 4.0.2
@@ -24,13 +24,13 @@ mysql 5.7.16
 ```
 
 ### 下载源码文件
-``` shell
+```shell
 $ git clone https://github.com/lisong/code-push-server.git
 ```
 
 ### 修改配置信息 ./config/config.js
 
-``` json
+```json
 // 修改数据库连接信息
 db: {
     username: process.env.RDS_USERNAME || "root", //db帐号
@@ -79,7 +79,7 @@ redis: {
 
 ### 安装
 
-``` shell
+```shell
 $ cd code-push-server
 $ npm install
 $ ./bin/db init #初始化mysql数据库
@@ -95,13 +95,13 @@ eg: ./bin/db init --dbname codepush --dbhost localhost --dbuser root --dbpasswor
 #### 直接启动服务
 
 直接启动服务可以及时查看日志，但进程容易 crash，服务器地址为 http://127.0.0.1:3000/ 如果本地开发建议使用此方法，正式环境使用 pm2 启动项目
-``` shell
+```shell
 $ ./bin/www #启动服务
 ```
 
 #### 使用 [pm2][3] 管理
 
-``` json
+```json
 // 1. 修改 ./docs/process.json 文件
 {
     "apps" : [
@@ -136,7 +136,7 @@ $ pm2 show <id> 查看某个服务的信息
 
 ### 安装 [react-native-code-push][2]
 
-``` shell
+```shell
 $ npm install react-native-code-push@latest --save
 ```
 
@@ -144,7 +144,7 @@ $ npm install react-native-code-push@latest --save
 
 #### 修改 plist 配置文件
 
-``` xml
+```xml
 key: CodePushServerURL value: CodePush 服务地址
 key: CodePushDeploymentKey value: CodePushKey
 
@@ -157,7 +157,7 @@ eg:
 
 #### 配置启动路径 jsCodeLocation
 
-``` objective-c
+```objective-c
 NSURL *jsCodeLocation = [CodePush bundleURL];
 RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                         moduleName:moduleName
@@ -167,7 +167,7 @@ RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
 
 ### Android
 
-``` java
+```java
 private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
 
 	@Override
@@ -202,7 +202,7 @@ private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
 
 ### JS
 
-``` js
+```js
 import CodePush from "react-native-code-push";
 
 ...
@@ -232,14 +232,14 @@ componentDidMount() {
 
 ### 安装 code-push-cli
 
-``` shell
+```shell
 $ npm install -g code-push-cli
 // 修改密码命令行
 $ curl -X PATCH -H "Authorization: Bearer mJxbwjODns2IlrWRvrOGLIDWbHut4ksvOXqog" -H "Accept: application/json" -H "Content-Type:application/json" -d '{"oldPassword":"123456","newPassword":"654321"}' http://192.168.1.3:3000/users/password
 ```
 ### 登录服务器
 
-``` shell
+```shell
 // 登录，使用命令行后会打开网页，服务器地址请填写实际地址，登录后获取 token ，然后把获取到的 token 值复制到命令行中。
 $ code-push login http://192.168.1.3:3000
 A browser is being launched to authenticate your account. Follow the instructions it displays to complete your login.
@@ -252,7 +252,7 @@ Successfully logged-in. Your session file was written to /Users/oeffect/.code-pu
 
 ### 常用命令行
 
-``` shell
+```shell
 // 备注:OS是安卓就是 Android
 $ code-push app add ksd_courier-ios ios react-native
  

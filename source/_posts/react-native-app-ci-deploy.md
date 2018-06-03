@@ -140,7 +140,7 @@ Boolean Parameter | CODE_PUSH_MAN | false | 是否强制更新
 ![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/xcodebuild_shell.png_blog)
 
 根据具体情况执行一些初始化命令
-``` shell
+```shell
 # codeinit.sh
 # 这个是通用的步骤,所以写在一个单据文件里面，方便执行
 yarn cache clean
@@ -150,7 +150,7 @@ git status
 git checkout .
 git status
 ```
-``` shell
+```shell
 # codepush.sh
 
 # 根据参数判断要热更新的环境，这里主要是写一个判断然后执行相应的命令行就好了
@@ -222,7 +222,7 @@ Boolean Parameter | JENKINS_BUILD | true | 是否为Jenkins打包
 ### 构建
 
 #### Execute shell
-``` shell
+```shell
 sh codeinit.sh
 ```
 
@@ -235,7 +235,7 @@ sh codeinit.sh
 ![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/android_build.png_blog)
 
 #### Execute shell
-``` shell
+```shell
 # build_android.sh
 # 主要是把安装包上传到内网发布平台，可以根据情况上传至蒲公英或者 fir 等平台
 if [[ ${PRODUCT_TYPE} = 'Ksd' ]]; then
@@ -293,10 +293,10 @@ String Parameter | TEAM_ID | | 证书对应的TeamID（图三-组织单位）
 
 ![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/xcodebuild_shell.png_blog)
 
-``` shell
+```shell
 sh codeinit.sh
 ```
-``` shell
+```shell
 # build_ios.sh
 echo "=================app info================="
 PLIST_PATH="${PROJECT_PATH}/${APP_NAME}/Info.plist"
@@ -446,7 +446,7 @@ Command /usr/bin/codesign failed with exit code 1
 ### 邮件通知模板
 
 这里主要使用 HTML 写邮件模板，需要根据不同 Job 定义不同的模板，这里提供一个参考。
-``` html
+```html
 <!DOCTYPE html>
 <html>
 <head>

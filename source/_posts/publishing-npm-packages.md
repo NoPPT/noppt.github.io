@@ -112,7 +112,7 @@ Is this ok? (yes)
 
 ## 登录账户 `npm login`
 
-``` shell
+```shell
 $ npm login
 Username: accountName
 Password:

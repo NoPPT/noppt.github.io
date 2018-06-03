@@ -17,7 +17,7 @@ categories: GIS
 
 ### 创建 HTML 页面
 
-``` html
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,7 +36,7 @@ categories: GIS
 
 从 [Leaflet 免费的 CDN ][18]获取想要使用的版本的文件地址，然后在 `<head>` 标签里添加以下代码：
 
-``` html
+```html
 // integrity 和 crossorigin 如果不需要验证文件完整性也可以不添加
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" integrity="sha256-bOWY8F32FGGbNDMPAnwWl/Lv9CKen4IQsNZ4RU9rcs0="
     crossorigin="anonymous" />
@@ -44,7 +44,7 @@ categories: GIS
 
 或者[下载源码文件][1]后添加引用，如果你使用 `npm` 包管理可以[参考这里][2]
 
-``` html
+```html
 <link rel="stylesheet" href="/path/to/leaflet.css" />
 ```
 
@@ -52,14 +52,14 @@ categories: GIS
 
 加载 CSS 之后添加 JavaScript 文件，记得 JS 文件的引用要放在 CSS 引用下面。
 
-``` html
+```html
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.js" integrity="sha256-GXUdrV9FHGDyzoSGD3O+jR3eYZaZZsjbsMvFhK3C0qg="
     crossorigin="anonymous"></script>
 ```
 
 或者引用源文件
 
-``` html
+```html
 <script src="/path/to/leaflet.js"></script>
 ```
 
@@ -67,7 +67,7 @@ categories: GIS
 
 在 `<body>` 标签里面添加 `<div>`，并设置 `id` 属性：
 
-``` html
+```html
 <div id="mapid"></div>
 ```
 
@@ -75,7 +75,7 @@ categories: GIS
 
 可以根据实际情况设置地图的宽高。
 
-``` css
+```css
 #mapid {
   position: absolute;
   top: 0;
@@ -89,7 +89,7 @@ categories: GIS
 
 以上准备工作做好之后，就可以开始初始化地图了。在 `<body>` 下面添加 `<script>`，首先初始化地图并设置地图中心点坐标以及缩放级别。默认情况下地图上的所有鼠标和触摸交互都已启用，并且它具有左上角缩放和右下角地图归属控件。
 
-``` js
+```js
 <script>
 	var mymap = L.map('mapid').setView([51.505, -0.09], 13);
 </script>
@@ -97,7 +97,7 @@ categories: GIS
 
 之后的 JS 代码都要放 `<script>` 标签里。然后我们需要在地图上添加瓦片图层，
 
-``` js
+```js
   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
     maxZoom: 18,
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
@@ -116,7 +116,7 @@ categories: GIS
 
 ### 属性
 
-``` js
+```js
 // 初始化方法
 L.map(<String> id, <Map options> options?)
 
@@ -147,7 +147,7 @@ click | MouseEvent | 鼠标点击地图时
 mousemove | MouseEvent | 鼠标在地图上移动时
 contextmenu | MouseEvent | 鼠标在地图上点击右键时，可以监听此事件覆盖默认右键菜单（手机上长按屏幕）
 
-``` js
+```js
 // 使用方法
 mymap.on('click', function (e) {
   console.log(e);
@@ -171,7 +171,7 @@ setZoom(<Number> zoom, <Zoom/pan options> options) | this | 设置地图缩放�
 locate(<Locate options> options?) | this | 使用 Geolocation API 获取用户位置信息，成功时触发“locationfound“事件，失败触发“locationerror”事件。在现代浏览器（Chrome 50及更新版本）如果网站不是 `https` 则会获取失败。返回坐标为 `WGS84`，可以使用 [coordtransform][17] 转换为需要的坐标。
 remove() | this | 销毁地图并移除所有已监听的事件响应
 
-``` js
+```js
   // 上面的加载图层也可以用这种写法，效果一样。
   mymap.addLayer(
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -190,7 +190,7 @@ remove() | this | 销毁地图并移除所有已监听的事件响应
 
 ### 初始化方法
 
-``` js
+```js
 L.tilelayer(<String> urlTemplate, <TileLayer options> options?)
 
 // 用法事例，常用属性及默认值
@@ -207,7 +207,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {
 
 Leaflet Map 属性 `crs` 默认值为 `L.CRS.EPSG3857`，球形墨卡托投影。因此只要我们知道高德地图的瓦片图地址，无需对高德地图瓦片做任何处理，就能够加载出正确的地图。
 
-``` js
+```js
   mymap.addLayer(L.tileLayer('http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
     subdomains: ['1', '2', '3', '4'],
     minZoom: 1,
@@ -235,7 +235,7 @@ Leaflet Map 属性 `crs` 默认值为 `L.CRS.EPSG3857`，球形墨卡托投影�
 
 从这里[下载源码][8]，然后添加引用
 
-``` html
+```html
   <script src="/path/to/proj4-compressed.js"></script>
   <script src="/path/to/proj4leaflet.js"></script>
 ```
@@ -244,7 +244,7 @@ Leaflet Map 属性 `crs` 默认值为 `L.CRS.EPSG3857`，球形墨卡托投影�
 
 初始化地图前，[自定义 CRS][15] 并[纠偏][14]
 
-``` js
+```js
 // 初始化百度地图瓦片图层，投影坐标转换以纠偏地图显示问题
 const baiduCrs = new L.Proj.CRS(
   "EPSG:900913",
@@ -271,7 +271,7 @@ var mymap = L.map("mapid", {
 
 #### 百度地图图层
 
-``` js
+```js
 // TileLayer 扩展
 L.TileLayer.BaiduLayer = L.TileLayer.extend({
   options: {
@@ -330,7 +330,7 @@ L.tileLayer.baiduLayer = function(options) {
 
 #### 添加到地图
 
-``` js
+```js
 // 使用
 const baiduLayer = L.tileLayer.baiduLayer({
   style: "normal"
@@ -346,7 +346,8 @@ baiduLayer.addTo(mymap);
 --- | ---
 L.control.layers(<Object> baselayers?, <Object> overlays?, <Control.Layers options> options?) | 使用给定的层创建一个属性控件。基层将使用单选按钮来切换，而覆盖将用复选框来切换。请注意，所有的基层都应该在基层对象中传递，但是在地图实例化过程中，应该只在映射中添加一个。
 
-```
+```js
+// 使用方法
 var baseLayers = {
     "Mapbox": mapbox,
     "OpenStreetMap": osm
@@ -358,7 +359,7 @@ var overlays = {
 L.control.layers(baseLayers, overlays).addTo(map);
 ```
 
-实现效果如下:
+实际 Demo 效果如下:
 
 ![](http://p4wb4s2l1.bkt.clouddn.com/leaflet/6.gif_gif)
 

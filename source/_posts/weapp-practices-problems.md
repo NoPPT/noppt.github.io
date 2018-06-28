@@ -14,13 +14,13 @@ categories: 微信小程序
 .container {
   height: 100%;
   display: flex;
-} 
+}
 
 # 满屏
 .container {
   height: 100vh;
   display: flex;
-} 
+}
 ```
 
 <!-- more -->
@@ -51,11 +51,11 @@ categories: 微信小程序
 
 原因是每次 export 方法调用后会清掉之前的动画效果。加粗的注意事项当时竟然看到后没有思考可能出现的情况。[wx.createAnimation(OBJECT)](https://mp.weixin.qq.com/debug/wxadoc/dev/api/api-animation.html#wxcreateanimationobject)
 
-###  `scroll-view` 高度自动填充剩余高度
+### `scroll-view` 高度自动填充剩余高度
 
 设置 `scroll-view` 高度自动填充剩余高度，且纵向滑动。（此种方法在性能较差机器上，且scrollview内部子组件会经常变化时可能导致一些渲染问题）
 
-```
+```css
 view height: 100%; overflow-y: auto
 ---------------------
 topbar height: 98rpx;
@@ -68,11 +68,27 @@ tabbar height: 98rpx;
 ---------------------
 
 设置 scroll-view  height: 100%,
-设置其父容器  height: 100%; overflow-y: auto; 
+设置其父容器  height: 100%; overflow-y: auto;
 ```
 
 设置 `scroll-view` 高度为 `100vh`，然后设置 `topbar` 和 `tabbar` 为绝对定位。然后设置 `scroll-view` 内部组件的第一个和最后一个，分别设置 `margin-top: @topbar-height` 和 `margin-bottom: @tabbar-height`（在设置高度为100vh后，如果 topbar 和 tabbar 的定位不是绝对定位的话，scroll-view 不能占满整个屏幕，此时在当前 scroll-view 弹出一个定位信息为 fixed 的 modal 时，可能导致 scroll-view 的滑动出现一定的问题，如不能滑动到最顶部。）
 
+### [小程序与小游戏获取用户信息接口调整][0]
 
+为优化用户体验，使用 `wx.getUserInfo` 接口直接弹出授权框的开发方式将逐步不再支持，使用 `<button />` 组件，并将 `open-type` 指定为 `getUserInfo` 类型，获取用户基本信息。限于 `<button />` 样式问题，有时一些自定义组件需要触发获取用户信息，可以在自定义组件上面覆盖一个 `<button />`，并隐藏 `<button />` 的显示
+
+```js
+<button class='ksd-tabbar-button' plain style='border: none;' open-type="getUserInfo" bindgetuserinfo="bindCustom" bindtap='onTapTabbarItem'></button>
+
+.ksd-tabbar-button {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+}
+```
 
 持续更新...
+
+[0]: https://developers.weixin.qq.com/blogdetail?action=get_post_info&lang=zh_CN&token=722216948&docid=0000a26e1aca6012e896a517556c01&devtools=1

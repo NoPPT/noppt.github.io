@@ -159,7 +159,7 @@ You can also set it to 'none' to disable any default behavior. Learn more: https
 
 ## 管理资源
 
-使用 `loader` 来预处理文件，可以打包除 JS 之外的任何静态资源如：CSS、图片、字体、数据等。
+使用 `loader` 来预处理文件，打包静态资源如：CSS、图片、字体、数据等。
 
 ### 加载 CSS
 

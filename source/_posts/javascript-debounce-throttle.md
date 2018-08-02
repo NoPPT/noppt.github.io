@@ -17,6 +17,8 @@ categories: JavaScript
 - 用于需要频繁调用的方法时，如input输入框架的格式验证，提交按钮的点击事件
 - 在用户不触发事件后才触发动作，并且抑制了本来在事件中要执行的动作。
 
+<!-- more -->
+
 ```js
 function debounce(func, wait, immediate) {
 

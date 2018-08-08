@@ -16,6 +16,9 @@ branches:
     - develop 
 
 before_install:
+  - openssl aes-256-cbc -K $encrypted_2d351329592f_key -iv $encrypted_2d351329592f_iv -in u672au547du540d.enc -out ~/.ssh/id_rsa -d
+  - chmod 400 ~/.ssh/id_rsa
+  - echo -e "Host ${cloud_host}\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
   - npm install -g hexo-cli
 
 # Start: Build Lifecycle
@@ -38,3 +41,9 @@ after_script:
   - sed -i "s/gh_token/${GH_TOKEN}/g" ./_config.yml
   - hexo deploy
 # End: Build LifeCycle
+
+after_success:
+# 没有修改过端口的，可以用这个，上传目录要加 -r 参数
+- scp -o stricthostkeychecking=no -r ./public root@$cloud_host:/usr/share/nginx/html/blog_test
+# 由于我修改了默认的port，所以在这里也进行了加密处理
+# - scp -o stricthostkeychecking=no -P $PORT -r 要上传的文件或目录 用户@域名或IP:/路径

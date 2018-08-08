@@ -44,6 +44,9 @@ after_script:
 
 after_success:
 # 没有修改过端口的，可以用这个，上传目录要加 -r 参数
-- scp -o stricthostkeychecking=no -r ./public root@$cloud_host:/usr/share/nginx/html/blog_test
+- scp -o stricthostkeychecking=no -r ./public root@$cloud_host:/usr/share/nginx/html/blog
 # 由于我修改了默认的port，所以在这里也进行了加密处理
 # - scp -o stricthostkeychecking=no -P $PORT -r 要上传的文件或目录 用户@域名或IP:/路径
+
+after_deploy:
+- curl -d "appid=${submail_id}&to=1041036986@qq.com&subject=[自动通知] 个人博客新版本$TRAVIS_TAG发布&project=2t4gu2&signature=${submail_key}&vars={\"TRAVIS_REPO_SLUG\":\"$TRAVIS_REPO_SLUG\",\"TRAVIS_TAG\":\"$TRAVIS_TAG\",\"TAG_DESCRIPTION\":\"$(git cat-file tag $TRAVIS_TAG | awk 1 ORS='<br>')\"}" https://api.submail.cn/mail/xsend.json

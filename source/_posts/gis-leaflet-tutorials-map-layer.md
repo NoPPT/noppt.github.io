@@ -108,7 +108,7 @@ categories: GIS
 ```
 然后在浏览器中打开 HTML 页面就可以看到我们已经将地图加载出来了。
 
-![](http://p4wb4s2l1.bkt.clouddn.com/leaflet/6.png_blog)
+![](http://qiniu.0x0803.top/leaflet/6.png_blog)
 
 ## 常用属性、事件及方法
 
@@ -361,7 +361,7 @@ L.control.layers(baseLayers, overlays).addTo(map);
 
 实际 Demo 效果如下:
 
-![](http://p4wb4s2l1.bkt.clouddn.com/leaflet/6.gif_gif)
+![](http://qiniu.0x0803.top/leaflet/6.gif_gif)
 
 
 

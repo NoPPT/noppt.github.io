@@ -47,21 +47,21 @@ Gradle 2.14
 
 设置 gradle 版本，并设置对应的路径，这里使用 [2.14.1][1] 版本，一开始使用 3.0 以上版本在打包中报错 `GC overhead limit exceeded`，由于项目使用的就是 2.14.1 版本，为了方便就不更新项目 Gradle 版本了。
 
-![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/gradle_config.png_blog)
+![img](http://qiniu.0x0803.top/image/blog/1/gradle_config.png_blog)
 
 #### Keychains and Provisioning Profiles Plugin
 > 路径：Jenkins => 系统管理 => Keychains and Provisioning Profiles Management
 
-![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/keychains_provisioning_profiles.png_blog)
+![img](http://qiniu.0x0803.top/image/blog/1/keychains_provisioning_profiles.png_blog)
 这里需要上传两种类型的文件 .keychain 和 .mobileprovision
 
 ##### 上传 .keychain 文件
 
 1. 打开钥匙串访问，找到系统中已安装过证书的 .keychain 文件。一般为登录钥匙串下，系统中的文件位置为 /Users/username/Library/Keychains/login.keychain（系统在 10.12 以上可能由于升级系统找不到 login.keychain 文件，只有 login.keychain-db 文件，由于上传 .keychain-db 格式的会失败，此时可以复制 login.keychain-db 文件后重命名为 login.keychain 用于上传）。
-![图1](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/keychains_cers.png_blog)
+![图1](http://qiniu.0x0803.top/image/blog/1/keychains_cers.png_blog)
 2. 上传成功后，如图1，在黄框2中输入密码，一般为当前用户登录密码。 
 3. 点击黄框3中的 Add Code Signing Identity 按钮，在 Identities 中添加证书对应的标识，可以在钥匙串中查看常用名称,右键证书，点击显示简介: 
-![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/cer_detail.png_blog)
+![img](http://qiniu.0x0803.top/image/blog/1/cer_detail.png_blog)
 
 ##### 上传 .mobileprovision 文件
 
@@ -73,9 +73,9 @@ Gradle 2.14
 1. Default Recipients，配置默认的收件人
 1. Default Subject，配置默认的邮件标题
 1. Default Content，配置默认的邮件内容等
-![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/email_1.png_blog)
-![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/email_2.png_blog)
-![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/email_3.png_blog)
+![img](http://qiniu.0x0803.top/image/blog/1/email_1.png_blog)
+![img](http://qiniu.0x0803.top/image/blog/1/email_2.png_blog)
+![img](http://qiniu.0x0803.top/image/blog/1/email_3.png_blog)
 
 ##### 保存配置
 
@@ -90,22 +90,22 @@ Gradle 2.14
 PATH | 通过 shell 命令 echo PATH 获取系统 PATH 的路径
 ANDROID_HOME | 设置 ANDROID_HOME， 如果项目中包含 local.properties 文件，可以不用设置，一般情况下 local.properties 会忽略上传到 git
 
-![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/global_environment.png_blog)
+![img](http://qiniu.0x0803.top/image/blog/1/global_environment.png_blog)
 
 ##### 配置邮件通知
 
-![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/email_server.png_blog)
+![img](http://qiniu.0x0803.top/image/blog/1/email_server.png_blog)
 
 ## 热更新
 
 ### 创建 job
 > 路径：Jenkins => 新建
 选择`构建一个自由风格的软件项目`，并输入任务名称，然后点确认。
-![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/add_job.png_blog)
+![img](http://qiniu.0x0803.top/image/blog/1/add_job.png_blog)
 
 ### 源码管理
 
-![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/source_manager.png_blog)
+![img](http://qiniu.0x0803.top/image/blog/1/source_manager.png_blog)
 
 这里使用 git 管理代码，输入文件仓库路径，设置 Credentials，设置要构建的分支 Branches to build，这里我设置的是 `*/${BRANCH}`，为了偷懒我就不重新截图了，同样的源码管理这一步在后续的 Android 以及 iOS 构建也需要添加，不过步骤相同，后续也不重复了，- -！。
 
@@ -137,7 +137,7 @@ Boolean Parameter | CODE_PUSH_MAN | false | 是否强制更新
 
 ### 构建
 
-![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/xcodebuild_shell.png_blog)
+![img](http://qiniu.0x0803.top/image/blog/1/xcodebuild_shell.png_blog)
 
 根据具体情况执行一些初始化命令
 ```shell
@@ -198,7 +198,7 @@ fi
 ```
 
 ### 构建后操作
-![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/after_source_job.png_blog)
+![img](http://qiniu.0x0803.top/image/blog/1/after_source_job.png_blog)
 可以通过设置构建后的操作，来实现不同的依赖关系，如当前项目依赖其他项目，可以在其他项目构建成功后执行当前项目（根据实际情况添加，这里有一点不是很满意的就是没法传入参数到后续项目）。
 
 ## 构建 Android 安装包
@@ -232,7 +232,7 @@ sh codeinit.sh
 1. Use Gradle Wrapper 不需要选中，但是要配置信息
 1. 配置 Task 内容 `clean assemble${PRODUCT_TYPE}Release --stacktrace --info --debug`
 1. 如果项目路径不在当前 workspace，则设置 Root Build script 到对应项目的 build.gradle 文件所在的文件夹
-![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/android_build.png_blog)
+![img](http://qiniu.0x0803.top/image/blog/1/android_build.png_blog)
 
 #### Execute shell
 ```shell
@@ -285,13 +285,13 @@ String Parameter | TEAM_ID | | 证书对应的TeamID（图三-组织单位）
 1. 选中当前项目对应的 provisioning profile 文件
 1. Variable Prefix 根据 Code Signing Identity 和 provisioning profile 对应的安装包信息添加 DIS 或 DEV 前缀
 
-![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/keychain_config.png_blog)
+![img](http://qiniu.0x0803.top/image/blog/1/keychain_config.png_blog)
 
 ### 构建
 
 增加构建步骤，选中 Execute shell，并配置如下，执行 shell 文件或直接把 shell 命令赋值到 Command 中
 
-![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/xcodebuild_shell.png_blog)
+![img](http://qiniu.0x0803.top/image/blog/1/xcodebuild_shell.png_blog)
 
 ```shell
 sh codeinit.sh
@@ -430,7 +430,7 @@ curl --form plat_id=${APP_PLAT_ID} --form file_nick_name=${IPANAME} --form token
 ### 更多
 如果 archive 过程报如下错误，是因为每次签名都需要权限，没有找到通过命令行解决的办法，解决方法是用 Xcode 打开项目并打包，在最后会提示 是否允许 codesign 获取钥匙串权限 点击始终允许，然后就不会出如下错误了。或者如脚本中设置权限，并在钥匙串中双击密钥，然后修改访问控制为允许所有应用程序访问项目。
 
-![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/change_key_info.png_blog)
+![img](http://qiniu.0x0803.top/image/blog/1/change_key_info.png_blog)
 
 ```
 # 遇到的错误信息
@@ -493,16 +493,16 @@ Command /usr/bin/codesign failed with exit code 1
 ### 添加 Editable Email Notification
 
 如果需要发送邮件的构建 job，则在构建后操作中添加 Editable Email Notification
-![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/after_build.png_blog)
+![img](http://qiniu.0x0803.top/image/blog/1/after_build.png_blog)
 
 ### 配置基础信息
 
 - 如果需要发送附件和 attach build log 在这里选中，默认是不发送
-![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/attach_info.png_blog)
+![img](http://qiniu.0x0803.top/image/blog/1/attach_info.png_blog)
 - Triggers 中配置接受者信息，默认是 Developers 需要自己添加配置的 Recipient List，根据自己实际情况而定 
-![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/triggers.png_blog)
+![img](http://qiniu.0x0803.top/image/blog/1/triggers.png_blog)
 - Triggers 中默认的响应构建状态为在插件中配置的信息，如果需要自定义，点击 Add Trigger 添加需要的构建状态
-![img](http://p4wb4s2l1.bkt.clouddn.com/image/blog/1/add_triggers.png_blog)
+![img](http://qiniu.0x0803.top/image/blog/1/add_triggers.png_blog)
 
 ## 结束
 

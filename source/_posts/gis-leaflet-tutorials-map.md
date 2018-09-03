@@ -25,13 +25,13 @@ Leaflet 强大的[开源库插件][8]涉及到地图应用的各个方面包括�
 
 使用 Leaflet 可以加载和切换不同的地图作为底图，Mapbox地图、谷歌地图、天地图、高德地图、百度地图等。
 
-![](http://p4wb4s2l1.bkt.clouddn.com/leaflet/1.gif_gif)
+![](http://qiniu.0x0803.top/leaflet/1.gif_gif)
 
 [在线演示][9]
 
 ### 标记、弹出窗口
 
-![](http://p4wb4s2l1.bkt.clouddn.com/leaflet/2.gif_gif)
+![](http://qiniu.0x0803.top/leaflet/2.gif_gif)
 
 [在线演示][10]
 
@@ -39,25 +39,25 @@ Leaflet 强大的[开源库插件][8]涉及到地图应用的各个方面包括�
 
 使用 Leaflet 可以很提供了线，多边形，圆形，矩形，以及编辑这些矢量图层，配和使用一些插件可以很方便了对矢量空间数据创建和修改。
 
-![](http://p4wb4s2l1.bkt.clouddn.com/leaflet/3.gif_gif)
+![](http://qiniu.0x0803.top/leaflet/3.gif_gif)
 
 [在线演示][11]
 
 ### 路线规划
 
-![](http://p4wb4s2l1.bkt.clouddn.com/leaflet/3.png_blog)
+![](http://qiniu.0x0803.top/leaflet/3.png_blog)
 
 [在线演示][12]
 
 ### 地理检索
 
-![](http://p4wb4s2l1.bkt.clouddn.com/leaflet/5.gif_gif)
+![](http://qiniu.0x0803.top/leaflet/5.gif_gif)
 
 [在线演示][15]
 
 ### 热力图
 
-![](http://p4wb4s2l1.bkt.clouddn.com/leaflet/4.png_blog)
+![](http://qiniu.0x0803.top/leaflet/4.png_blog)
 
 [在线演示][13]
 
@@ -65,7 +65,7 @@ Leaflet 强大的[开源库插件][8]涉及到地图应用的各个方面包括�
 
 使用 Leaflet 可以配合一些图表库来展示信息，比如使用百度提供的数据配合 Echarts 制作迁徙图。
 
-![](http://p4wb4s2l1.bkt.clouddn.com/leaflet/4.gif_gif)
+![](http://qiniu.0x0803.top/leaflet/4.gif_gif)
 
 [在线演示][14]  [在线演示][16]
 

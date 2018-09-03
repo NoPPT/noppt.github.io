@@ -223,7 +223,7 @@ marker.bindTooltip("my tooltip text").openTooltip();
 
 上述代码添加后的效果如图所示：
 
-![](http://p4wb4s2l1.bkt.clouddn.com/leaflet/7.png_blog)
+![](http://qiniu.0x0803.top/leaflet/7.png_blog)
 
 ## 进阶
 
@@ -358,7 +358,7 @@ mymap.addLayer(markers);
 
 你可以在这里查看[完整 Demo][7]
 
-![](http://p4wb4s2l1.bkt.clouddn.com/leaflet/7.gif_gif)
+![](http://qiniu.0x0803.top/leaflet/7.gif_gif)
 
 
 以上就是关于标记以及矢量图使用的一些总结了，主要介绍了一些类的基础知识和常用方法，以及如何使用三方插件实现一些简单的需求场景，但是我们发现到这里除了使用官方 API 就是使用三方插件，我们自己几乎没有写什么代码，虽然 Leaflet 相关的插件足以满足大部分需求，但是如果只是简单调用 API 的话，那么我们做的东西价值极低，对自身的进步也没有什么提升。想要实现更高级的东西往往需要我们自定义一些插件，接下来就学一下怎么实现自定义插件。

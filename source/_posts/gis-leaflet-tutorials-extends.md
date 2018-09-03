@@ -26,7 +26,7 @@ categories: GIS
 
 首先来熟悉下 Leaflet 的结构，只有熟悉了 Leaflet 都有哪些类，才能在编写插件时得心应手，知道要扩展那个类，或者哪些类一起使用能实现需求。
 
-![](http://p4wb4s2l1.bkt.clouddn.com/leaflet/8.png_blog)
+![](http://qiniu.0x0803.top/leaflet/8.png_blog)
 
 [在线查看][0]
 

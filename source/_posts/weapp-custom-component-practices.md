@@ -316,7 +316,7 @@ _changeDataChoose: function (lastIndex, currentIndex) {
   let lastDatas = this.data.items;
 
   if (this.data.multiple) {
-    if (typeof currentIndex != 'object' && Number(currentIndex) != NaN) {
+    if (typeof currentIndex != 'object') {
       if (lastDatas[currentIndex].choose) {
         lastDatas[currentIndex].choose = false;
         const index = this.selIndex.indexOf(currentIndex)

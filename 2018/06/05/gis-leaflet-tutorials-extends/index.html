@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="JavaScript,Leaflet,自定义组件,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="zhuang's blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="本篇主要介绍 Leaflet 开发自定义插件的一些理论知识，在日常开发中，仅仅使用 Leaflet 提供的类虽然能满足一些基本需求，但是在一些功能点的实现上需要我们自己写插件来实现功能。如上文中为了实现点聚合的效果，我们就使用了三方插件，目前 Leaflet 相关的三方插件已经基本满足大部分需求，如果你有一些需求不知道怎么实现，可以先从这里找一找，如果没有找到的合适的话，然后再自己实现插件。所谓插">
+<meta name="keywords" content="JavaScript,Leaflet,自定义组件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Leaflet 学习系列（四）如何写插件理论篇">
+<meta property="og:url" content="http://0x0803.top/2018/06/05/gis-leaflet-tutorials-extends/index.html">
+<meta property="og:site_name" content="zhuang&#39;s blog">
+<meta property="og:description" content="本篇主要介绍 Leaflet 开发自定义插件的一些理论知识，在日常开发中，仅仅使用 Leaflet 提供的类虽然能满足一些基本需求，但是在一些功能点的实现上需要我们自己写插件来实现功能。如上文中为了实现点聚合的效果，我们就使用了三方插件，目前 Leaflet 相关的三方插件已经基本满足大部分需求，如果你有一些需求不知道怎么实现，可以先从这里找一找，如果没有找到的合适的话，然后再自己实现插件。所谓插">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://qiniu.0x0803.top/leaflet/8.png_blog">
+<meta property="og:updated_time" content="2019-10-11T07:00:46.699Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Leaflet 学习系列（四）如何写插件理论篇">
+<meta name="twitter:description" content="本篇主要介绍 Leaflet 开发自定义插件的一些理论知识，在日常开发中，仅仅使用 Leaflet 提供的类虽然能满足一些基本需求，但是在一些功能点的实现上需要我们自己写插件来实现功能。如上文中为了实现点聚合的效果，我们就使用了三方插件，目前 Leaflet 相关的三方插件已经基本满足大部分需求，如果你有一些需求不知道怎么实现，可以先从这里找一找，如果没有找到的合适的话，然后再自己实现插件。所谓插">
+<meta name="twitter:image" content="http://qiniu.0x0803.top/leaflet/8.png_blog">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"搜索博客","hits_empty":"没有找到匹配项: ${query}","hits_stats":"${time} ms 内找到 ${hits} 符合条件的内容"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://0x0803.top/2018/06/05/gis-leaflet-tutorials-extends/">
+
+
+
+
+
+  <title>Leaflet 学习系列（四）如何写插件理论篇 | zhuang's blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7cda0beda6b0c3a7002a11bfb03df138";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zhuang's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">小庄先生呢</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://0x0803.top/2018/06/05/gis-leaflet-tutorials-extends/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="庄彪">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhuang's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Leaflet 学习系列（四）如何写插件理论篇</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-05T21:13:04+00:00">
+                2018-06-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/GIS/" itemprop="url" rel="index">
+                    <span itemprop="name">GIS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本篇主要介绍 Leaflet 开发自定义插件的一些理论知识，在日常开发中，仅仅使用 Leaflet 提供的类虽然能满足一些基本需求，但是在一些功能点的实现上需要我们自己写插件来实现功能。如<a href="/2018/06/02/gis-leaflet-ui-vector-layers/">上文</a>中为了实现点聚合的效果，我们就使用了三方插件，目前 Leaflet <a href="https://leafletjs.com/plugins.html" target="_blank" rel="noopener">相关的三方插件</a>已经基本满足大部分需求，如果你有一些需求不知道怎么实现，可以先从<a href="https://leafletjs.com/plugins.html" target="_blank" rel="noopener">这里</a>找一找，如果没有找到的合适的话，然后再自己实现插件。所谓插件即对一些功能的封装，比如之前 TileLayer 我们通过传入不同的参数，来实现加载不同的地图，如果通过扩展 Leaflet 提供的 TileLayer 类，把这些参数定义在子类内部，然后当做一个独立类导出，这样在其他人使用时就无需关心内部逻辑，极大降低了使用难度，同时也避免了大量冗余代码。为 Leaflet 编写插件需要以下基础知识：</p>
+<ul>
+<li>JavaScript</li>
+<li>DOM 操作</li>
+<li>面向对象编程思想</li>
+<li>熟悉 Leaflet 原有类</li>
+</ul>
+<a id="more"></a>
+<p>首先理论篇和实践篇主要翻译自以下三篇官方教程，当然翻译过程中加入了一些自己的理解，对于英文水平较好且对 Leaflet 已经有一定实践经验的还是建议阅读官方文档和教程。</p>
+<ul>
+<li><a href="https://leafletjs.com/examples/extending/extending-1-classes.html" target="_blank" rel="noopener">Extending Leaflet: Class Theory</a></li>
+<li><a href="https://leafletjs.com/examples/extending/extending-2-layers.html" target="_blank" rel="noopener">Extending Leaflet: Layers</a></li>
+<li><a href="https://leafletjs.com/examples/extending/extending-3-controls.html" target="_blank" rel="noopener">Extending Leaflet: Handlers and Controls</a></li>
+</ul>
+<h2 id="Leaflet-结构"><a href="#Leaflet-结构" class="headerlink" title="Leaflet 结构"></a>Leaflet 结构</h2><p>首先来熟悉下 Leaflet 的结构，只有熟悉了 Leaflet 都有哪些类，才能在编写插件时得心应手，知道要扩展那个类，或者哪些类一起使用能实现需求。</p>
+<p><img src="http://qiniu.0x0803.top/leaflet/8.png_blog" alt></p>
+<p><a href="https://leafletjs.com/examples/extending/class-diagram.html" target="_blank" rel="noopener">在线查看</a></p>
+<p>Leaflet 有以下几种扩展方式：</p>
+<ul>
+<li>最常用的方式：使用 <code>L.Class.extend()</code> 创建 <code>L.Layer</code>, <code>L.Handler</code> 或者 <code>L.Control</code> 的子类实现几种需求<ul>
+<li>地图移动的同时移动图层</li>
+<li>浏览器事件</li>
+<li>地图上的控件元素</li>
+</ul>
+</li>
+<li>使用 <code>L.Class.include()</code> 为 <code>Class</code> 添加功能<ul>
+<li>添加新的 <code>methods</code> 和 <code>options</code></li>
+<li>修改一些 <code>methods</code></li>
+<li>使用 <code>addInitHook</code> 执行额外的构造函数代码</li>
+</ul>
+</li>
+<li>使用 <code>L.Class.include()</code> 更改现有 <code>Class</code> 的部分</li>
+</ul>
+<h2 id="L-Class"><a href="#L-Class" class="headerlink" title="L.Class"></a>L.Class</h2><p>我们知道在 ECMAScript 只支持<code>实现继承</code>，而且其实现继承主要是依靠原型链，其优缺点以及实现的方式就不一一介绍了。Leaflet 中的 <code>L.Class</code> 提供了 <code>extend()</code>、<code>include()</code>、<code>initialize()</code> 方法，可以方便实现类的继承。</p>
+<h3 id="L-Class-extend"><a href="#L-Class-extend" class="headerlink" title="L.Class.extend()"></a>L.Class.extend()</h3><p>使用 <code>.extend()</code> 方法创建 Leaflet 中类的子类，方法可传入一个包含键值对的普通对象，对应的 <code>key</code> 就是子类的属性名或者方法名，<code>key</code> 对应的 <code>value</code> 就是其默认值或者方法的实现。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> MyDemoClass = L.Class.extend(&#123;</span><br><span class="line">    <span class="comment">// A property with initial value = 42</span></span><br><span class="line">    myDemoProperty: <span class="number">42</span>,   </span><br><span class="line">    <span class="comment">// A method </span></span><br><span class="line">    myDemoMethod: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>.myDemoProperty; &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> myDemoInstance = <span class="keyword">new</span> MyDemoClass();</span><br><span class="line"><span class="comment">// This will output "42" to the development console</span></span><br><span class="line"><span class="built_in">console</span>.log( myDemoInstance.myDemoMethod() );</span><br></pre></td></tr></table></figure>
+<p>命名 classes, methods 和 properties 时建议遵循以下建议：</p>
+<ul>
+<li>函数，方法，属性和工厂命名应该使用小驼峰法 lowerCamelCase</li>
+<li>类名应该使用大驼峰法 UpperCamelCase</li>
+<li>私有属性和方法建议使用下划线 <code>_</code> 开头。对于 JavaScript 来说所有方法和属性都能被访问，增加下划线前缀只是让我们容易区分属性和方法的状态。</li>
+</ul>
+<h3 id="L-Class-include"><a href="#L-Class-include" class="headerlink" title="L.Class.include()"></a>L.Class.include()</h3><p>使用 <code>.include()</code> 可以为一个已经定义的类重新定义属性、方法或者添加新的属性和方法。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">MyDemoClass.include(&#123;</span><br><span class="line">    <span class="comment">// Adding a new property to the class</span></span><br><span class="line">    _myPrivateProperty: <span class="number">78</span>,</span><br><span class="line">    <span class="comment">// Redefining a method</span></span><br><span class="line">    myDemoMethod: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>._myPrivateProperty; &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> mySecondDemoInstance = <span class="keyword">new</span> MyDemoClass();</span><br><span class="line"><span class="comment">// This will output "78"</span></span><br><span class="line"><span class="built_in">console</span>.log( mySecondDemoInstance.myDemoMethod() );</span><br><span class="line"><span class="comment">// However, properties and methods from before still exist</span></span><br><span class="line"><span class="comment">// This will output "42"</span></span><br><span class="line"><span class="built_in">console</span>.log( mySecondDemoInstance.myDemoProperty );</span><br></pre></td></tr></table></figure>
+<h3 id="L-Class-initialize"><a href="#L-Class-initialize" class="headerlink" title="L.Class.initialize()"></a>L.Class.initialize()</h3><p>Leaflet 中的类，构造函数的方法命名为 <code>initialize</code>。我们可以在构造函数中处理自定义类和原始 <code>options</code> 的合并操作以及其他初始化操作。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> MyBoxClass = L.Class.extend(&#123;</span><br><span class="line">    options: &#123;</span><br><span class="line">        width: <span class="number">1</span>,</span><br><span class="line">        height: <span class="number">1</span></span><br><span class="line">    &#125;,</span><br><span class="line">    initialize: <span class="function"><span class="keyword">function</span>(<span class="params">name, options</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        L.setOptions(<span class="keyword">this</span>, options);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> instance = <span class="keyword">new</span> MyBoxClass(<span class="string">'Red'</span>, &#123;<span class="attr">width</span>: <span class="number">10</span>&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(instance.name); <span class="comment">// Outputs "Red"</span></span><br><span class="line"><span class="built_in">console</span>.log(instance.options.width); <span class="comment">// Outputs "10"</span></span><br><span class="line"><span class="built_in">console</span>.log(instance.options.height); <span class="comment">// Outputs "1", the default</span></span><br></pre></td></tr></table></figure>
+<p>子类会继承父类中的 <code>options</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> MyCubeClass = MyBoxClass.extend(&#123;</span><br><span class="line">    options: &#123;</span><br><span class="line">        depth: <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> instance = <span class="keyword">new</span> MyCubeClass(<span class="string">'Blue'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(instance.options.width); <span class="comment">// Outputs "1", parent class default</span></span><br><span class="line"><span class="built_in">console</span>.log(instance.options.height); <span class="comment">// Outputs "1", parent class default</span></span><br><span class="line"><span class="built_in">console</span>.log(instance.options.depth); <span class="comment">// Outputs "1"</span></span><br></pre></td></tr></table></figure>
+<p>我们经常会有这种需求，先执行父类的构造函数，然后在执行子类的构造函数。此时可以使用 <code>L.Class.addInitHook()</code> 实现。在 <code>initialize</code> 函数执行之后会触发钩子执行该方法，此时 <code>this.options</code> 已存在且可被访问。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MyBoxClass.addInitHook(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>._area = <span class="keyword">this</span>.options.width * <span class="keyword">this</span>.options.length;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>或者下面这种写法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">MyCubeClass.include(&#123;</span><br><span class="line">    _calculateVolume: <span class="function"><span class="keyword">function</span>(<span class="params">arg1, arg2</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>._volume = <span class="keyword">this</span>.options.width * <span class="keyword">this</span>.options.length * <span class="keyword">this</span>.options.depth;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">MyCubeClass.addInitHook(<span class="string">'_calculateVolume'</span>, argValue1, argValue2);</span><br></pre></td></tr></table></figure>
+<h3 id="父类方法"><a href="#父类方法" class="headerlink" title="父类方法"></a>父类方法</h3><p>使用 <code>Funcation.call(...)</code> 调用父类的方法。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">L.FeatureGroup = L.LayerGroup.extend(&#123;</span><br><span class="line"></span><br><span class="line">    addLayer: <span class="function"><span class="keyword">function</span> (<span class="params">layer</span>) </span>&#123;</span><br><span class="line">        …</span><br><span class="line">        L.LayerGroup.prototype.addLayer.call(<span class="keyword">this</span>, layer);</span><br><span class="line">    &#125;,</span><br><span class="line">    </span><br><span class="line">    removeLayer: <span class="function"><span class="keyword">function</span> (<span class="params">layer</span>) </span>&#123;</span><br><span class="line">        …</span><br><span class="line">        L.LayerGroup.prototype.removeLayer.call(<span class="keyword">this</span>, layer);</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    …</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>调用父类的构造函数 <code>ParentClass.prototype.initialize.call(this, …)</code></p>
+<h3 id="工厂函数"><a href="#工厂函数" class="headerlink" title="工厂函数"></a>工厂函数</h3><p>大多数 Leaflet 中的类都有一个相应的工厂函数，函数名同类名相同，不过命名由大写驼峰改为了小写驼峰。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myBoxClass</span>(<span class="params">name, options</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> MyBoxClass(name, options);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="命名约定"><a href="#命名约定" class="headerlink" title="命名约定"></a>命名约定</h3><p>在为插件命名时，建议遵循以下约定：</p>
+<ul>
+<li>不在插件中暴露全局变量</li>
+<li>如果有一个新的类，直接放在 L 命名空间下 (L.MyPlugin)</li>
+<li>如果继承自一个已经存在的类，将其设置为子属性 (L.TileLayer.BaiduLayer)</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    庄彪
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://0x0803.top/2018/06/05/gis-leaflet-tutorials-extends/" title="Leaflet 学习系列（四）如何写插件理论篇">http://0x0803.top/2018/06/05/gis-leaflet-tutorials-extends/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/Leaflet/" rel="tag"># Leaflet</a>
+          
+            <a href="/tags/自定义组件/" rel="tag"># 自定义组件</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/02/gis-leaflet-ui-vector-layers/" rel="next" title="Leaflet 学习系列（三）标记以及矢量图">
+                <i class="fa fa-chevron-left"></i> Leaflet 学习系列（三）标记以及矢量图
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/23/webpack-tutorials-start/" rel="prev" title="Webpack v4.14.0 实践">
+                Webpack v4.14.0 实践 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="庄彪">
+            
+              <p class="site-author-name" itemprop="name">庄彪</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/NoPPT" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:1041036986@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Leaflet-结构"><span class="nav-number">1.</span> <span class="nav-text">Leaflet 结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#L-Class"><span class="nav-number">2.</span> <span class="nav-text">L.Class</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#L-Class-extend"><span class="nav-number">2.1.</span> <span class="nav-text">L.Class.extend()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#L-Class-include"><span class="nav-number">2.2.</span> <span class="nav-text">L.Class.include()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#L-Class-initialize"><span class="nav-number">2.3.</span> <span class="nav-text">L.Class.initialize()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#父类方法"><span class="nav-number">2.4.</span> <span class="nav-text">父类方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工厂函数"><span class="nav-number">2.5.</span> <span class="nav-text">工厂函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命名约定"><span class="nav-number">2.6.</span> <span class="nav-text">命名约定</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">庄彪</span>
+
+  
+</div>
+
+
+  <div class="powered-by">津ICP备18006909号</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

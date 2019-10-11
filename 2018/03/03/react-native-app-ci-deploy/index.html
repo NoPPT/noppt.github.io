@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="CI,Jenkins,React Native,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="zhuang's blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="App 开发过程中总是需要打包诸多版本提供测试部分进行测试，由于我们的 App 是使用 React Native 进行开发的，每次更新又分为热更新和安装包更新，如果每次都通过命令行进行热更新或者在本机上进行编译打包的话十分影响自己的工作效率。所以搭建一套持续集成环境把这些重复工作自动化就变的十分必要的了，持续集成的好处相信大家都了解了很多，只是搭建步骤比较繁琐，这里就把我之前使用 Jenkins">
+<meta name="keywords" content="CI,Jenkins,React Native">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React Native 项目使用 Jenkins 持续集成部署步骤">
+<meta property="og:url" content="http://0x0803.top/2018/03/03/react-native-app-ci-deploy/index.html">
+<meta property="og:site_name" content="zhuang&#39;s blog">
+<meta property="og:description" content="App 开发过程中总是需要打包诸多版本提供测试部分进行测试，由于我们的 App 是使用 React Native 进行开发的，每次更新又分为热更新和安装包更新，如果每次都通过命令行进行热更新或者在本机上进行编译打包的话十分影响自己的工作效率。所以搭建一套持续集成环境把这些重复工作自动化就变的十分必要的了，持续集成的好处相信大家都了解了很多，只是搭建步骤比较繁琐，这里就把我之前使用 Jenkins">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/1/gradle_config.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/1/keychains_provisioning_profiles.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/1/keychains_cers.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/1/cer_detail.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/1/email_1.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/1/email_2.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/1/email_3.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/1/global_environment.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/1/email_server.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/1/add_job.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/1/source_manager.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/1/xcodebuild_shell.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/1/after_source_job.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/1/android_build.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/1/keychain_config.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/1/xcodebuild_shell.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/1/change_key_info.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/1/after_build.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/1/attach_info.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/1/triggers.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/1/add_triggers.png_blog">
+<meta property="og:updated_time" content="2019-10-11T07:00:46.699Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React Native 项目使用 Jenkins 持续集成部署步骤">
+<meta name="twitter:description" content="App 开发过程中总是需要打包诸多版本提供测试部分进行测试，由于我们的 App 是使用 React Native 进行开发的，每次更新又分为热更新和安装包更新，如果每次都通过命令行进行热更新或者在本机上进行编译打包的话十分影响自己的工作效率。所以搭建一套持续集成环境把这些重复工作自动化就变的十分必要的了，持续集成的好处相信大家都了解了很多，只是搭建步骤比较繁琐，这里就把我之前使用 Jenkins">
+<meta name="twitter:image" content="http://qiniu.0x0803.top/image/blog/1/gradle_config.png_blog">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"搜索博客","hits_empty":"没有找到匹配项: ${query}","hits_stats":"${time} ms 内找到 ${hits} 符合条件的内容"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://0x0803.top/2018/03/03/react-native-app-ci-deploy/">
+
+
+
+
+
+  <title>React Native 项目使用 Jenkins 持续集成部署步骤 | zhuang's blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7cda0beda6b0c3a7002a11bfb03df138";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zhuang's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">小庄先生呢</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://0x0803.top/2018/03/03/react-native-app-ci-deploy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="庄彪">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhuang's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">React Native 项目使用 Jenkins 持续集成部署步骤</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-03T11:14:16+00:00">
+                2018-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/React-Native/" itemprop="url" rel="index">
+                    <span itemprop="name">React Native</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>App 开发过程中总是需要打包诸多版本提供测试部分进行测试，由于我们的 App 是使用 React Native 进行开发的，每次更新又分为热更新和安装包更新，如果每次都通过命令行进行热更新或者在本机上进行编译打包的话十分影响自己的工作效率。所以搭建一套持续集成环境把这些重复工作自动化就变的十分必要的了，持续集成的好处相信大家都了解了很多，只是搭建步骤比较繁琐，这里就把我之前使用 <a href="https://jenkins.io/" target="_blank" rel="noopener">Jenkins</a> 搭建持续集成环境的过程总结下来，留作参考。<br><a id="more"></a></p>
+<p>开始之前总结一下哪些功能需要解决的一些问题：</p>
+<ul>
+<li>代码依赖问题。由于 Android 原生项目中会依赖一些三方库，所以在构建 Android 项目前，需要先执行用于下载依赖库的 Job。</li>
+<li>热更新。由于需要热更新时并不需要重新构建原生安装包，所以把热更新当做一个单独的Job，这一部分主要是更新代码并执行热更新命令行。</li>
+<li>Android 打包。这里把 Android 打包当做一个单独的 Job，为了满足自动化构建需要对原生项目做一些改进，包括三方库的依赖路径，以及一些构建参数，需要改成能接受外部传入参数。其余的可根据实际情况定制参数，比如我们项目同一份代码，需要分为三个不同的 logo，以及不同的接口地址进行分发，这时需要使用多渠道打包，所以我们的 Jenkins 也要根据情况传入自定义的参数。</li>
+<li>iOS 打包。同样的 iOS 打包也是一个单独的 Job，iOS 项目没有直接接受外部传入参数的方法，这里我们可以在构建过程中，根据 Jenkins 参数，进行手动修改 plist 文件内的属性达到自定义属性的效果。同时配合在同一 workspace 下创建不同的 target 和 scheme 达到区分安装包的效果。</li>
+<li>构建通知。由于打包需要消耗不少的时间，实时盯着进度显然不合适。所以我们需要在 Job 执行结束时发送邮件通知相关人员。</li>
+</ul>
+<p>综上所述，要实现以上的需求，直接使用 Jenkins 里面提供的打包插件实现起来并不方便。所以我这里把一些主要的操作都通过执行 shell 脚本实现。</p>
+<h2 id="依赖环境"><a href="#依赖环境" class="headerlink" title="依赖环境"></a>依赖环境</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Jenkins 2.89.2</span><br><span class="line">macOS 10.13.2</span><br><span class="line">Xcode 9.2</span><br><span class="line">Gradle 2.14</span><br></pre></td></tr></table></figure>
+<h2 id="Jenkins-基础配置"><a href="#Jenkins-基础配置" class="headerlink" title="Jenkins 基础配置"></a>Jenkins 基础配置</h2><h3 id="安装依赖插件"><a href="#安装依赖插件" class="headerlink" title="安装依赖插件"></a>安装依赖插件</h3><blockquote>
+<p>路径：Jenkins =&gt; 系统管理 =&gt; 插件管理 =&gt; 可选插件 中搜索以下组件</p>
+</blockquote>
+<ul>
+<li>GitLab Plugin</li>
+<li>Email Extension Plugin</li>
+<li>Gradle Plugin</li>
+<li>Keychains and Provisioning Profiles Plugin</li>
+</ul>
+<h3 id="配置插件"><a href="#配置插件" class="headerlink" title="配置插件"></a>配置插件</h3><h4 id="Gradle-Plugin"><a href="#Gradle-Plugin" class="headerlink" title="Gradle Plugin"></a>Gradle Plugin</h4><blockquote>
+<p>路径：Jenkins =&gt; 系统管理 =&gt; 全局工具配置 =&gt; Gradle</p>
+</blockquote>
+<p>设置 gradle 版本，并设置对应的路径，这里使用 <a href="https://downloads.gradle.org/distributions/gradle-2.14.1-all.zip" target="_blank" rel="noopener">2.14.1</a> 版本，一开始使用 3.0 以上版本在打包中报错 <code>GC overhead limit exceeded</code>，由于项目使用的就是 2.14.1 版本，为了方便就不更新项目 Gradle 版本了。</p>
+<p><img src="http://qiniu.0x0803.top/image/blog/1/gradle_config.png_blog" alt="img"></p>
+<h4 id="Keychains-and-Provisioning-Profiles-Plugin"><a href="#Keychains-and-Provisioning-Profiles-Plugin" class="headerlink" title="Keychains and Provisioning Profiles Plugin"></a>Keychains and Provisioning Profiles Plugin</h4><blockquote>
+<p>路径：Jenkins =&gt; 系统管理 =&gt; Keychains and Provisioning Profiles Management</p>
+</blockquote>
+<p><img src="http://qiniu.0x0803.top/image/blog/1/keychains_provisioning_profiles.png_blog" alt="img"><br>这里需要上传两种类型的文件 .keychain 和 .mobileprovision</p>
+<h5 id="上传-keychain-文件"><a href="#上传-keychain-文件" class="headerlink" title="上传 .keychain 文件"></a>上传 .keychain 文件</h5><ol>
+<li>打开钥匙串访问，找到系统中已安装过证书的 .keychain 文件。一般为登录钥匙串下，系统中的文件位置为 /Users/username/Library/Keychains/login.keychain（系统在 10.12 以上可能由于升级系统找不到 login.keychain 文件，只有 login.keychain-db 文件，由于上传 .keychain-db 格式的会失败，此时可以复制 login.keychain-db 文件后重命名为 login.keychain 用于上传）。<br><img src="http://qiniu.0x0803.top/image/blog/1/keychains_cers.png_blog" alt="图1"></li>
+<li>上传成功后，如图1，在黄框2中输入密码，一般为当前用户登录密码。 </li>
+<li>点击黄框3中的 Add Code Signing Identity 按钮，在 Identities 中添加证书对应的标识，可以在钥匙串中查看常用名称,右键证书，点击显示简介:<br><img src="http://qiniu.0x0803.top/image/blog/1/cer_detail.png_blog" alt="img"></li>
+</ol>
+<h5 id="上传-mobileprovision-文件"><a href="#上传-mobileprovision-文件" class="headerlink" title="上传 .mobileprovision 文件"></a>上传 .mobileprovision 文件</h5><ol>
+<li>设置 Provisionging Profiles Directory Path。主要用于存储上传的 .mobileprovision 文件, 一般为默认路径即可，如图1-黄框4</li>
+<li>上传 .mobileprovision 文件。上传后可以看到如图1-黄框5，即代表上传成功</li>
+</ol>
+<h5 id="Email-Extension-Plugin"><a href="#Email-Extension-Plugin" class="headerlink" title="Email Extension Plugin"></a>Email Extension Plugin</h5><p>相较与默认提供的邮箱通知，Email Extension Plugin 提供的功能更强大 </p>
+<ol>
+<li>Default Recipients，配置默认的收件人</li>
+<li>Default Subject，配置默认的邮件标题</li>
+<li>Default Content，配置默认的邮件内容等<br><img src="http://qiniu.0x0803.top/image/blog/1/email_1.png_blog" alt="img"><br><img src="http://qiniu.0x0803.top/image/blog/1/email_2.png_blog" alt="img"><br><img src="http://qiniu.0x0803.top/image/blog/1/email_3.png_blog" alt="img"></li>
+</ol>
+<h5 id="保存配置"><a href="#保存配置" class="headerlink" title="保存配置"></a>保存配置</h5><h4 id="配置系统设置"><a href="#配置系统设置" class="headerlink" title="配置系统设置"></a>配置系统设置</h4><blockquote>
+<p>路径：Jenkins =&gt; 系统管理 =&gt; 系统设置</p>
+</blockquote>
+<h5 id="配置全局属性"><a href="#配置全局属性" class="headerlink" title="配置全局属性"></a>配置全局属性</h5><blockquote>
+<p>路径：Jenkins =&gt; 系统管理 =&gt; 系统设置 =&gt; 全局属性</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>键</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PATH</td>
+<td>通过 shell 命令 echo PATH 获取系统 PATH 的路径</td>
+</tr>
+<tr>
+<td>ANDROID_HOME</td>
+<td>设置 ANDROID_HOME， 如果项目中包含 local.properties 文件，可以不用设置，一般情况下 local.properties 会忽略上传到 git</td>
+</tr>
+</tbody>
+</table>
+<p><img src="http://qiniu.0x0803.top/image/blog/1/global_environment.png_blog" alt="img"></p>
+<h5 id="配置邮件通知"><a href="#配置邮件通知" class="headerlink" title="配置邮件通知"></a>配置邮件通知</h5><p><img src="http://qiniu.0x0803.top/image/blog/1/email_server.png_blog" alt="img"></p>
+<h2 id="热更新"><a href="#热更新" class="headerlink" title="热更新"></a>热更新</h2><h3 id="创建-job"><a href="#创建-job" class="headerlink" title="创建 job"></a>创建 job</h3><blockquote>
+<p>路径：Jenkins =&gt; 新建<br>选择<code>构建一个自由风格的软件项目</code>，并输入任务名称，然后点确认。<br><img src="http://qiniu.0x0803.top/image/blog/1/add_job.png_blog" alt="img"></p>
+</blockquote>
+<h3 id="源码管理"><a href="#源码管理" class="headerlink" title="源码管理"></a>源码管理</h3><p><img src="http://qiniu.0x0803.top/image/blog/1/source_manager.png_blog" alt="img"></p>
+<p>这里使用 git 管理代码，输入文件仓库路径，设置 Credentials，设置要构建的分支 Branches to build，这里我设置的是 <code>*/${BRANCH}</code>，为了偷懒我就不重新截图了，同样的源码管理这一步在后续的 Android 以及 iOS 构建也需要添加，不过步骤相同，后续也不重复了，- -！。</p>
+<h3 id="参数化构建"><a href="#参数化构建" class="headerlink" title="参数化构建"></a>参数化构建</h3><p>需要自定义的参数要根据实际情况添加，不必要完全相同，我这里把我设置的都记录下来了。</p>
+<style>
+table th:nth-of-type(1) {
+    width: 80px;
+}
+table th:nth-of-type(2) {
+    width: 170px;
+}
+table th:nth-of-type(4) {
+    width: 100px;
+}
+</style>
+
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>名字</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Choice Parameter</td>
+<td>BRANCH</td>
+<td>develop<br>master</td>
+<td>代码分支</td>
+</tr>
+<tr>
+<td>Boolean Parameter</td>
+<td>CODE_PUSH</td>
+<td>false</td>
+<td>是否热更新此次推送</td>
+</tr>
+<tr>
+<td>Choice Parameter</td>
+<td>CODE_PUSH_TEST_ENV</td>
+<td>test<br>master</td>
+<td>推送服务器环境</td>
+</tr>
+<tr>
+<td>Choice Parameter</td>
+<td>CODE_PUSH_DEPLOY</td>
+<td>all<br>ksd_shuttle<br>ksd_shuttle_ems<br>ksd_shuttle_sgr</td>
+<td>推送哪些APP</td>
+</tr>
+<tr>
+<td>Choice Parameter</td>
+<td>CODE_PUSH_PLATFORM</td>
+<td>all<br>android<br>ios</td>
+<td>推送更新的设备类型</td>
+</tr>
+<tr>
+<td>String Parameter</td>
+<td>CODE_PUSH_DESC</td>
+<td></td>
+<td>推送内容信息</td>
+</tr>
+<tr>
+<td>Boolean Parameter</td>
+<td>CODE_PUSH_MAN</td>
+<td>false</td>
+<td>是否强制更新</td>
+</tr>
+</tbody>
+</table>
+<h3 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h3><p><img src="http://qiniu.0x0803.top/image/blog/1/xcodebuild_shell.png_blog" alt="img"></p>
+<p>根据具体情况执行一些初始化命令<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> codeinit.sh</span><br><span class="line"><span class="meta">#</span> 这个是通用的步骤,所以写在一个单据文件里面，方便执行</span><br><span class="line">yarn cache clean</span><br><span class="line">yarn install</span><br><span class="line">yarn upgrade</span><br><span class="line">git status</span><br><span class="line">git checkout .</span><br><span class="line">git status</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> codepush.sh</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 根据参数判断要热更新的环境，这里主要是写一个判断然后执行相应的命令行就好了</span><br><span class="line">if [[ $CODE_PUSH = true ]]; then</span><br><span class="line">    echo "=================code push start================="</span><br><span class="line">	if [[ $CODE_PUSH_TEST_ENV = 'test' ]]; then</span><br><span class="line">        codepushUrl="http://192.168.1.14:3000"</span><br><span class="line">        codepushKey=""</span><br><span class="line">    elif  [[ $CODE_PUSH_TEST_ENV = 'master' ]]; then</span><br><span class="line">        codepushUrl="http://master.com:3200"</span><br><span class="line">        codepushKey=""</span><br><span class="line">    else</span><br><span class="line">        codepushUrl="http://192.168.1.14:3000"</span><br><span class="line">        codepushKey=""</span><br><span class="line">    fi</span><br><span class="line">    echo "codepushUrl: " $&#123;codepushUrl&#125;</span><br><span class="line">    echo "codepushKey: " $&#123;codepushKey&#125;</span><br><span class="line"></span><br><span class="line">    code-push logout</span><br><span class="line">    echo $&#123;codepushKey&#125; | code-push login $&#123;codepushUrl&#125;</span><br><span class="line">	code-push app list</span><br><span class="line">    </span><br><span class="line">    if [[ $CODE_PUSH_PLATFORM = 'all' ]]; then</span><br><span class="line">        if [[ $CODE_PUSH_DEPLOY = 'all' ]]; then </span><br><span class="line">        else</span><br><span class="line">        code-push release-react $&#123;CODE_PUSH_DEPLOY&#125;-ios ios --plistFile ./ios/ksudi_courier_rn/Info.plist -d Production --description "$&#123;CODE_PUSH_DESC&#125;" --mandatory $&#123;CODE_PUSH_MAN&#125; --disabled true</span><br><span class="line">        code-push release-react $&#123;CODE_PUSH_DEPLOY&#125;-android android -d Production --description "$&#123;CODE_PUSH_DESC&#125;" --mandatory $&#123;CODE_PUSH_MAN&#125; --disabled true</span><br><span class="line">        fi</span><br><span class="line">    elif [[ $CODE_PUSH_PLATFORM = 'android' ]]; then</span><br><span class="line">        if [[ $CODE_PUSH_DEPLOY = 'all' ]]; then </span><br><span class="line">        else</span><br><span class="line">        code-push release-react $&#123;CODE_PUSH_DEPLOY&#125;-android android -d Production --description "$&#123;CODE_PUSH_DESC&#125;" --mandatory $&#123;CODE_PUSH_MAN&#125; --disabled true</span><br><span class="line">        fi</span><br><span class="line">    else</span><br><span class="line">        if [[ $CODE_PUSH_DEPLOY = 'all' ]]; then </span><br><span class="line">        else</span><br><span class="line">        code-push release-react $&#123;CODE_PUSH_DEPLOY&#125;-ios ios --plistFile ./ios/ksudi_courier_rn/Info.plist -d Production --description "$&#123;CODE_PUSH_DESC&#125;" --mandatory $&#123;CODE_PUSH_MAN&#125; --disabled true</span><br><span class="line">        fi</span><br><span class="line">    fi</span><br><span class="line">    echo "=================code push success================="</span><br><span class="line">    exit 0</span><br><span class="line">else</span><br><span class="line">    echo "=================update code success, does not code push================="</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<h3 id="构建后操作"><a href="#构建后操作" class="headerlink" title="构建后操作"></a>构建后操作</h3><p><img src="http://qiniu.0x0803.top/image/blog/1/after_source_job.png_blog" alt="img"><br>可以通过设置构建后的操作，来实现不同的依赖关系，如当前项目依赖其他项目，可以在其他项目构建成功后执行当前项目（根据实际情况添加，这里有一点不是很满意的就是没法传入参数到后续项目）。</p>
+<h2 id="构建-Android-安装包"><a href="#构建-Android-安装包" class="headerlink" title="构建 Android 安装包"></a>构建 Android 安装包</h2><h3 id="创建-job-1"><a href="#创建-job-1" class="headerlink" title="创建 job"></a>创建 job</h3><p>选择<code>构建一个自由风格的软件项目</code>，并输入任务名称，然后点确认。这里要创建两个，由于 Android 项目依赖的有其他三方库，所以要根据实际情况创建对应的下载代码的 Job。</p>
+<h3 id="参数化构建-1"><a href="#参数化构建-1" class="headerlink" title="参数化构建"></a>参数化构建</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>名字</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Choice Parameter</td>
+<td>BUILD_TYPE</td>
+<td>Release<br>Debug</td>
+<td>构建环境</td>
+</tr>
+<tr>
+<td>Choice Parameter</td>
+<td>PRODUCT_TYPE</td>
+<td>Ksd<br>Ems<br>Sgr</td>
+<td>安装包类型</td>
+</tr>
+<tr>
+<td>String Parameter</td>
+<td>APP_VERSION</td>
+<td>1.0.0</td>
+<td>安装包版本号（跟随代码设置）</td>
+</tr>
+<tr>
+<td>String Parameter</td>
+<td>APP_BUILD</td>
+<td>1</td>
+<td>安装包构建号（跟随代码设置）</td>
+</tr>
+<tr>
+<td>String Parameter</td>
+<td>APK_PATH</td>
+<td>${WORKSPACE}/apk/</td>
+<td>安装包输出路径</td>
+</tr>
+<tr>
+<td>Extensible Choice</td>
+<td>BUILD_TIME</td>
+<td>return [new Date().format(‘yyyyMMdd’)]</td>
+<td>构建时间</td>
+</tr>
+<tr>
+<td>String Parameter</td>
+<td>APK_NAME</td>
+<td>ksd_shuttle_${BUILD_TIME}.apk</td>
+<td>安装包名</td>
+</tr>
+<tr>
+<td>Boolean Parameter</td>
+<td>JENKINS_BUILD</td>
+<td>true</td>
+<td>是否为Jenkins打包</td>
+</tr>
+</tbody>
+</table>
+<h3 id="构建-1"><a href="#构建-1" class="headerlink" title="构建"></a>构建</h3><h4 id="Execute-shell"><a href="#Execute-shell" class="headerlink" title="Execute shell"></a>Execute shell</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh codeinit.sh</span><br></pre></td></tr></table></figure>
+<h4 id="Invoke-Gradle-script"><a href="#Invoke-Gradle-script" class="headerlink" title="Invoke Gradle script"></a>Invoke Gradle script</h4><ol>
+<li>Invoke Gradle 选中刚才添加的 2.14.1 版本</li>
+<li>Use Gradle Wrapper 不需要选中，但是要配置信息</li>
+<li>配置 Task 内容 <code>clean assemble${PRODUCT_TYPE}Release --stacktrace --info --debug</code></li>
+<li>如果项目路径不在当前 workspace，则设置 Root Build script 到对应项目的 build.gradle 文件所在的文件夹<br><img src="http://qiniu.0x0803.top/image/blog/1/android_build.png_blog" alt="img"></li>
+</ol>
+<h4 id="Execute-shell-1"><a href="#Execute-shell-1" class="headerlink" title="Execute shell"></a>Execute shell</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> build_android.sh</span><br><span class="line"><span class="meta">#</span> 主要是把安装包上传到内网发布平台，可以根据情况上传至蒲公英或者 fir 等平台</span><br><span class="line">if [[ $&#123;PRODUCT_TYPE&#125; = 'Ksd' ]]; then</span><br><span class="line">    if [[ $&#123;IS_TEST_CODEPUSH&#125; = true ]]; then</span><br><span class="line">        APP_PLAT_ID=3</span><br><span class="line">    else</span><br><span class="line">        APP_PLAT_ID=4</span><br><span class="line">    fi</span><br><span class="line">elif [[ $&#123;PRODUCT_TYPE&#125; = 'Ems' ]]; then</span><br><span class="line">    if [[ $&#123;IS_TEST_CODEPUSH&#125; = true ]]; then</span><br><span class="line">        APP_PLAT_ID=7</span><br><span class="line">    else</span><br><span class="line">        APP_PLAT_ID=8</span><br><span class="line">    fi</span><br><span class="line">elif [[ $&#123;PRODUCT_TYPE&#125; = 'Sgr' ]]; then</span><br><span class="line">    if [[ $&#123;IS_TEST_CODEPUSH&#125; = true ]]; then</span><br><span class="line">        APP_PLAT_ID=11</span><br><span class="line">    else</span><br><span class="line">        APP_PLAT_ID=12</span><br><span class="line">    fi</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">curl --form plat_id=$&#123;APP_PLAT_ID&#125; --form file_nick_name=$&#123;APK_NAME&#125; --form token=b83ccaaa9dcef62d2d28cb030bc805fda2f1b03c --form file=@$&#123;APK_PATH&#125;/$&#123;APK_NAME&#125; https://192.168.1.38/api/pkgs</span><br></pre></td></tr></table></figure>
+<h2 id="构建-iOS-安装包"><a href="#构建-iOS-安装包" class="headerlink" title="构建 iOS 安装包"></a>构建 iOS 安装包</h2><h3 id="创建-job-2"><a href="#创建-job-2" class="headerlink" title="创建 job"></a>创建 job</h3><p>选择<code>构建一个自由风格的软件项目</code>，并输入任务名称，然后点确认。</p>
+<h3 id="参数化构建-2"><a href="#参数化构建-2" class="headerlink" title="参数化构建"></a>参数化构建</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>名字</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>String Parameter</td>
+<td>APP_NAME</td>
+<td>ksudi_courier_rn</td>
+<td>.xcworkspace 文件对应的文件名</td>
+</tr>
+<tr>
+<td>Choice Parameter</td>
+<td>SCHEME</td>
+<td>ksd_shuttle<br>ksd_shuttle_ems<br>ksd_shuttle_sgr</td>
+<td>构建APP</td>
+</tr>
+<tr>
+<td>String Parameter</td>
+<td>PROJECT_PATH</td>
+<td>${WORKSPACE}/../ksudi-courier-rn/ios</td>
+<td>.xcworkspace文件对应的文件夹路径</td>
+</tr>
+<tr>
+<td>String Parameter</td>
+<td>IPA_PATH</td>
+<td>${WORKSPACE}/ipa</td>
+<td>ipa 包存放路径</td>
+</tr>
+<tr>
+<td>String Parameter</td>
+<td>ARCHIVE_PATH</td>
+<td>${WORKSPACE}/archive</td>
+<td>.archive 文件存放路径</td>
+</tr>
+<tr>
+<td>Choice Parameter</td>
+<td>EXPORT_METHOD</td>
+<td>enterprise<br>development<br>ad-hoc<br>app-store</td>
+<td>导出安装包的类型</td>
+</tr>
+<tr>
+<td>String Parameter</td>
+<td>BUNDLE_IDENTIFIER</td>
+<td>com.company.bundleid</td>
+<td>唯一标识</td>
+</tr>
+<tr>
+<td>String Parameter</td>
+<td>TEAM_ID</td>
+<td></td>
+<td>证书对应的TeamID（图三-组织单位） </td>
+</tr>
+</tbody>
+</table>
+<h3 id="构建环境"><a href="#构建环境" class="headerlink" title="构建环境"></a>构建环境</h3><ol>
+<li>选中当前项目对应的签名证书</li>
+<li>选中当前项目对应的 provisioning profile 文件</li>
+<li>Variable Prefix 根据 Code Signing Identity 和 provisioning profile 对应的安装包信息添加 DIS 或 DEV 前缀</li>
+</ol>
+<p><img src="http://qiniu.0x0803.top/image/blog/1/keychain_config.png_blog" alt="img"></p>
+<h3 id="构建-2"><a href="#构建-2" class="headerlink" title="构建"></a>构建</h3><p>增加构建步骤，选中 Execute shell，并配置如下，执行 shell 文件或直接把 shell 命令赋值到 Command 中</p>
+<p><img src="http://qiniu.0x0803.top/image/blog/1/xcodebuild_shell.png_blog" alt="img"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh codeinit.sh</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> build_ios.sh</span><br><span class="line">echo "=================app info================="</span><br><span class="line">PLIST_PATH="$&#123;PROJECT_PATH&#125;/$&#123;APP_NAME&#125;/Info.plist"</span><br><span class="line">echo "PLIST_PATH:" $&#123;PLIST_PATH&#125;</span><br><span class="line"><span class="meta">#</span>取版本号</span><br><span class="line">bundleShortVersion=$(/usr/libexec/PlistBuddy -c "print CFBundleShortVersionString" "$&#123;PLIST_PATH&#125;")</span><br><span class="line">echo "bundleShortVersion:" $&#123;bundleShortVersion&#125;</span><br><span class="line"><span class="meta">#</span>取build值</span><br><span class="line">bundleVersion=$(/usr/libexec/PlistBuddy -c "print CFBundleVersion" "$&#123;PLIST_PATH&#125;")</span><br><span class="line">echo "bundleVersion:" $&#123;bundleVersion&#125;</span><br><span class="line"><span class="meta">#</span>bundle id</span><br><span class="line">bundleId=$&#123;BUNDLE_IDENTIFIER&#125;</span><br><span class="line">echo "bundleId:" $&#123;bundleId&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 根据不同环境设置不同的安装包上传地址，以及不同的证书文件。</span><br><span class="line">if [[ $&#123;EXPORT_METHOD&#125; = 'enterprise' || $&#123;EXPORT_METHOD&#125; = 'app-store' ]]; then</span><br><span class="line">    PROVISIONING_PROFILE=$&#123;DIS_PROVISIONING_PROFILE&#125;</span><br><span class="line">    CODE_SIGNING_IDENTITY=$&#123;DIS_CODE_SIGNING_IDENTITY&#125;</span><br><span class="line">    KEYCHAIN_PASSWORD=$&#123;DIS_KEYCHAIN_PASSWORD&#125;</span><br><span class="line">    KEYCHAIN_PATH=$&#123;DIS_KEYCHAIN_PATH&#125;</span><br><span class="line">    BUILD_CONFIG='Release'</span><br><span class="line">    if [[ $&#123;SCHEME&#125; = 'ksd_shuttle_ems' ]]; then</span><br><span class="line">        APP_PLAT_ID=6</span><br><span class="line">    elif [[ $&#123;SCHEME&#125; = 'ksd_shuttle' ]]; then</span><br><span class="line">        APP_PLAT_ID=2</span><br><span class="line">    elif [[ $&#123;SCHEME&#125; = 'ksd_shuttle_sgr' ]]; then</span><br><span class="line">        APP_PLAT_ID=10</span><br><span class="line">    fi</span><br><span class="line">elif [ $&#123;EXPORT_METHOD&#125; = 'ad-hoc' ]; then </span><br><span class="line">    PROVISIONING_PROFILE=$&#123;DIS_PROVISIONING_PROFILE&#125;</span><br><span class="line">    CODE_SIGNING_IDENTITY=$&#123;DIS_CODE_SIGNING_IDENTITY&#125;</span><br><span class="line">    KEYCHAIN_PASSWORD=$&#123;DIS_KEYCHAIN_PASSWORD&#125;</span><br><span class="line">    KEYCHAIN_PATH=$&#123;DIS_KEYCHAIN_PATH&#125;</span><br><span class="line">    BUILD_CONFIG='Release'</span><br><span class="line">    if [[ $&#123;SCHEME&#125; = 'ksd_shuttle_ems' ]]; then</span><br><span class="line">        APP_PLAT_ID=5</span><br><span class="line">    elif [[ $&#123;SCHEME&#125; = 'ksd_shuttle' ]]; then</span><br><span class="line">        APP_PLAT_ID=1</span><br><span class="line">    elif [[ $&#123;SCHEME&#125; = 'ksd_shuttle_sgr' ]]; then</span><br><span class="line">        APP_PLAT_ID=9</span><br><span class="line">    fi</span><br><span class="line">else</span><br><span class="line">    PROVISIONING_PROFILE=$&#123;DEV_PROVISIONING_PROFILE&#125;</span><br><span class="line">    CODE_SIGNING_IDENTITY=$&#123;DEV_CODE_SIGNING_IDENTITY&#125;</span><br><span class="line">    KEYCHAIN_PASSWORD=$&#123;DEV_KEYCHAIN_PASSWORD&#125;</span><br><span class="line">    KEYCHAIN_PATH=$&#123;DEV_KEYCHAIN_PATH&#125;</span><br><span class="line">    BUILD_CONFIG='Debug'</span><br><span class="line">    if [[ $&#123;SCHEME&#125; = 'ksd_shuttle_ems' ]]; then</span><br><span class="line">        APP_PLAT_ID=5</span><br><span class="line">    elif [[ $&#123;SCHEME&#125; = 'ksd_shuttle' ]]; then</span><br><span class="line">        APP_PLAT_ID=1</span><br><span class="line">    elif [[ $&#123;SCHEME&#125; = 'ksd_shuttle_sgr' ]]; then</span><br><span class="line">        APP_PLAT_ID=9</span><br><span class="line">    fi</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 配置打包是需要的 plist 文件，</span><br><span class="line">EXPORT_PLIST_TEMPLATE="&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;&lt;!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\"&gt;&lt;plist version=\"1.0\"&gt;&lt;dict&gt;&lt;key&gt;compileBitcode&lt;/key&gt;&lt;false/&gt;&lt;key&gt;method&lt;/key&gt;&lt;string&gt;$&#123;EXPORT_METHOD&#125;&lt;/string&gt;&lt;key&gt;provisioningProfiles&lt;/key&gt;&lt;dict&gt;&lt;key&gt;$&#123;bundleId&#125;&lt;/key&gt;&lt;string&gt;$&#123;PROVISIONING_PROFILE&#125;&lt;/string&gt;&lt;/dict&gt;&lt;key&gt;signingStyle&lt;/key&gt;&lt;string&gt;manual&lt;/string&gt;&lt;key&gt;stripSwiftSymbols&lt;/key&gt;&lt;true/&gt;&lt;key&gt;teamID&lt;/key&gt;&lt;string&gt;$&#123;TEAM_ID&#125;&lt;/string&gt;&lt;key&gt;thinning&lt;/key&gt;&lt;string&gt;&amp;lt;none&amp;gt;&lt;/string&gt;&lt;/dict&gt;&lt;/plist&gt;"</span><br><span class="line">echo "=================export info================="</span><br><span class="line">EXPORT_PLIST_PATH="$&#123;WORKSPACE&#125;/ExportOptions.plist"</span><br><span class="line">echo "EXPORT_PLIST_TEMPLATE:" $&#123;EXPORT_PLIST_TEMPLATE&#125;</span><br><span class="line">echo $&#123;EXPORT_PLIST_TEMPLATE&#125; &gt; $&#123;EXPORT_PLIST_PATH&#125;</span><br><span class="line"></span><br><span class="line">DATE="$(date +%Y%m%d)"</span><br><span class="line">echo "DATE:" $&#123;DATE&#125;</span><br><span class="line">echo "IPA_PATH:" $&#123;IPA_PATH&#125;</span><br><span class="line">echo "ARCHIVE_PATH:" $&#123;ARCHIVE_PATH&#125;</span><br><span class="line">ARCHIVE_FILE_PATH="$&#123;ARCHIVE_PATH&#125;/$&#123;APP_NAME&#125;.xcarchive"</span><br><span class="line">echo "ARCHIVE_FILE_PATH:" $&#123;ARCHIVE_FILE_PATH&#125;</span><br><span class="line"></span><br><span class="line">export LANG=en_US.UTF-8</span><br><span class="line">echo "=================unlock keychain================="</span><br><span class="line">/usr/bin/security list-keychains -s $&#123;KEYCHAIN_PATH&#125;</span><br><span class="line">/usr/bin/security default-keychain -d user -s $&#123;KEYCHAIN_PATH&#125;</span><br><span class="line"><span class="meta">#</span> 解锁 keychain</span><br><span class="line">/usr/bin/security unlock-keychain -p $&#123;KEYCHAIN_PASSWORD&#125; $&#123;KEYCHAIN_PATH&#125; </span><br><span class="line">/usr/bin/security set-keychain-settings -t 3600 -l $&#123;KEYCHAIN_PATH&#125;</span><br><span class="line">/usr/bin/security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $&#123;KEYCHAIN_PASSWORD&#125; $&#123;KEYCHAIN_PATH&#125;</span><br><span class="line"><span class="meta">#</span> /usr/bin/security set-key-partition-list -S apple-tool:,apple: -s -k $&#123;KEYCHAIN_PASSWORD&#125; $&#123;KEYCHAIN_PATH&#125;</span><br><span class="line">/usr/bin/security show-keychain-info $&#123;KEYCHAIN_PATH&#125;</span><br><span class="line">/usr/bin/security find-identity -p codesigning -v</span><br><span class="line"></span><br><span class="line">echo "=================update pods================="</span><br><span class="line">cd $&#123;PROJECT_PATH&#125;</span><br><span class="line">pod update --no-repo-update</span><br><span class="line"></span><br><span class="line">echo "=================xcodebuild command start================="</span><br><span class="line">chmod -R 777 $&#123;PROJECT_PATH&#125;/../node_modules/react-native</span><br><span class="line">xcodebuild -version</span><br><span class="line">xcodebuild -showsdks</span><br><span class="line"></span><br><span class="line">echo "=================list================="</span><br><span class="line">xcodebuild -list -workspace "$&#123;PROJECT_PATH&#125;/$&#123;APP_NAME&#125;.xcworkspace"</span><br><span class="line"></span><br><span class="line">echo "=================clean================="</span><br><span class="line">xcodebuild -workspace "$&#123;PROJECT_PATH&#125;/$&#123;APP_NAME&#125;.xcworkspace" -scheme "$&#123;SCHEME&#125;" -configuration "$&#123;BUILD_CONFIG&#125;" clean</span><br><span class="line"></span><br><span class="line">echo "=================archive================="</span><br><span class="line">xcodebuild archive -workspace "$&#123;PROJECT_PATH&#125;/$&#123;APP_NAME&#125;.xcworkspace" -scheme "$&#123;SCHEME&#125;" -sdk iphoneos -configuration "$&#123;BUILD_CONFIG&#125;" -archivePath "$&#123;ARCHIVE_FILE_PATH&#125;" CODE_SIGN_IDENTITY="$&#123;CODE_SIGNING_IDENTITY&#125;" PROVISIONING_PROFILE="$&#123;PROVISIONING_PROFILE&#125;"</span><br><span class="line">if [ $? -eq 0 ]; then</span><br><span class="line">    echo "=================archive success================="</span><br><span class="line">else</span><br><span class="line">    echo "=================archive failure================="</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">echo "=================export================="</span><br><span class="line">xcodebuild -exportArchive -archivePath "$&#123;ARCHIVE_FILE_PATH&#125;" -exportPath "$&#123;IPA_PATH&#125;" -exportOptionsPlist "$&#123;EXPORT_PLIST_PATH&#125;"</span><br><span class="line">if [ $? -eq 0 ]; then</span><br><span class="line">    echo "=================export success================="</span><br><span class="line">else</span><br><span class="line">    echo "=================export failure================="</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">echo "=================rename ipa================="</span><br><span class="line">IPANAME="$&#123;SCHEME&#125;_V$&#123;bundleShortVersion&#125;_$&#123;DATE&#125;.ipa"</span><br><span class="line">echo "IPANAME:" $&#123;IPANAME&#125;</span><br><span class="line">mv "$&#123;IPA_PATH&#125;/$&#123;SCHEME&#125;.ipa" "$&#123;IPA_PATH&#125;/$&#123;IPANAME&#125;" </span><br><span class="line">if [ $? -eq 0 ]; then</span><br><span class="line">    echo "=================rename success================="</span><br><span class="line">else</span><br><span class="line">    echo "=================rename failure================="</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 上传安装包到内网发布平台</span><br><span class="line">curl --form plat_id=$&#123;APP_PLAT_ID&#125; --form file_nick_name=$&#123;IPANAME&#125; --form token=b83ccaaa9dcef62d2d28cb030bc805fda2f1b03c --form file=@$&#123;IPA_PATH&#125;/$&#123;IPANAME&#125; https://192.168.1.38/api/pkgs</span><br></pre></td></tr></table></figure>
+<h3 id="更多"><a href="#更多" class="headerlink" title="更多"></a>更多</h3><p>如果 archive 过程报如下错误，是因为每次签名都需要权限，没有找到通过命令行解决的办法，解决方法是用 Xcode 打开项目并打包，在最后会提示 是否允许 codesign 获取钥匙串权限 点击始终允许，然后就不会出如下错误了。或者如脚本中设置权限，并在钥匙串中双击密钥，然后修改访问控制为允许所有应用程序访问项目。</p>
+<p><img src="http://qiniu.0x0803.top/image/blog/1/change_key_info.png_blog" alt="img"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 遇到的错误信息</span><br><span class="line">/usr/bin/codesign --force --sign BECCC467849A21A6C3090FF3913F38BE5C25171A --entitlements /Users/ksudi/Library/Developer/Xcode/DerivedData/ksudi_courier_rn-ghscruhcynnsgeaxehveiqyurbpm/Build/Intermediates.noindex/ArchiveIntermediates/ksd_shuttle/IntermediateBuildFilesPath/ksudi_courier_rn.build/Release-iphoneos/ksd_shuttle.build/ksd_shuttle.app.xcent --timestamp=none /Users/ksudi/Library/Developer/Xcode/DerivedData/ksudi_courier_rn-ghscruhcynnsgeaxehveiqyurbpm/Build/Intermediates.noindex/ArchiveIntermediates/ksd_shuttle/InstallationBuildProductsLocation/Applications/ksd_shuttle.app</span><br><span class="line">/Users/ksudi/Library/Developer/Xcode/DerivedData/ksudi_courier_rn-ghscruhcynnsgeaxehveiqyurbpm/Build/Intermediates.noindex/ArchiveIntermediates/ksd_shuttle/InstallationBuildProductsLocation/Applications/ksd_shuttle.app: unknown error -1=ffffffffffffffff</span><br><span class="line">Command /usr/bin/codesign failed with exit code 1</span><br><span class="line"></span><br><span class="line">** ARCHIVE FAILED **</span><br></pre></td></tr></table></figure>
+<h2 id="配置构建成功后操作"><a href="#配置构建成功后操作" class="headerlink" title="配置构建成功后操作"></a>配置构建成功后操作</h2><h3 id="邮件通知模板"><a href="#邮件通知模板" class="headerlink" title="邮件通知模板"></a>邮件通知模板</h3><p>这里主要使用 HTML 写邮件模板，需要根据不同 Job 定义不同的模板，这里提供一个参考。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">title</span>&gt;</span>$&#123;ENV, var="JOB_NAME"&#125;-第$&#123;BUILD_NUMBER&#125;次构建日志<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span> <span class="attr">leftmargin</span>=<span class="string">"8"</span> <span class="attr">marginwidth</span>=<span class="string">"0"</span> <span class="attr">topmargin</span>=<span class="string">"8"</span> <span class="attr">marginheight</span>=<span class="string">"4"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">offset</span>=<span class="string">"0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">table</span> <span class="attr">width</span>=<span class="string">"95%"</span> <span class="attr">cellpadding</span>=<span class="string">"0"</span> <span class="attr">cellspacing</span>=<span class="string">"0"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">style</span>=<span class="string">"font-size: 11pt; font-family: Tahoma, Arial, Helvetica, sans-serif"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">b</span>&gt;</span><span class="tag">&lt;<span class="name">font</span> <span class="attr">color</span>=<span class="string">"#0B610B"</span>&gt;</span>构建信息<span class="tag">&lt;/<span class="name">font</span>&gt;</span><span class="tag">&lt;/<span class="name">b</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">hr</span> <span class="attr">size</span>=<span class="string">"2"</span> <span class="attr">width</span>=<span class="string">"100%"</span> <span class="attr">align</span>=<span class="string">"center"</span> /&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">li</span>&gt;</span>项目名称：$&#123;PROJECT_NAME&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">li</span>&gt;</span>构建编号：第$&#123;BUILD_NUMBER&#125;次构建<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">li</span>&gt;</span>APP 名称：$&#123;APP_NAME&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">li</span>&gt;</span>APP 标识：$&#123;BUNDLE_IDENTIFIER&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">li</span>&gt;</span>安装包类型：$&#123;EXPORT_METHOD&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">li</span>&gt;</span>构建日志：<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"$&#123;BUILD_URL&#125;console"</span>&gt;</span>$&#123;BUILD_URL&#125;console<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">li</span>&gt;</span>构建 Url：<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"$&#123;BUILD_URL&#125;"</span>&gt;</span>$&#123;BUILD_URL&#125;<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">li</span>&gt;</span>项目 Url：<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"$&#123;PROJECT_URL&#125;"</span>&gt;</span>$&#123;PROJECT_URL&#125;<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">b</span>&gt;</span><span class="tag">&lt;<span class="name">font</span> <span class="attr">color</span>=<span class="string">"#0B610B"</span>&gt;</span>变更集<span class="tag">&lt;/<span class="name">font</span>&gt;</span><span class="tag">&lt;/<span class="name">b</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">hr</span> <span class="attr">size</span>=<span class="string">"2"</span> <span class="attr">width</span>=<span class="string">"100%"</span> <span class="attr">align</span>=<span class="string">"center"</span> /&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>$&#123;JELLY_SCRIPT,template="html"&#125;<span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">hr</span> <span class="attr">size</span>=<span class="string">"2"</span> <span class="attr">width</span>=<span class="string">"100%"</span> <span class="attr">align</span>=<span class="string">"center"</span> /&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="添加-Editable-Email-Notification"><a href="#添加-Editable-Email-Notification" class="headerlink" title="添加 Editable Email Notification"></a>添加 Editable Email Notification</h3><p>如果需要发送邮件的构建 job，则在构建后操作中添加 Editable Email Notification<br><img src="http://qiniu.0x0803.top/image/blog/1/after_build.png_blog" alt="img"></p>
+<h3 id="配置基础信息"><a href="#配置基础信息" class="headerlink" title="配置基础信息"></a>配置基础信息</h3><ul>
+<li>如果需要发送附件和 attach build log 在这里选中，默认是不发送<br><img src="http://qiniu.0x0803.top/image/blog/1/attach_info.png_blog" alt="img"></li>
+<li>Triggers 中配置接受者信息，默认是 Developers 需要自己添加配置的 Recipient List，根据自己实际情况而定<br><img src="http://qiniu.0x0803.top/image/blog/1/triggers.png_blog" alt="img"></li>
+<li>Triggers 中默认的响应构建状态为在插件中配置的信息，如果需要自定义，点击 Add Trigger 添加需要的构建状态<br><img src="http://qiniu.0x0803.top/image/blog/1/add_triggers.png_blog" alt="img"></li>
+</ul>
+<h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2><p>感谢大家能够一路看下来，以上就是我在搭建持续部署环境时主要的一些步骤，写的比较乱，可能会有一些步骤写的比较简单，可能对于一些项目这样搭建起来过于麻烦，不过对于我们公司的项目是目前我能想到的相对简单可行的方法了。希望对大家能起到一点帮助~~~</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    庄彪
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://0x0803.top/2018/03/03/react-native-app-ci-deploy/" title="React Native 项目使用 Jenkins 持续集成部署步骤">http://0x0803.top/2018/03/03/react-native-app-ci-deploy/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CI/" rel="tag"># CI</a>
+          
+            <a href="/tags/Jenkins/" rel="tag"># Jenkins</a>
+          
+            <a href="/tags/React-Native/" rel="tag"># React Native</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/28/react-native-code-push/" rel="next" title="Code Push 服务器搭建以及集成方式">
+                <i class="fa fa-chevron-left"></i> Code Push 服务器搭建以及集成方式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/04/markdown-table-desc/" rel="prev" title="Markdown 中表格使用及常见问题">
+                Markdown 中表格使用及常见问题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="庄彪">
+            
+              <p class="site-author-name" itemprop="name">庄彪</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/NoPPT" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:1041036986@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#依赖环境"><span class="nav-number">1.</span> <span class="nav-text">依赖环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Jenkins-基础配置"><span class="nav-number">2.</span> <span class="nav-text">Jenkins 基础配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装依赖插件"><span class="nav-number">2.1.</span> <span class="nav-text">安装依赖插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置插件"><span class="nav-number">2.2.</span> <span class="nav-text">配置插件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Gradle-Plugin"><span class="nav-number">2.2.1.</span> <span class="nav-text">Gradle Plugin</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Keychains-and-Provisioning-Profiles-Plugin"><span class="nav-number">2.2.2.</span> <span class="nav-text">Keychains and Provisioning Profiles Plugin</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#上传-keychain-文件"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">上传 .keychain 文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#上传-mobileprovision-文件"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">上传 .mobileprovision 文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Email-Extension-Plugin"><span class="nav-number">2.2.2.3.</span> <span class="nav-text">Email Extension Plugin</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#保存配置"><span class="nav-number">2.2.2.4.</span> <span class="nav-text">保存配置</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置系统设置"><span class="nav-number">2.2.3.</span> <span class="nav-text">配置系统设置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#配置全局属性"><span class="nav-number">2.2.3.1.</span> <span class="nav-text">配置全局属性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置邮件通知"><span class="nav-number">2.2.3.2.</span> <span class="nav-text">配置邮件通知</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#热更新"><span class="nav-number">3.</span> <span class="nav-text">热更新</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建-job"><span class="nav-number">3.1.</span> <span class="nav-text">创建 job</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#源码管理"><span class="nav-number">3.2.</span> <span class="nav-text">源码管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数化构建"><span class="nav-number">3.3.</span> <span class="nav-text">参数化构建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建"><span class="nav-number">3.4.</span> <span class="nav-text">构建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建后操作"><span class="nav-number">3.5.</span> <span class="nav-text">构建后操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构建-Android-安装包"><span class="nav-number">4.</span> <span class="nav-text">构建 Android 安装包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建-job-1"><span class="nav-number">4.1.</span> <span class="nav-text">创建 job</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数化构建-1"><span class="nav-number">4.2.</span> <span class="nav-text">参数化构建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建-1"><span class="nav-number">4.3.</span> <span class="nav-text">构建</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Execute-shell"><span class="nav-number">4.3.1.</span> <span class="nav-text">Execute shell</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Invoke-Gradle-script"><span class="nav-number">4.3.2.</span> <span class="nav-text">Invoke Gradle script</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Execute-shell-1"><span class="nav-number">4.3.3.</span> <span class="nav-text">Execute shell</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构建-iOS-安装包"><span class="nav-number">5.</span> <span class="nav-text">构建 iOS 安装包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建-job-2"><span class="nav-number">5.1.</span> <span class="nav-text">创建 job</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数化构建-2"><span class="nav-number">5.2.</span> <span class="nav-text">参数化构建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建环境"><span class="nav-number">5.3.</span> <span class="nav-text">构建环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建-2"><span class="nav-number">5.4.</span> <span class="nav-text">构建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更多"><span class="nav-number">5.5.</span> <span class="nav-text">更多</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置构建成功后操作"><span class="nav-number">6.</span> <span class="nav-text">配置构建成功后操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#邮件通知模板"><span class="nav-number">6.1.</span> <span class="nav-text">邮件通知模板</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加-Editable-Email-Notification"><span class="nav-number">6.2.</span> <span class="nav-text">添加 Editable Email Notification</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置基础信息"><span class="nav-number">6.3.</span> <span class="nav-text">配置基础信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结束"><span class="nav-number">7.</span> <span class="nav-text">结束</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">庄彪</span>
+
+  
+</div>
+
+
+  <div class="powered-by">津ICP备18006909号</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

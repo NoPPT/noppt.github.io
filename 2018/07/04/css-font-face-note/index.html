@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="CSS,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="zhuang's blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="12345678@font-face &amp;#123;  font-family: &quot;AiDeep&quot;;  src: url(&quot;./AiDeep.otf&quot;) format(&quot;opentype&quot;);  /* 错误的写法 */  /* src: url(&apos;./AiDeep.otf&apos;) format(&quot;otf&quot;); */  font-weight: 600;  font-style: normal;&amp;#125">
+<meta name="keywords" content="CSS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS @font-face 使用">
+<meta property="og:url" content="http://0x0803.top/2018/07/04/css-font-face-note/index.html">
+<meta property="og:site_name" content="zhuang&#39;s blog">
+<meta property="og:description" content="12345678@font-face &amp;#123;  font-family: &quot;AiDeep&quot;;  src: url(&quot;./AiDeep.otf&quot;) format(&quot;opentype&quot;);  /* 错误的写法 */  /* src: url(&apos;./AiDeep.otf&apos;) format(&quot;otf&quot;); */  font-weight: 600;  font-style: normal;&amp;#125">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-11T07:00:46.699Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CSS @font-face 使用">
+<meta name="twitter:description" content="12345678@font-face &amp;#123;  font-family: &quot;AiDeep&quot;;  src: url(&quot;./AiDeep.otf&quot;) format(&quot;opentype&quot;);  /* 错误的写法 */  /* src: url(&apos;./AiDeep.otf&apos;) format(&quot;otf&quot;); */  font-weight: 600;  font-style: normal;&amp;#125">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"搜索博客","hits_empty":"没有找到匹配项: ${query}","hits_stats":"${time} ms 内找到 ${hits} 符合条件的内容"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://0x0803.top/2018/07/04/css-font-face-note/">
+
+
+
+
+
+  <title>CSS @font-face 使用 | zhuang's blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7cda0beda6b0c3a7002a11bfb03df138";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zhuang's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">小庄先生呢</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://0x0803.top/2018/07/04/css-font-face-note/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="庄彪">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhuang's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">CSS @font-face 使用</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-04T23:50:43+00:00">
+                2018-07-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CSS/" itemprop="url" rel="index">
+                    <span itemprop="name">CSS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">font-face</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: <span class="string">"AiDeep"</span>;</span><br><span class="line">  <span class="attribute">src</span>: <span class="built_in">url</span>(<span class="string">"./AiDeep.otf"</span>) <span class="built_in">format</span>(<span class="string">"opentype"</span>);</span><br><span class="line">  <span class="comment">/* 错误的写法 */</span></span><br><span class="line">  <span class="comment">/* src: url('./AiDeep.otf') format("otf"); */</span></span><br><span class="line">  <span class="attribute">font-weight</span>: <span class="number">600</span>;</span><br><span class="line">  <span class="attribute">font-style</span>: normal;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在添加自定义字体时，遇到无效的作用，起初以为是字体文件没有引用正确，后来发现是设置 <code>src</code> 时 <code>format</code> 没有填写正确，以为把字体文件后缀名传入 <code>format</code> 就可以了，还是太 naive 了。总结下常用字体文件格式以及 <code>@font-face</code> 的用法。</p>
+<a id="more"></a>
+<h2 id="font-face"><a href="#font-face" class="headerlink" title="@font-face"></a>@font-face</h2><p><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face" target="_blank" rel="noopener">@font-face</a> 是 CSS3 提供的一个 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/At-rule" target="_blank" rel="noopener">at-rule</a>，用于指定一个自定义字体。</p>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><h3 id="src"><a href="#src" class="headerlink" title="src"></a>src</h3><p>设置自定义字体的文件位置以及格式</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* &lt;url&gt; values */</span></span><br><span class="line">src: url(https://somewebsite.com/path/to/font.woff); /* absolute URL */</span><br><span class="line">src: url(path/to/font.woff); /* relative URL */</span><br><span class="line">src: url(path/to/font.woff) format("woff"); /* explicit format */</span><br><span class="line">src: url("path/to/font.woff"); /* quoted URL */</span><br><span class="line">src: url(path/to/svgfont.svg#example); /* fragment identifying font */</span><br><span class="line"></span><br><span class="line"><span class="comment">/* &lt;font-face-name&gt; values */</span></span><br><span class="line"><span class="selector-tag">src</span>: <span class="selector-tag">local</span>(<span class="selector-tag">font</span>); <span class="comment">/* unquoted name */</span></span><br><span class="line"><span class="selector-tag">src</span>: <span class="selector-tag">local</span>(<span class="selector-tag">some</span> <span class="selector-tag">font</span>); <span class="comment">/* name containing space */</span></span><br><span class="line"><span class="selector-tag">src</span>: <span class="selector-tag">local</span>("<span class="selector-tag">font</span>"); <span class="comment">/* quoted name */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Multiple items */</span></span><br><span class="line">src: local(font), url(path/to/font.svg) format("svg"), url(path/to/font.woff)</span><br><span class="line">    format("woff"), url(path/to/font.otf) format("opentype");</span><br></pre></td></tr></table></figure>
+<p>format 可接收参数有：<code>woff</code>, <code>woff2</code>, <code>truetype</code>, <code>opentype</code>, <code>embedded-opentype</code>, <code>svg</code></p>
+<h3 id="font-display"><a href="#font-display" class="headerlink" title="font-display"></a>font-display</h3><p>用于自定义字体加载过程时的显示问题</p>
+<ul>
+<li><code>auto</code>: 默认值。典型的浏览器字体加载的行为会发生，也就是使用自定义字体的文本会先被隐藏，直到字体加载结束才会显示。</li>
+<li><code>block</code>: 如果字体未加载完成，浏览器将首先绘制“隐形”文本；一旦字体加载完成，立即切换字体。</li>
+<li><code>swap</code>：浏览器不会等待字体加载，直接使用字体栈中符合条件的字体先显示出来，等自定义字体加载完毕后再切换回来</li>
+<li><code>fallback</code>: 需要使用自定义字体渲染的文本会在较短的时间（100ms according to Google ）不可见，如果自定义字体还没有加载结束，那么就先加载无样式的文本。一旦自定义字体加载结束，那么文本就会被正确赋予样式。</li>
+<li><code>optional</code>: 和 <code>fallback</code> 基本相同，区别是让浏览器自由决定是否使用自定义字体</li>
+</ul>
+<h3 id="font-family"><a href="#font-family" class="headerlink" title="font-family"></a>font-family</h3><p>指定一个字体名称，之后可以设置字体属性为当前值</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* &lt;string&gt; values */</span></span><br><span class="line"><span class="selector-tag">font-family</span>: "<span class="selector-tag">font</span> <span class="selector-tag">family</span>";</span><br><span class="line"><span class="selector-tag">font-family</span>: "<span class="selector-tag">another</span> <span class="selector-tag">font</span> <span class="selector-tag">family</span>";</span><br><span class="line"></span><br><span class="line"><span class="comment">/* &lt;custom-ident&gt; value */</span></span><br><span class="line"><span class="selector-tag">font-family</span>: <span class="selector-tag">examplefont</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="font-style"><a href="#font-style" class="headerlink" title="font-style"></a>font-style</h3><p>字体样式</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">font-style</span>: <span class="selector-tag">normal</span>;</span><br><span class="line"><span class="selector-tag">font-style</span>: <span class="selector-tag">italic</span>;</span><br><span class="line"><span class="selector-tag">font-style</span>: <span class="selector-tag">oblique</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Global values */</span></span><br><span class="line"><span class="selector-tag">font-style</span>: <span class="selector-tag">inherit</span>;</span><br><span class="line"><span class="selector-tag">font-style</span>: <span class="selector-tag">initial</span>;</span><br><span class="line"><span class="selector-tag">font-style</span>: <span class="selector-tag">unset</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="font-weight"><a href="#font-weight" class="headerlink" title="font-weight"></a>font-weight</h3><p>设置字体的粗细</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Keyword values */</span></span><br><span class="line"><span class="selector-tag">font-weight</span>: <span class="selector-tag">normal</span>;</span><br><span class="line"><span class="selector-tag">font-weight</span>: <span class="selector-tag">bold</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Keyword values relative to the parent */</span></span><br><span class="line"><span class="selector-tag">font-weight</span>: <span class="selector-tag">lighter</span>;</span><br><span class="line"><span class="selector-tag">font-weight</span>: <span class="selector-tag">bolder</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Numeric keyword values */</span></span><br><span class="line"><span class="selector-tag">font-weight</span>: 100;</span><br><span class="line"><span class="selector-tag">font-weight</span>: 200;</span><br><span class="line"><span class="selector-tag">font-weight</span>: 300;</span><br><span class="line"><span class="selector-tag">font-weight</span>: 400;</span><br><span class="line"><span class="selector-tag">font-weight</span>: 500;</span><br><span class="line"><span class="selector-tag">font-weight</span>: 600;</span><br><span class="line"><span class="selector-tag">font-weight</span>: 700;</span><br><span class="line"><span class="selector-tag">font-weight</span>: 800;</span><br><span class="line"><span class="selector-tag">font-weight</span>: 900;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Global values */</span></span><br><span class="line"><span class="selector-tag">font-weight</span>: <span class="selector-tag">inherit</span>;</span><br><span class="line"><span class="selector-tag">font-weight</span>: <span class="selector-tag">initial</span>;</span><br><span class="line"><span class="selector-tag">font-weight</span>: <span class="selector-tag">unset</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="font-stretch"><a href="#font-stretch" class="headerlink" title="font-stretch"></a>font-stretch</h3><p>字体显示为正常、缩小、拉伸等样式</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Keyword values */</span></span><br><span class="line"><span class="selector-tag">font-stretch</span>: <span class="selector-tag">ultra-condensed</span>;</span><br><span class="line"><span class="selector-tag">font-stretch</span>: <span class="selector-tag">extra-condensed</span>;</span><br><span class="line"><span class="selector-tag">font-stretch</span>: <span class="selector-tag">condensed</span>;</span><br><span class="line"><span class="selector-tag">font-stretch</span>: <span class="selector-tag">semi-condensed</span>;</span><br><span class="line"><span class="selector-tag">font-stretch</span>: <span class="selector-tag">normal</span>;</span><br><span class="line"><span class="selector-tag">font-stretch</span>: <span class="selector-tag">semi-expanded</span>;</span><br><span class="line"><span class="selector-tag">font-stretch</span>: <span class="selector-tag">expanded</span>;</span><br><span class="line"><span class="selector-tag">font-stretch</span>: <span class="selector-tag">extra-expanded</span>;</span><br><span class="line"><span class="selector-tag">font-stretch</span>: <span class="selector-tag">ultra-expanded</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Global values */</span></span><br><span class="line"><span class="selector-tag">font-stretch</span>: <span class="selector-tag">inherit</span>;</span><br><span class="line"><span class="selector-tag">font-stretch</span>: <span class="selector-tag">initial</span>;</span><br><span class="line"><span class="selector-tag">font-stretch</span>: <span class="selector-tag">unset</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="font-variant"><a href="#font-variant" class="headerlink" title="font-variant"></a>font-variant</h3><p>快速设置 font-variant-caps, font-variant-numeric, font-variant-alternates, font-variant-ligatures, 和 font-variant-east-asian。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">font-variant</span>: <span class="selector-tag">small-caps</span>;</span><br><span class="line"><span class="selector-tag">font-variant</span>: <span class="selector-tag">common-ligatures</span> <span class="selector-tag">small-caps</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Global values */</span></span><br><span class="line"><span class="selector-tag">font-variant</span>: <span class="selector-tag">inherit</span>;</span><br><span class="line"><span class="selector-tag">font-variant</span>: <span class="selector-tag">initial</span>;</span><br><span class="line"><span class="selector-tag">font-variant</span>: <span class="selector-tag">unset</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="font-variation-settings"><a href="#font-variation-settings" class="headerlink" title="font-variation-settings"></a>font-variation-settings</h3><p>指定低级的 OpenType 或 TrueType 字体变体。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Use the default settings */</span></span><br><span class="line"><span class="selector-tag">font-variation-settings</span>: <span class="selector-tag">normal</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Set values for OpenType axis names */</span></span><br><span class="line"><span class="selector-tag">font-variation-settings</span>: "<span class="selector-tag">xhgt</span>" 0<span class="selector-class">.7</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="unicode-range"><a href="#unicode-range" class="headerlink" title="unicode-range"></a>unicode-range</h3><p>设置要使用的字符的特定范围</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* &lt;unicode-range&gt; values */</span></span><br><span class="line"><span class="selector-tag">unicode-range</span>: <span class="selector-tag">U</span>+26; <span class="comment">/* single codepoint */</span></span><br><span class="line"><span class="selector-tag">unicode-range</span>: <span class="selector-tag">U</span>+0<span class="selector-tag">-7F</span>;</span><br><span class="line"><span class="selector-tag">unicode-range</span>: <span class="selector-tag">U</span>+0025<span class="selector-tag">-00FF</span>; <span class="comment">/* codepoint range */</span></span><br><span class="line"><span class="selector-tag">unicode-range</span>: <span class="selector-tag">U</span>+4??; <span class="comment">/* wildcard range */</span></span><br><span class="line"><span class="selector-tag">unicode-range</span>: <span class="selector-tag">U</span>+0025<span class="selector-tag">-00FF</span>, <span class="selector-tag">U</span>+4??; <span class="comment">/* multiple values */</span></span><br></pre></td></tr></table></figure>
+<h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">font-face</span> &#123;</span><br><span class="line">  [ font-family: &lt;family-name&gt;; ] ||</span><br><span class="line">  [ src: &lt;src&gt;; ] ||</span><br><span class="line">  [ unicode-range: &lt;unicode-range&gt;; ] ||</span><br><span class="line">  [ font-variant: &lt;font-variant&gt;; ] ||</span><br><span class="line">  [ font-feature-settings: &lt;font-feature-settings&gt;; ] ||</span><br><span class="line">  [ font-variation-settings: &lt;font-variation-settings&gt;; ] ||</span><br><span class="line">  [ font-stretch: &lt;font-stretch&gt;; ] ||</span><br><span class="line">  [ font-weight: &lt;font-weight&gt;; ] ||</span><br><span class="line">  <span class="selector-attr">[ font-style: &lt;font-style&gt;; ]</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">where</span></span><br><span class="line">&lt;family-name&gt; = &lt;string&gt; | &lt;custom-ident&gt;+</span><br></pre></td></tr></table></figure>
+<h2 id="字体格式"><a href="#字体格式" class="headerlink" title="字体格式"></a>字体格式</h2><p>对于 <code>@font-face</code> 而言，兼容性问题就是各浏览器所能识别的字体格式不尽相同。</p>
+<h3 id="TrueType-格式-ttf"><a href="#TrueType-格式-ttf" class="headerlink" title="TrueType 格式(.ttf)"></a>TrueType 格式(.ttf)</h3><p>Windows 和 Mac 上常见的字体格式，是一种原始格式，因此它并没有为网页进行优化处理。<br>浏览器支持：IE9+,FireFox3.5+,Chrome4.0+,Safari3+,Opera10+,IOS Mobile Safari4.2+</p>
+<h3 id="OpenType-格式-otf"><a href="#OpenType-格式-otf" class="headerlink" title="OpenType 格式(.otf)"></a>OpenType 格式(.otf)</h3><p>以 TrueType 为基础，也是一种原始格式，但提供更多的功能。<br>浏览器支持：FireFox3.5+,Chrome4.0+,Safari3.1+,Opera10.0+,IOS Mobile Safari4.2+</p>
+<h3 id="Web-Open-Font-格式-woff"><a href="#Web-Open-Font-格式-woff" class="headerlink" title="Web Open Font 格式(.woff)"></a>Web Open Font 格式(.woff)</h3><p>针对网页进行特殊优化，因此是 Web 字体中最佳格式，它是一个开放的 TrueType/OpenType 的压缩版，同时支持元数据包的分离。<br>浏览器支持：IE9+, FireFox3.5+, Chrome6+, Safari3.6+,Opera11.1+</p>
+<h3 id="Embedded-Open-Type-格式-eot"><a href="#Embedded-Open-Type-格式-eot" class="headerlink" title="Embedded Open Type 格式(.eot)"></a>Embedded Open Type 格式(.eot)</h3><p>IE 专用字体格式，可以从 TrueType 格式创建此格式字体。<br>浏览器支持：IE4+</p>
+<h3 id="SVG-格式-svg"><a href="#SVG-格式-svg" class="headerlink" title="SVG 格式(.svg)"></a>SVG 格式(.svg)</h3><p>基于 SVG 字体渲染的格式。<br>浏览器支持：Chrome4+, Safari3.1+, Opera10.0+, IOS Mobile Safari3.2+</p>
+<p>这就意味着在 <code>@font-face</code> 中我们至少需要 .woff, .eot 两种格式字体，甚至还需要 .svg 等字体达到更多种浏览版本的支持。</p>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face" target="_blank" rel="noopener">相关引用: @font-face</a><br><a href="https://www.sohu.com/a/162902209_464084" target="_blank" rel="noopener">相关引用: font-display</a><br><a href="https://segmentfault.com/a/1190000004179303" target="_blank" rel="noopener">相关引用: 字体格式</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    庄彪
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://0x0803.top/2018/07/04/css-font-face-note/" title="CSS @font-face 使用">http://0x0803.top/2018/07/04/css-font-face-note/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CSS/" rel="tag"># CSS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/23/webpack-tutorials-start/" rel="next" title="Webpack v4.14.0 实践">
+                <i class="fa fa-chevron-left"></i> Webpack v4.14.0 实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/02/javascript-debounce-throttle/" rel="prev" title="JavaScript 函数防抖与函数节流">
+                JavaScript 函数防抖与函数节流 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="庄彪">
+            
+              <p class="site-author-name" itemprop="name">庄彪</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/NoPPT" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:1041036986@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#font-face"><span class="nav-number">1.</span> <span class="nav-text">@font-face</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#语法"><span class="nav-number">2.</span> <span class="nav-text">语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#src"><span class="nav-number">2.1.</span> <span class="nav-text">src</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-display"><span class="nav-number">2.2.</span> <span class="nav-text">font-display</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-family"><span class="nav-number">2.3.</span> <span class="nav-text">font-family</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-style"><span class="nav-number">2.4.</span> <span class="nav-text">font-style</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-weight"><span class="nav-number">2.5.</span> <span class="nav-text">font-weight</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-stretch"><span class="nav-number">2.6.</span> <span class="nav-text">font-stretch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-variant"><span class="nav-number">2.7.</span> <span class="nav-text">font-variant</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-variation-settings"><span class="nav-number">2.8.</span> <span class="nav-text">font-variation-settings</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unicode-range"><span class="nav-number">2.9.</span> <span class="nav-text">unicode-range</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#格式"><span class="nav-number">3.</span> <span class="nav-text">格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字体格式"><span class="nav-number">4.</span> <span class="nav-text">字体格式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TrueType-格式-ttf"><span class="nav-number">4.1.</span> <span class="nav-text">TrueType 格式(.ttf)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OpenType-格式-otf"><span class="nav-number">4.2.</span> <span class="nav-text">OpenType 格式(.otf)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Web-Open-Font-格式-woff"><span class="nav-number">4.3.</span> <span class="nav-text">Web Open Font 格式(.woff)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Embedded-Open-Type-格式-eot"><span class="nav-number">4.4.</span> <span class="nav-text">Embedded Open Type 格式(.eot)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SVG-格式-svg"><span class="nav-number">4.5.</span> <span class="nav-text">SVG 格式(.svg)</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">庄彪</span>
+
+  
+</div>
+
+
+  <div class="powered-by">津ICP备18006909号</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

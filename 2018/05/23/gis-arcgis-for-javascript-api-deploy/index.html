@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="ArcGIS,JavaScript,部署,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="zhuang's blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="下载 API &amp;amp; SDKAPIs &amp;amp; SDKs 下载地址 只有注册并登录帐号后才能从 ArcGIS for Developers 中下载相关的 API 和 SDK。 登录后选择要下载的产品相应的 API 和 Documentation：    Product Version     ArcGIS API for JavaScript 3.24">
+<meta name="keywords" content="ArcGIS,JavaScript,部署">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ArcGIS for JavaScript API v3.24 部署指南">
+<meta property="og:url" content="http://0x0803.top/2018/05/23/gis-arcgis-for-javascript-api-deploy/index.html">
+<meta property="og:site_name" content="zhuang&#39;s blog">
+<meta property="og:description" content="下载 API &amp;amp; SDKAPIs &amp;amp; SDKs 下载地址 只有注册并登录帐号后才能从 ArcGIS for Developers 中下载相关的 API 和 SDK。 登录后选择要下载的产品相应的 API 和 Documentation：    Product Version     ArcGIS API for JavaScript 3.24">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-11T07:00:46.699Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ArcGIS for JavaScript API v3.24 部署指南">
+<meta name="twitter:description" content="下载 API &amp;amp; SDKAPIs &amp;amp; SDKs 下载地址 只有注册并登录帐号后才能从 ArcGIS for Developers 中下载相关的 API 和 SDK。 登录后选择要下载的产品相应的 API 和 Documentation：    Product Version     ArcGIS API for JavaScript 3.24">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"搜索博客","hits_empty":"没有找到匹配项: ${query}","hits_stats":"${time} ms 内找到 ${hits} 符合条件的内容"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://0x0803.top/2018/05/23/gis-arcgis-for-javascript-api-deploy/">
+
+
+
+
+
+  <title>ArcGIS for JavaScript API v3.24 部署指南 | zhuang's blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7cda0beda6b0c3a7002a11bfb03df138";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zhuang's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">小庄先生呢</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://0x0803.top/2018/05/23/gis-arcgis-for-javascript-api-deploy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="庄彪">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhuang's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">ArcGIS for JavaScript API v3.24 部署指南</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-23T09:44:33+00:00">
+                2018-05-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/GIS/" itemprop="url" rel="index">
+                    <span itemprop="name">GIS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="下载-API-amp-SDK"><a href="#下载-API-amp-SDK" class="headerlink" title="下载 API &amp; SDK"></a>下载 API &amp; SDK</h2><p><a href="https://developers.arcgis.com/downloads/apis-and-sdks" target="_blank" rel="noopener">APIs &amp; SDKs 下载地址</a></p>
+<p>只有注册并登录帐号后才能从 ArcGIS for Developers 中下载相关的 API 和 SDK。</p>
+<p>登录后选择要下载的产品相应的 API 和 Documentation：</p>
+<table>
+<thead>
+<tr>
+<th>Product</th>
+<th>Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ArcGIS API for JavaScript</td>
+<td>3.24</td>
+</tr>
+</tbody>
+</table>
+<a id="more"></a>
+<h2 id="解压-API-到文件夹"><a href="#解压-API-到文件夹" class="headerlink" title="解压 API 到文件夹"></a>解压 API 到文件夹</h2><p>对应的目录结构树如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">/Users/oeffect/Downloads/arcgis_js_v324_api</span><br><span class="line">├── arcgis_js_api</span><br><span class="line">│   └── library</span><br><span class="line">│       └── 3.24</span><br><span class="line">│           ├── 3.24</span><br><span class="line">│           ├── 3.24compact</span><br><span class="line">│           ├── install_api_linux.html</span><br><span class="line">│           └── install_api_windows.html</span><br><span class="line">├── install.html</span><br><span class="line">└── legal</span><br><span class="line">    └── EULA.pdf</span><br></pre></td></tr></table></figure>
+<h2 id="配置-Nginx"><a href="#配置-Nginx" class="headerlink" title="配置 Nginx"></a>配置 Nginx</h2><p>主要文件为 <code>arcgis_js_api/library/3.24</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line"></span><br><span class="line">    location /arcgis/ &#123;</span><br><span class="line">        autoindex on;</span><br><span class="line">        alias /usr/local/var/www/library/arcgis/3.24/;</span><br><span class="line">        index install_api_linux.html;</span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果出现 403 Forbidden 情况，可以关闭 nginx 的第一行的注释，并修改配置为资源文件夹的用户以及用户组（Mac系统），如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user root staff;</span><br></pre></td></tr></table></figure>
+<p>同时开启目录浏览功能，如上配置 <code>autoindex</code> 值为 <code>on</code>。</p>
+<p>打开 <code>http://localhost/arcgis/</code> 可以看到安装指南。</p>
+<h2 id="根据文档修改配置"><a href="#根据文档修改配置" class="headerlink" title="根据文档修改配置"></a>根据文档修改配置</h2><p>如果没有相应的安全证书，可修改 <code>https</code> 为 <code>http</code> </p>
+<h3 id="修改默认-3-24-文件下的配置"><a href="#修改默认-3-24-文件下的配置" class="headerlink" title="修改默认 3.24 文件下的配置"></a>修改默认 <code>3.24</code> 文件下的配置</h3><ol>
+<li><p>打开 <code>arcgis_js_api/library/3.24/3.24/init.js</code> 文件搜索并替换 <code>https://[HOSTNAME_AND_PATH_TO_JSAPI]/dojo</code> 为当前部署的地址 <code>https://www.example.com/arcgis_js_api/library/3.24/3.24/dojo</code></p>
+</li>
+<li><p>打开 <code>arcgis_js_api/library/3.24/3.24/dojo/dojo.js</code> 文件搜索并替换 <code>https://[HOSTNAME_AND_PATH_TO_JSAPI]/dojo</code> 为当前部署的地址 <code>https://www.example.com/arcgis_js_api/library/3.24/3.24/dojo</code></p>
+</li>
+</ol>
+<h3 id="修改-compact-文件下的配置"><a href="#修改-compact-文件下的配置" class="headerlink" title="修改 compact 文件下的配置"></a>修改 <code>compact</code> 文件下的配置</h3><ol>
+<li><p>打开 <code>/var/www/html/arcgis_js_api/library/3.24/3.24compact/init.js</code>  文件搜索并替换 <code>https://[HOSTNAME_AND_PATH_TO_JSAPI]dojo</code> 为当前部署的地址  <code>https://www.example.com/arcgis_js_api/library/3.24/3.24compact/dojo</code></p>
+</li>
+<li><p>打开 <code>/var/www/html/arcgis_js_api/library/3.24/3.24compact/dojo/dojo.js</code> 文件搜索并替换 <code>https://[HOSTNAME_AND_PATH_TO_JSAPI]dojo</code> 为当前部署的地址 <code>https://www.example.com/arcgis_js_api/library/3.24/3.24compact/dojo</code></p>
+</li>
+</ol>
+<h2 id="测试使用"><a href="#测试使用" class="headerlink" title="测试使用"></a>测试使用</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE HTML&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Content-Type"</span> <span class="attr">content</span>=<span class="string">"text/html; charset=utf-8"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Test Map<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"https://www.example.com/arcgis_js_api/library/3.24/3.24/esri/css/esri.css"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://www.example.com/arcgis_js_api/library/3.24/3.24/init.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line">      html,</span><br><span class="line">      body,</span><br><span class="line"><span class="css">      <span class="selector-id">#map</span> &#123;</span></span><br><span class="line">        height: 100%;</span><br><span class="line">        width: 100%;</span><br><span class="line">        margin: 0;</span><br><span class="line">        padding: 0;</span><br><span class="line">      &#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">      <span class="built_in">require</span>([</span></span><br><span class="line"><span class="javascript">          <span class="string">"esri/map"</span>,</span></span><br><span class="line"><span class="javascript">          <span class="string">"esri/layers/ArcGISTiledMapServiceLayer"</span>,</span></span><br><span class="line"><span class="javascript">          <span class="string">"dojo/domReady!"</span></span></span><br><span class="line"><span class="javascript">      ],<span class="function"><span class="keyword">function</span>(<span class="params">Map, ArcGISTiledMapServiceLayer</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">          <span class="keyword">var</span> map = <span class="keyword">new</span> <span class="built_in">Map</span>(<span class="string">"map"</span>);</span></span><br><span class="line"><span class="javascript">          <span class="comment">//If you do not have Internet access then you will need to point this url to your own locally accessible tiled service.</span></span></span><br><span class="line"><span class="javascript">          <span class="keyword">var</span> tiled = <span class="keyword">new</span> ArcGISTiledMapServiceLayer(<span class="string">"https://services.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer"</span>);</span></span><br><span class="line">          map.addLayer(tiled);</span><br><span class="line">      &#125;);</span><br><span class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"map"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    庄彪
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://0x0803.top/2018/05/23/gis-arcgis-for-javascript-api-deploy/" title="ArcGIS for JavaScript API v3.24 部署指南">http://0x0803.top/2018/05/23/gis-arcgis-for-javascript-api-deploy/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ArcGIS/" rel="tag"># ArcGIS</a>
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/部署/" rel="tag"># 部署</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/09/weapp-practices-problems/" rel="next" title="微信小程序实践问题总结">
+                <i class="fa fa-chevron-left"></i> 微信小程序实践问题总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/23/gis-arcgis-api-3-24-snappingmanager/" rel="prev" title="ArcGIS SnappingManager 捕捉管理器">
+                ArcGIS SnappingManager 捕捉管理器 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="庄彪">
+            
+              <p class="site-author-name" itemprop="name">庄彪</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/NoPPT" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:1041036986@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#下载-API-amp-SDK"><span class="nav-number">1.</span> <span class="nav-text">下载 API &amp; SDK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解压-API-到文件夹"><span class="nav-number">2.</span> <span class="nav-text">解压 API 到文件夹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置-Nginx"><span class="nav-number">3.</span> <span class="nav-text">配置 Nginx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#根据文档修改配置"><span class="nav-number">4.</span> <span class="nav-text">根据文档修改配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改默认-3-24-文件下的配置"><span class="nav-number">4.1.</span> <span class="nav-text">修改默认 3.24 文件下的配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改-compact-文件下的配置"><span class="nav-number">4.2.</span> <span class="nav-text">修改 compact 文件下的配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试使用"><span class="nav-number">5.</span> <span class="nav-text">测试使用</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">庄彪</span>
+
+  
+</div>
+
+
+  <div class="powered-by">津ICP备18006909号</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

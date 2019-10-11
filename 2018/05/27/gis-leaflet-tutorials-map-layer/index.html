@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="JavaScript,Leaflet,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="zhuang's blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="上文说到使用 Leaflet 可以方便的加载和切换不同的地图作为底图，Mapbox 地图、谷歌地图、天地图、高德地图、百度地图等。那么本篇文章就来介绍下如何快速开始使用 Leaflet 加载和切换不同的地图，以及地图相关的基础知识。 准备 HTML 页面需要以下准备步骤：">
+<meta name="keywords" content="JavaScript,Leaflet">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Leaflet 学习系列（二）加载地图">
+<meta property="og:url" content="http://0x0803.top/2018/05/27/gis-leaflet-tutorials-map-layer/index.html">
+<meta property="og:site_name" content="zhuang&#39;s blog">
+<meta property="og:description" content="上文说到使用 Leaflet 可以方便的加载和切换不同的地图作为底图，Mapbox 地图、谷歌地图、天地图、高德地图、百度地图等。那么本篇文章就来介绍下如何快速开始使用 Leaflet 加载和切换不同的地图，以及地图相关的基础知识。 准备 HTML 页面需要以下准备步骤：">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://qiniu.0x0803.top/leaflet/6.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/leaflet/6.gif_gif">
+<meta property="og:updated_time" content="2019-10-11T07:00:46.699Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Leaflet 学习系列（二）加载地图">
+<meta name="twitter:description" content="上文说到使用 Leaflet 可以方便的加载和切换不同的地图作为底图，Mapbox 地图、谷歌地图、天地图、高德地图、百度地图等。那么本篇文章就来介绍下如何快速开始使用 Leaflet 加载和切换不同的地图，以及地图相关的基础知识。 准备 HTML 页面需要以下准备步骤：">
+<meta name="twitter:image" content="http://qiniu.0x0803.top/leaflet/6.png_blog">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"搜索博客","hits_empty":"没有找到匹配项: ${query}","hits_stats":"${time} ms 内找到 ${hits} 符合条件的内容"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://0x0803.top/2018/05/27/gis-leaflet-tutorials-map-layer/">
+
+
+
+
+
+  <title>Leaflet 学习系列（二）加载地图 | zhuang's blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7cda0beda6b0c3a7002a11bfb03df138";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zhuang's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">小庄先生呢</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://0x0803.top/2018/05/27/gis-leaflet-tutorials-map-layer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="庄彪">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhuang's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Leaflet 学习系列（二）加载地图</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-27T14:41:10+00:00">
+                2018-05-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/GIS/" itemprop="url" rel="index">
+                    <span itemprop="name">GIS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="/2018/05/27/gis-leaflet-tutorials-map/">上文</a>说到使用 Leaflet 可以方便的加载和切换不同的地图作为底图，Mapbox 地图、谷歌地图、天地图、高德地图、百度地图等。那么本篇文章就来介绍下如何快速开始使用 Leaflet 加载和切换不同的地图，以及地图相关的基础知识。</p>
+<h2 id="准备-HTML-页面"><a href="#准备-HTML-页面" class="headerlink" title="准备 HTML 页面"></a>准备 HTML 页面</h2><p>需要以下准备步骤：</p>
+<a id="more"></a>
+<h3 id="创建-HTML-页面"><a href="#创建-HTML-页面" class="headerlink" title="创建 HTML 页面"></a>创建 HTML 页面</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="引用-CSS-文件"><a href="#引用-CSS-文件" class="headerlink" title="引用 CSS 文件"></a>引用 CSS 文件</h3><p>从 <a href="https://cdnjs.com/libraries/leaflet" target="_blank" rel="noopener">Leaflet 免费的 CDN </a>获取想要使用的版本的文件地址，然后在 <code>&lt;head&gt;</code> 标签里添加以下代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// integrity 和 crossorigin 如果不需要验证文件完整性也可以不添加</span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css"</span> <span class="attr">integrity</span>=<span class="string">"sha256-bOWY8F32FGGbNDMPAnwWl/Lv9CKen4IQsNZ4RU9rcs0="</span></span></span><br><span class="line"><span class="tag">    <span class="attr">crossorigin</span>=<span class="string">"anonymous"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>或者<a href="https://github.com/Leaflet/Leaflet/releases" target="_blank" rel="noopener">下载源码文件</a>后添加引用，如果你使用 <code>npm</code> 包管理可以<a href="https://leafletjs.com/download.html" target="_blank" rel="noopener">参考这里</a></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"/path/to/leaflet.css"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="添加-JavaScript-文件"><a href="#添加-JavaScript-文件" class="headerlink" title="添加 JavaScript 文件"></a>添加 JavaScript 文件</h3><p>加载 CSS 之后添加 JavaScript 文件，记得 JS 文件的引用要放在 CSS 引用下面。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.js"</span> <span class="attr">integrity</span>=<span class="string">"sha256-GXUdrV9FHGDyzoSGD3O+jR3eYZaZZsjbsMvFhK3C0qg="</span></span></span><br><span class="line"><span class="tag">  <span class="attr">crossorigin</span>=<span class="string">"anonymous"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>或者引用源文件</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/path/to/leaflet.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="添加地图容器"><a href="#添加地图容器" class="headerlink" title="添加地图容器"></a>添加地图容器</h3><p>在 <code>&lt;body&gt;</code> 标签里面添加 <code>&lt;div&gt;</code>，并设置 <code>id</code> 属性：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"mapid"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="设置地图容器样式"><a href="#设置地图容器样式" class="headerlink" title="设置地图容器样式"></a>设置地图容器样式</h3><p>可以根据实际情况设置地图的宽高。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#mapid</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">bottom</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">right</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="设置地图"><a href="#设置地图" class="headerlink" title="设置地图"></a>设置地图</h2><p>以上准备工作做好之后，就可以开始初始化地图了。在 <code>&lt;body&gt;</code> 下面添加 <code>&lt;script&gt;</code>，首先初始化地图并设置地图中心点坐标以及缩放级别。默认情况下地图上的所有鼠标和触摸交互都已启用，并且它具有左上角缩放和右下角地图归属控件。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">	<span class="keyword">var</span> mymap = L.map(<span class="string">'mapid'</span>).setView([<span class="number">51.505</span>, <span class="number">-0.09</span>], <span class="number">13</span>);</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<p>之后的 JS 代码都要放 <code>&lt;script&gt;</code> 标签里。然后我们需要在地图上添加瓦片图层，</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">L.tileLayer(<span class="string">'https://api.tiles.mapbox.com/v4/&#123;id&#125;/&#123;z&#125;/&#123;x&#125;/&#123;y&#125;.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'</span>, &#123;</span><br><span class="line">  maxZoom: <span class="number">18</span>,</span><br><span class="line">  attribution: <span class="string">'Map data &amp;copy; &lt;a href="https://www.openstreetmap.org/"&gt;OpenStreetMap&lt;/a&gt; contributors, '</span> +</span><br><span class="line">    <span class="string">'&lt;a href="https://creativecommons.org/licenses/by-sa/2.0/"&gt;CC-BY-SA&lt;/a&gt;, '</span> +</span><br><span class="line">    <span class="string">'Imagery © &lt;a href="https://www.mapbox.com/"&gt;Mapbox&lt;/a&gt;'</span>,</span><br><span class="line">  id: <span class="string">'mapbox.streets'</span></span><br><span class="line">&#125;).addTo(mymap);</span><br></pre></td></tr></table></figure>
+<p>然后在浏览器中打开 HTML 页面就可以看到我们已经将地图加载出来了。</p>
+<p><img src="http://qiniu.0x0803.top/leaflet/6.png_blog" alt></p>
+<h2 id="常用属性、事件及方法"><a href="#常用属性、事件及方法" class="headerlink" title="常用属性、事件及方法"></a>常用属性、事件及方法</h2><p>可以看到上面代码 <code>L.map(&#39;mapid&#39;)</code> 生成 <code>map</code> 对象，然后使用 <code>setView</code> 方法设置位置以及缩放级别，一般调用地图的方法时也会返回地图对象，这样可以方便的进行链式方法调用。除了上面两个方法外还有以下常用<a href="https://leafletjs.com/reference-1.0.3.html#map-example" target="_blank" rel="noopener">属性、事件及方法</a></p>
+<h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 初始化方法</span></span><br><span class="line">L.map(&lt;String&gt; id, &lt;Map options&gt; options?)</span><br><span class="line"></span><br><span class="line">// 以下为常用属性及其默认值</span><br><span class="line">L.map('mapid', &#123;</span><br><span class="line">  attributionControl: true, // 设置为 false 隐藏地图归属信息控件</span><br><span class="line">  zoomControl: true, // 设置为 false 隐藏地图缩放控件</span><br><span class="line">  doubleClickZoom: true, // 设置为 false 禁止双击缩放</span><br><span class="line">  dragging: true, // 设置为 false 禁止鼠标拖动地图</span><br><span class="line">  center: LatLng, // 设置地图中心点位置信息</span><br><span class="line">  zoom: Number // 设置地图当前缩放级别</span><br><span class="line">  minZoom: Number // 设置地图最小缩放级别</span><br><span class="line">  maxZoom: Number // 设置地图最大缩放级别</span><br><span class="line">  scrollWheelZoom: true // 设置为 false 禁止使用鼠标滑轮缩放地图</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p><a href="https://leafletjs.com/reference-1.0.3.html#map-option" target="_blank" rel="noopener">更多属性</a></p>
+<h3 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h3><table>
+<thead>
+<tr>
+<th>事件名</th>
+<th>类型</th>
+<th>触发时机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>layeradd</td>
+<td>LayerEvent</td>
+<td>当一个新的图层添加到地图上时</td>
+</tr>
+<tr>
+<td>layerremove</td>
+<td>LayerEvent</td>
+<td>当一个图层从地图上移除时</td>
+</tr>
+<tr>
+<td>load</td>
+<td>Event</td>
+<td>当地图初始化完成时</td>
+</tr>
+<tr>
+<td>click</td>
+<td>MouseEvent</td>
+<td>鼠标点击地图时</td>
+</tr>
+<tr>
+<td>mousemove</td>
+<td>MouseEvent</td>
+<td>鼠标在地图上移动时</td>
+</tr>
+<tr>
+<td>contextmenu</td>
+<td>MouseEvent</td>
+<td>鼠标在地图上点击右键时，可以监听此事件覆盖默认右键菜单（手机上长按屏幕）</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用方法</span></span><br><span class="line">mymap.on(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(e);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p><a href="https://leafletjs.com/reference-1.0.3.html#map-event" target="_blank" rel="noopener">更多事件</a></p>
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>返回值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>addControl(<control> control)</control></td>
+<td>this</td>
+<td>在地图上添加控件</td>
+</tr>
+<tr>
+<td>removeControl(<control> control)</control></td>
+<td>this</td>
+<td>移除地图上的控件</td>
+</tr>
+<tr>
+<td>addLayer(<layer> layer)</layer></td>
+<td>this</td>
+<td>在地图上添加图层</td>
+</tr>
+<tr>
+<td>removeLayer(<layer> layer)</layer></td>
+<td>this</td>
+<td>移除地图上的图层</td>
+</tr>
+<tr>
+<td>openPopup(<popup> popup)</popup></td>
+<td>this</td>
+<td>打开 popup，并关闭其他 popup</td>
+</tr>
+<tr>
+<td>closePopup(<popup> popup?)</popup></td>
+<td>this</td>
+<td>关闭 popup</td>
+</tr>
+<tr>
+<td>setView(<latlng> center, <number> zoom, &lt;Zoom/pan options&gt; options?)</number></latlng></td>
+<td>this</td>
+<td>设置地图属性</td>
+</tr>
+<tr>
+<td>setZoom(<number> zoom, &lt;Zoom/pan options&gt; options)</number></td>
+<td>this</td>
+<td>设置地图缩放级别</td>
+</tr>
+<tr>
+<td>locate(<locate options> options?)</locate></td>
+<td>this</td>
+<td>使用 Geolocation API 获取用户位置信息，成功时触发“locationfound“事件，失败触发“locationerror”事件。在现代浏览器（Chrome 50及更新版本）如果网站不是 <code>https</code> 则会获取失败。返回坐标为 <code>WGS84</code>，可以使用 <a href="https://github.com/wandergis/coordtransform" target="_blank" rel="noopener">coordtransform</a> 转换为需要的坐标。</td>
+</tr>
+<tr>
+<td>remove()</td>
+<td>this</td>
+<td>销毁地图并移除所有已监听的事件响应</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 上面的加载图层也可以用这种写法，效果一样。</span></span><br><span class="line">mymap.addLayer(</span><br><span class="line">  L.tileLayer(<span class="string">'https://api.tiles.mapbox.com/v4/&#123;id&#125;/&#123;z&#125;/&#123;x&#125;/&#123;y&#125;.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'</span>, &#123;</span><br><span class="line">  maxZoom: <span class="number">18</span>,</span><br><span class="line">  attribution: <span class="string">'Map data &amp;copy; &lt;a href="https://www.openstreetmap.org/"&gt;OpenStreetMap&lt;/a&gt; contributors, '</span> +</span><br><span class="line">    <span class="string">'&lt;a href="https://creativecommons.org/licenses/by-sa/2.0/"&gt;CC-BY-SA&lt;/a&gt;, '</span> +</span><br><span class="line">    <span class="string">'Imagery © &lt;a href="https://www.mapbox.com/"&gt;Mapbox&lt;/a&gt;'</span>,</span><br><span class="line">  id: <span class="string">'mapbox.streets'</span></span><br><span class="line">&#125;));</span><br></pre></td></tr></table></figure>
+<p><a href="https://leafletjs.com/reference-1.0.3.html#map-methods-for-modifying-map-state" target="_blank" rel="noopener">更多方法</a></p>
+<h2 id="加载其他地图服务"><a href="#加载其他地图服务" class="headerlink" title="加载其他地图服务"></a>加载其他地图服务</h2><p>虽然 Leaflet 默认教程中使用的都是 OpenStreetMap，但是在国内使用的话，高德地图、百度地图更加实用，使用 Leaflet 可以很简单的加载高德地图，而<a href="http://www.cnblogs.com/cglNet/archive/2013/11/26/3443637.html" target="_blank" rel="noopener">百度地图的瓦片规则和普通的互联网地图的瓦片规则</a>（<a href="http://cntchen.github.io/2016/05/09/国内主要地图瓦片坐标系定义及计算原理/" target="_blank" rel="noopener">相关1</a>，<a href="http://www.cnblogs.com/jz1108/archive/2011/07/02/2095376.html" target="_blank" rel="noopener">相关2</a>）不那么一样，需要进行转换后才能正常使用。不过 Leaflet 提供了 <a href="https://leafletjs.com/reference-1.0.3.html#crs" target="_blank" rel="noopener">CRS</a> 类定义坐标参考系统，用于将地理点投影到像素（屏幕）坐标（以及用于WMS服务的其他单位的坐标）。配合使用 <a href="https://github.com/kartena/Proj4Leaflet" target="_blank" rel="noopener">Proj4Leaflet</a> 插件可以方便实现自定义 CRS。然后使用 <a href="https://leafletjs.com/reference-1.0.3.html#tilelayer" target="_blank" rel="noopener">TileLayer</a> 加载地图图层。</p>
+<h3 id="初始化方法"><a href="#初始化方法" class="headerlink" title="初始化方法"></a>初始化方法</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">L.tilelayer(&lt;String&gt; urlTemplate, &lt;TileLayer options&gt; options?)</span><br><span class="line"></span><br><span class="line">// 用法事例，常用属性及默认值</span><br><span class="line">L.tileLayer('https://&#123;s&#125;.tile.openstreetmap.org/&#123;z&#125;/&#123;x&#125;/&#123;y&#125;.png?&#123;foo&#125;', &#123;</span><br><span class="line">  minZoom: 0, // 最小缩放级别</span><br><span class="line">  maxZoom: 18, // 最小缩放级别</span><br><span class="line">  subdomains: 'abc', // 子域名，对应 urlTemplate 链接中的参数 &#123;s&#125;</span><br><span class="line">  errorTileUrl: '', // 加载失败时的图片地址</span><br><span class="line">  detectRetina: false， // 用户在视网膜显示器上可以设置为true，来利用高分辨率。</span><br><span class="line">&#125;).addTo(mymap);</span><br></pre></td></tr></table></figure>
+<h3 id="加载高德地图"><a href="#加载高德地图" class="headerlink" title="加载高德地图"></a>加载高德地图</h3><p>Leaflet Map 属性 <code>crs</code> 默认值为 <code>L.CRS.EPSG3857</code>，球形墨卡托投影。因此只要我们知道高德地图的瓦片图地址，无需对高德地图瓦片做任何处理，就能够加载出正确的地图。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mymap.addLayer(L.tileLayer(<span class="string">'http://webrd0&#123;s&#125;.is.autonavi.com/appmaptile?lang=zh_cn&amp;size=1&amp;scale=1&amp;style=8&amp;x=&#123;x&#125;&amp;y=&#123;y&#125;&amp;z=&#123;z&#125;'</span>, &#123;</span><br><span class="line">  subdomains: [<span class="string">'1'</span>, <span class="string">'2'</span>, <span class="string">'3'</span>, <span class="string">'4'</span>],</span><br><span class="line">  minZoom: <span class="number">1</span>,</span><br><span class="line">  maxZoom: <span class="number">19</span></span><br><span class="line">&#125;));</span><br></pre></td></tr></table></figure>
+<p>类似的谷歌地图或者其他同类瓦片坐标地图我们只要知道瓦片地址链接，然后替换 <code>urlTemplate</code> 参数和 <code>subdomains</code> 属性就能加载不同的地图了。</p>
+<table>
+<thead>
+<tr>
+<th>地图</th>
+<th>瓦片地址</th>
+<th>子域名</th>
+<th>层级</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>高德地图</td>
+<td><a href="http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&amp;size=1&amp;scale=1&amp;style=8&amp;x={x}&amp;y={y}&amp;z={z}" target="_blank" rel="noopener">http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&amp;size=1&amp;scale=1&amp;style=8&amp;x={x}&amp;y={y}&amp;z={z}</a></td>
+<td>[‘1’, ‘2’, ‘3’, ‘4’]</td>
+<td>1~19</td>
+</tr>
+<tr>
+<td>高德地图卫星</td>
+<td><a href="http://webst0{s}.is.autonavi.com/appmaptile?style=6&amp;x={x}&amp;y={y}&amp;z={z}" target="_blank" rel="noopener">http://webst0{s}.is.autonavi.com/appmaptile?style=6&amp;x={x}&amp;y={y}&amp;z={z}</a></td>
+<td>[‘1’, ‘2’, ‘3’, ‘4’]</td>
+<td>1~19</td>
+</tr>
+<tr>
+<td>高德地图标注</td>
+<td><a href="http://webst0{s}.is.autonavi.com/appmaptile?style=8&amp;x={x}&amp;y={y}&amp;z={z}" target="_blank" rel="noopener">http://webst0{s}.is.autonavi.com/appmaptile?style=8&amp;x={x}&amp;y={y}&amp;z={z}</a></td>
+<td>[‘1’, ‘2’, ‘3’, ‘4’]</td>
+<td>1~19</td>
+</tr>
+<tr>
+<td>谷歌地图</td>
+<td><a href="http://www.google.cn/maps/vt?lyrs=m@189&amp;gl=cn&amp;x={x}&amp;y={y}&amp;z={z}" target="_blank" rel="noopener">http://www.google.cn/maps/vt?lyrs=m@189&amp;gl=cn&amp;x={x}&amp;y={y}&amp;z={z}</a></td>
+<td>[]</td>
+<td>0~21</td>
+</tr>
+<tr>
+<td>谷歌地图卫星</td>
+<td><a href="http://www.google.cn/maps/vt?lyrs=s@189&amp;gl=cn&amp;x={x}&amp;y={y}&amp;z={z}" target="_blank" rel="noopener">http://www.google.cn/maps/vt?lyrs=s@189&amp;gl=cn&amp;x={x}&amp;y={y}&amp;z={z}</a></td>
+<td>[]</td>
+<td>0~21</td>
+</tr>
+</tbody>
+</table>
+<p>如果要用到以上所有的地图，可以使用 <a href="https://github.com/htoooth/Leaflet.ChineseTmsProviders" target="_blank" rel="noopener">Leaflet.ChineseTmsProviders</a> 插件，其对这些常用的地图做了简单封装，方便在地图上添加。</p>
+<h3 id="加载百度地图"><a href="#加载百度地图" class="headerlink" title="加载百度地图"></a>加载百度地图</h3><p>上面说到百度地图需要进行转换后才能正常使用，其转换方法也有已知解决方案，如下步骤：</p>
+<h4 id="添加-Proj4Leaflet"><a href="#添加-Proj4Leaflet" class="headerlink" title="添加 Proj4Leaflet"></a>添加 Proj4Leaflet</h4><p>从这里<a href="https://github.com/kartena/Proj4Leaflet" target="_blank" rel="noopener">下载源码</a>，然后添加引用</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/path/to/proj4-compressed.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/path/to/proj4leaflet.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="自定义-CRS"><a href="#自定义-CRS" class="headerlink" title="自定义 CRS"></a>自定义 CRS</h4><p>初始化地图前，<a href="https://blog.csdn.net/u012087400/article/details/52847614?locationNum=13&amp;fps=1" target="_blank" rel="noopener">自定义 CRS</a> 并<a href="https://blog.csdn.net/u012087400/article/details/53744756?utm_source=itdadao&amp;utm_medium=referral" target="_blank" rel="noopener">纠偏</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 初始化百度地图瓦片图层，投影坐标转换以纠偏地图显示问题</span></span><br><span class="line"><span class="keyword">const</span> baiduCrs = <span class="keyword">new</span> L.Proj.CRS(</span><br><span class="line">  <span class="string">"EPSG:900913"</span>,</span><br><span class="line">  <span class="string">"+proj=merc +a=6378206 +b=6356584.314245179 +lat_ts=0.0 +lon_0=0.0 +x_0=0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs"</span>,</span><br><span class="line">  &#123;</span><br><span class="line">    resolutions: (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      level = <span class="number">19</span>;</span><br><span class="line">      <span class="keyword">var</span> res = [];</span><br><span class="line">      res[<span class="number">0</span>] = <span class="built_in">Math</span>.pow(<span class="number">2</span>, <span class="number">18</span>);</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt; level; i++) &#123;</span><br><span class="line">        res[i] = <span class="built_in">Math</span>.pow(<span class="number">2</span>, <span class="number">18</span> - i);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> res;</span><br><span class="line">    &#125;)(),</span><br><span class="line">    origin: [<span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    bounds: L.bounds([<span class="number">20037508.342789244</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">20037508.342789244</span>])</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> mymap = L.map(<span class="string">"mapid"</span>, &#123;</span><br><span class="line">  crs: baiduCrs,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="百度地图图层"><a href="#百度地图图层" class="headerlink" title="百度地图图层"></a>百度地图图层</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// TileLayer 扩展</span></span><br><span class="line">L.TileLayer.BaiduLayer = L.TileLayer.extend(&#123;</span><br><span class="line">  options: &#123;</span><br><span class="line">    minZoom: <span class="number">3</span>,</span><br><span class="line">    maxZoom: <span class="number">18</span>,</span><br><span class="line">    <span class="comment">// subdomains: ["online1", "online2", "online3"],</span></span><br><span class="line">    <span class="comment">// attribution:</span></span><br><span class="line">    <span class="comment">//   '&amp;copy; &lt;a href="http://www.ksudi.com"&gt;Ksudi&lt;/a&gt; contributors',</span></span><br><span class="line">    style: <span class="string">"normal"</span>,</span><br><span class="line">    tms: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  _urls: &#123;</span><br><span class="line">    normal:</span><br><span class="line">      <span class="string">"https://ss0.bdstatic.com/8bo_dTSlRsgBo1vgoIiO_jowehsv/tile/?qt=tile&amp;x=&#123;x&#125;&amp;y=&#123;y&#125;&amp;z=&#123;z&#125;&amp;styles=pl&amp;scaler=2&amp;udt=20170803"</span>,</span><br><span class="line">    weixing:</span><br><span class="line">      <span class="string">"https://ss0.bdstatic.com/5bwHcj7lABFT8t_jkk_Z1zRvfdw6buu/it/u=x=&#123;x&#125;;y=&#123;y&#125;;z=&#123;z&#125;;v=009;type=sate&amp;fm=46&amp;udt=20170803"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  _weixing_label_url:</span><br><span class="line">    <span class="string">"https://ss0.bdstatic.com/8bo_dTSlRMgBo1vgoIiO_jowehsv/tile/?qt=tile&amp;x=&#123;x&#125;&amp;y=&#123;y&#125;&amp;z=&#123;z&#125;&amp;styles=sl&amp;udt=20141015"</span>,</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * url:</span></span><br><span class="line"><span class="comment">   * style:</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  initialize: <span class="function"><span class="keyword">function</span>(<span class="params">options</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> that = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">let</span> url;</span><br><span class="line">    <span class="keyword">if</span> (options.url) &#123;</span><br><span class="line">      url = options.url;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (options.style) &#123;</span><br><span class="line">      url = that._urls[options.style];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    url || (url = that._urls[<span class="string">"normal"</span>]);</span><br><span class="line">    L.TileLayer.prototype.initialize.call(<span class="keyword">this</span>, url, options);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="string">"weixing"</span> == options.style) &#123;</span><br><span class="line">      that.labelLayer = <span class="keyword">new</span> L.TileLayer.BaiduLayer(&#123;</span><br><span class="line">        url: that._weixing_label_url</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">      that.on(<span class="string">"add"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        that.labelLayer.addTo(that._map);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  getTileUrl: <span class="function"><span class="keyword">function</span>(<span class="params">t</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> L.TileLayer.prototype.getTileUrl.call(<span class="keyword">this</span>, t);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">L.tileLayer.baiduLayer = <span class="function"><span class="keyword">function</span>(<span class="params">options</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> L.TileLayer.BaiduLayer(options);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="添加到地图"><a href="#添加到地图" class="headerlink" title="添加到地图"></a>添加到地图</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="keyword">const</span> baiduLayer = L.tileLayer.baiduLayer(&#123;</span><br><span class="line">  style: <span class="string">"normal"</span></span><br><span class="line">&#125;);</span><br><span class="line">baiduLayer.addTo(mymap);</span><br></pre></td></tr></table></figure>
+<h2 id="切换地图"><a href="#切换地图" class="headerlink" title="切换地图"></a>切换地图</h2><p>以上我们就把地图的常用方法，以及常用地图的加载介绍完毕。我们可能会有在使用时加载多个地图图层，然后根据情况切换图层的需求。我们可以借助于 <a href="https://leafletjs.com/reference-1.0.3.html#control-layers" target="_blank" rel="noopener">Control.Layers</a> 来实现。</p>
+<table>
+<thead>
+<tr>
+<th>初始化</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L.control.layers(<object> baselayers?, <object> overlays?, &lt;Control.Layers options&gt; options?)</object></object></td>
+<td>使用给定的层创建一个属性控件。基层将使用单选按钮来切换，而覆盖将用复选框来切换。请注意，所有的基层都应该在基层对象中传递，但是在地图实例化过程中，应该只在映射中添加一个。</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用方法</span></span><br><span class="line"><span class="keyword">var</span> baseLayers = &#123;</span><br><span class="line">    <span class="string">"Mapbox"</span>: mapbox,</span><br><span class="line">    <span class="string">"OpenStreetMap"</span>: osm</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> overlays = &#123;</span><br><span class="line">    <span class="string">"Marker"</span>: marker,</span><br><span class="line">    <span class="string">"Roads"</span>: roadsLayer</span><br><span class="line">&#125;;</span><br><span class="line">L.control.layers(baseLayers, overlays).addTo(map);</span><br></pre></td></tr></table></figure>
+<p>实际 Demo 效果如下:</p>
+<p><img src="http://qiniu.0x0803.top/leaflet/6.gif_gif" alt></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    庄彪
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://0x0803.top/2018/05/27/gis-leaflet-tutorials-map-layer/" title="Leaflet 学习系列（二）加载地图">http://0x0803.top/2018/05/27/gis-leaflet-tutorials-map-layer/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/Leaflet/" rel="tag"># Leaflet</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/27/gis-leaflet-tutorials-map/" rel="next" title="Leaflet 学习系列（一）初识">
+                <i class="fa fa-chevron-left"></i> Leaflet 学习系列（一）初识
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/02/gis-leaflet-ui-vector-layers/" rel="prev" title="Leaflet 学习系列（三）标记以及矢量图">
+                Leaflet 学习系列（三）标记以及矢量图 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="庄彪">
+            
+              <p class="site-author-name" itemprop="name">庄彪</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/NoPPT" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:1041036986@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#准备-HTML-页面"><span class="nav-number">1.</span> <span class="nav-text">准备 HTML 页面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建-HTML-页面"><span class="nav-number">1.1.</span> <span class="nav-text">创建 HTML 页面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引用-CSS-文件"><span class="nav-number">1.2.</span> <span class="nav-text">引用 CSS 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加-JavaScript-文件"><span class="nav-number">1.3.</span> <span class="nav-text">添加 JavaScript 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加地图容器"><span class="nav-number">1.4.</span> <span class="nav-text">添加地图容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置地图容器样式"><span class="nav-number">1.5.</span> <span class="nav-text">设置地图容器样式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置地图"><span class="nav-number">2.</span> <span class="nav-text">设置地图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用属性、事件及方法"><span class="nav-number">3.</span> <span class="nav-text">常用属性、事件及方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#属性"><span class="nav-number">3.1.</span> <span class="nav-text">属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事件"><span class="nav-number">3.2.</span> <span class="nav-text">事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法"><span class="nav-number">3.3.</span> <span class="nav-text">方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#加载其他地图服务"><span class="nav-number">4.</span> <span class="nav-text">加载其他地图服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化方法"><span class="nav-number">4.1.</span> <span class="nav-text">初始化方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加载高德地图"><span class="nav-number">4.2.</span> <span class="nav-text">加载高德地图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加载百度地图"><span class="nav-number">4.3.</span> <span class="nav-text">加载百度地图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#添加-Proj4Leaflet"><span class="nav-number">4.3.1.</span> <span class="nav-text">添加 Proj4Leaflet</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义-CRS"><span class="nav-number">4.3.2.</span> <span class="nav-text">自定义 CRS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#百度地图图层"><span class="nav-number">4.3.3.</span> <span class="nav-text">百度地图图层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加到地图"><span class="nav-number">4.3.4.</span> <span class="nav-text">添加到地图</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#切换地图"><span class="nav-number">5.</span> <span class="nav-text">切换地图</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">庄彪</span>
+
+  
+</div>
+
+
+  <div class="powered-by">津ICP备18006909号</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="API,微信小程序,百度地图,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="zhuang's blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="目前微信小程序提供了 map 组件用于展示一些地图信息，以及获取当前位置的 API wx.getLocation(OBJECT)。如果想要基于 map 组件做一些扩展功能，就需要集成一些三方 API，如百度地图、高德地图来实现。本文使用百度地图微信小程序 JavaScript API，并增加一些额外功能。 小程序百度地图简述集成步骤 注册并登录百度地图开发平台 到控制台创建应用并获取服务密钥 下载">
+<meta name="keywords" content="API,微信小程序,百度地图">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信小程序集成百度地图 API 及路线规划等功能">
+<meta property="og:url" content="http://0x0803.top/2018/05/23/weapp-baidu-map-api-and-direction-etc/index.html">
+<meta property="og:site_name" content="zhuang&#39;s blog">
+<meta property="og:description" content="目前微信小程序提供了 map 组件用于展示一些地图信息，以及获取当前位置的 API wx.getLocation(OBJECT)。如果想要基于 map 组件做一些扩展功能，就需要集成一些三方 API，如百度地图、高德地图来实现。本文使用百度地图微信小程序 JavaScript API，并增加一些额外功能。 小程序百度地图简述集成步骤 注册并登录百度地图开发平台 到控制台创建应用并获取服务密钥 下载">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-11T07:00:46.699Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="微信小程序集成百度地图 API 及路线规划等功能">
+<meta name="twitter:description" content="目前微信小程序提供了 map 组件用于展示一些地图信息，以及获取当前位置的 API wx.getLocation(OBJECT)。如果想要基于 map 组件做一些扩展功能，就需要集成一些三方 API，如百度地图、高德地图来实现。本文使用百度地图微信小程序 JavaScript API，并增加一些额外功能。 小程序百度地图简述集成步骤 注册并登录百度地图开发平台 到控制台创建应用并获取服务密钥 下载">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"搜索博客","hits_empty":"没有找到匹配项: ${query}","hits_stats":"${time} ms 内找到 ${hits} 符合条件的内容"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://0x0803.top/2018/05/23/weapp-baidu-map-api-and-direction-etc/">
+
+
+
+
+
+  <title>微信小程序集成百度地图 API 及路线规划等功能 | zhuang's blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7cda0beda6b0c3a7002a11bfb03df138";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zhuang's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">小庄先生呢</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://0x0803.top/2018/05/23/weapp-baidu-map-api-and-direction-etc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="庄彪">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhuang's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">微信小程序集成百度地图 API 及路线规划等功能</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-23T10:23:51+00:00">
+                2018-05-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/微信小程序/" itemprop="url" rel="index">
+                    <span itemprop="name">微信小程序</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>目前微信小程序提供了 <a href="https://developers.weixin.qq.com/miniprogram/dev/component/map.html" target="_blank" rel="noopener"><code>map</code></a> 组件用于展示一些地图信息，以及获取当前<a href="https://developers.weixin.qq.com/miniprogram/dev/api/location.html" target="_blank" rel="noopener">位置</a>的 API <code>wx.getLocation(OBJECT)</code>。如果想要基于 <code>map</code> 组件做一些扩展功能，就需要集成一些三方 API，如百度地图、高德地图来实现。本文使用百度地图微信小程序 JavaScript API，并增加一些额外功能。</p>
+<h2 id="小程序百度地图"><a href="#小程序百度地图" class="headerlink" title="小程序百度地图"></a>小程序百度地图</h2><h3 id="简述集成步骤"><a href="#简述集成步骤" class="headerlink" title="简述集成步骤"></a>简述集成步骤</h3><ol>
+<li>注册并登录<a href="http://lbsyun.baidu.com/index.php?title=%E9%A6%96%E9%A1%B5" target="_blank" rel="noopener">百度地图开发平台</a></li>
+<li>到<a href="http://lbsyun.baidu.com/apiconsole/key" target="_blank" rel="noopener">控制台</a>创建应用并获取服务密钥</li>
+<li>下载<a href="http://lbsyun.baidu.com/index.php?title=wxjsapi/wxjs-download" target="_blank" rel="noopener">百度地图微信小程序 JavaScript API</a></li>
+<li>添加 JS 文件到微信小程序中</li>
+<li>配置小程序合法域名</li>
+<li>开始开发功能<a id="more"></a>
+详细入门指南参照百度<a href="http://lbsyun.baidu.com/index.php?title=wxjsapi/guide/key" target="_blank" rel="noopener">官方文档</a>，下载 API 后发现有 <code>bmap-wx.js</code> 和 <code>bmap-wx.min.js</code> 一个是正常的文件，另一个是压缩代码后的文件。这里选择 <code>bmap-wx.js</code> 未压缩的文件，方便之后增加功能。</li>
+</ol>
+<h3 id="默认功能"><a href="#默认功能" class="headerlink" title="默认功能"></a>默认功能</h3><p>目前百度地图微信小程序 JavaScript API 内只提供了以下四个接口。</p>
+<ul>
+<li>POI 检索</li>
+<li>POI 检索热词联想</li>
+<li>逆地址解析</li>
+<li>天气查询</li>
+</ul>
+<p>同样这里官方提供了很好的 <a href="http://lbsyun.baidu.com/index.php?title=wxjsapi/guide/getpoi" target="_blank" rel="noopener">DEMO</a>，就不重复实现了。</p>
+<h2 id="添加其他百度地图服务"><a href="#添加其他百度地图服务" class="headerlink" title="添加其他百度地图服务"></a>添加其他百度地图服务</h2><p>百度地图默认提供的小程序接口功能太少，我们可以自己动手实现其他百度地图服务。通过查看百度地图微信小程序 API，我们可以发现，其实现方式主要是通过 <code>wx.request</code> 请求 <code>RESTful</code> 接口，然后处理接口返回数据，通过 <code>map</code> 组件提供的一些属性（<code>markers</code>, <code>polyline</code>, <code>include-points</code>）来显示返回数据，需要注意的是百度地图默认使用的是百度坐标（BD09），而 <code>map</code> 组件使用的是国测局坐标（火星坐标系，gcj02），所以我们需要把坐标统一转换为 <code>gcj02</code>。知道思路后就开始实现吧。</p>
+<h3 id="路线规划"><a href="#路线规划" class="headerlink" title="路线规划"></a>路线规划</h3><p>这里以驾车路线规划为例，查看<a href="https://developers.weixin.qq.com/miniprogram/dev/component/map.html" target="_blank" rel="noopener">路线规划 服务API</a>，根据文档传入比较关键的几个参数 </p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>origin</td>
+<td>起点经纬度，小数点后不超过6位，40.056878,116.30815</td>
+</tr>
+<tr>
+<td>destination</td>
+<td>终点经纬度，小数点后不超过6位，40.056878,116.30815</td>
+</tr>
+<tr>
+<td>coord_type</td>
+<td>坐标类型，默认为bd09ll。这里传入 <code>gcj02</code></td>
+</tr>
+<tr>
+<td>ret_coordtype</td>
+<td>返回结果坐标类型，默认为bd09ll，这里传入 <code>gcj02</code></td>
+</tr>
+<tr>
+<td>ak</td>
+<td>填申请的密钥（和小程序不是同一个，控制台添加时选择服务端，注意要白名单不要做 IP 限制）</td>
+</tr>
+</tbody>
+</table>
+<p>实现代码就比较简单了，在 <code>success</code> 方法中处理返回数据，按照 <code>map</code> 组件 <code>polyline</code> 属性需要的参数格式，尽量使 <code>route</code> 方法回掉时的数据能够直接使用。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">route(&#123; ori, des, success = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; &#125;, fail = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; &#125; &#125;) &#123;</span><br><span class="line">  <span class="comment">// http://lbsyun.baidu.com/index.php?title=webapi/direction-api-v2</span></span><br><span class="line">  <span class="keyword">if</span> (!ori || !des) &#123;</span><br><span class="line">    fail(&#123;</span><br><span class="line">      errMsg: <span class="string">'传入起点终点经纬度'</span>,</span><br><span class="line">      statusCode: <span class="number">-1</span></span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">var</span> that = <span class="keyword">this</span>;</span><br><span class="line">  <span class="keyword">let</span> routeparam = &#123;</span><br><span class="line">    origin: ori,</span><br><span class="line">    destination: des,</span><br><span class="line">    coord_type: <span class="string">'gcj02'</span>,</span><br><span class="line">    ret_coordtype: <span class="string">'gcj02'</span>,</span><br><span class="line">    ak: <span class="string">'zIfvklWXpDFGCDzaHdZM6VOdeZWSO8US'</span>,</span><br><span class="line">  &#125;;</span><br><span class="line">  wx.request(&#123;</span><br><span class="line">    url: <span class="string">'https://api.map.baidu.com/direction/v2/driving'</span>,</span><br><span class="line">    data: routeparam,</span><br><span class="line">    header: &#123;</span><br><span class="line">      <span class="string">"content-type"</span>: <span class="string">"application/json"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    method: <span class="string">'GET'</span>,</span><br><span class="line">    success(res) &#123;</span><br><span class="line">      <span class="keyword">const</span> data = res.data;</span><br><span class="line">      <span class="keyword">if</span> (data[<span class="string">"status"</span>] === <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> res = data[<span class="string">"result"</span>];</span><br><span class="line">        <span class="keyword">const</span> &#123; origin, destination, routes &#125; = res;</span><br><span class="line">        <span class="keyword">const</span> &#123; distance, duration, steps &#125; = routes[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">let</span> newSteps = [];</span><br><span class="line">        steps &amp;&amp; steps.forEach(<span class="function">(<span class="params">value, index</span>) =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">const</span> start = &#123;</span><br><span class="line">            latitude: value.start_location.lat,</span><br><span class="line">            longitude: value.start_location.lng</span><br><span class="line">          &#125;</span><br><span class="line">          newSteps.push(start);</span><br><span class="line">          <span class="keyword">if</span> (index == steps.length - <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">const</span> end = &#123;</span><br><span class="line">              latitude: value.end_location.lat,</span><br><span class="line">              longitude: value.end_location.lng</span><br><span class="line">            &#125;</span><br><span class="line">            newSteps.push(end);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">const</span> result = &#123;</span><br><span class="line">          distance,</span><br><span class="line">          duration,</span><br><span class="line">          steps: newSteps</span><br><span class="line">        &#125;;</span><br><span class="line">        success(result);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        fail(&#123;</span><br><span class="line">          errMsg: data[<span class="string">"message"</span>],</span><br><span class="line">          statusCode: data[<span class="string">"status"</span>]</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    fail(data) &#123;</span><br><span class="line">      fail(data);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/NoPPT/wx-app-demo" target="_blank" rel="noopener">完整 Demo 代码在这里</a></p>
+<h3 id="其他服务"><a href="#其他服务" class="headerlink" title="其他服务"></a>其他服务</h3><p>和路线规划一样，基本上所有在 <a href="http://lbsyun.baidu.com/index.php?title=webapi" target="_blank" rel="noopener">WEB 服务API</a> 中提供的功能，都可以改造成可以适用微信小程序。</p>
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>我们可以发现其实没有什么难度，主要是调用接口然后处理数据罢了。虽然扩展百度地图小程序 API 很方便，但是并不建议企业项目直接添加。因为我们的实现是在小程序中使用百度地图服务端 API，所以我们在申请密钥时不能对 IP 做限制，不然无法让每部手机都能请求数据。如果自己写写 DEMO 的话可能无关紧要，但是如果做为企业使用的话，尽量让后台开发人员写接口调用百度地图 API 以保证密钥 AK 的安全性。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    庄彪
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://0x0803.top/2018/05/23/weapp-baidu-map-api-and-direction-etc/" title="微信小程序集成百度地图 API 及路线规划等功能">http://0x0803.top/2018/05/23/weapp-baidu-map-api-and-direction-etc/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/API/" rel="tag"># API</a>
+          
+            <a href="/tags/微信小程序/" rel="tag"># 微信小程序</a>
+          
+            <a href="/tags/百度地图/" rel="tag"># 百度地图</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/23/gis-arcgis-api-3-24-snappingmanager/" rel="next" title="ArcGIS SnappingManager 捕捉管理器">
+                <i class="fa fa-chevron-left"></i> ArcGIS SnappingManager 捕捉管理器
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/27/gis-leaflet-tutorials-map/" rel="prev" title="Leaflet 学习系列（一）初识">
+                Leaflet 学习系列（一）初识 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="庄彪">
+            
+              <p class="site-author-name" itemprop="name">庄彪</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/NoPPT" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:1041036986@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#小程序百度地图"><span class="nav-number">1.</span> <span class="nav-text">小程序百度地图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简述集成步骤"><span class="nav-number">1.1.</span> <span class="nav-text">简述集成步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#默认功能"><span class="nav-number">1.2.</span> <span class="nav-text">默认功能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加其他百度地图服务"><span class="nav-number">2.</span> <span class="nav-text">添加其他百度地图服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#路线规划"><span class="nav-number">2.1.</span> <span class="nav-text">路线规划</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他服务"><span class="nav-number">2.2.</span> <span class="nav-text">其他服务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写在最后"><span class="nav-number">3.</span> <span class="nav-text">写在最后</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">庄彪</span>
+
+  
+</div>
+
+
+  <div class="powered-by">津ICP备18006909号</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

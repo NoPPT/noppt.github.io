@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="自定义组件,微信小程序,实践,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="zhuang's blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="从小程序基础库版本 1.6.3 开始，小程序支持简洁的组件化编程。所有自定义组件相关特性都需要基础库版本 1.6.3 或更高。开发者可以将页面内的功能模块抽象成自定义组件，以便在不同的页面中重复使用；也可以将复杂的页面拆分成多个低耦合的模块，有助于代码维护。自定义组件在使用时与基础组件非常相似。  作为一个小程序初学者，一开始看到自定义组件时，虽然文档已经写的很详细了，整体上都能看的懂，但看完之">
+<meta name="keywords" content="自定义组件,微信小程序,实践">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信小程序自定义组件实践">
+<meta property="og:url" content="http://0x0803.top/2018/04/01/weapp-custom-component-practices/index.html">
+<meta property="og:site_name" content="zhuang&#39;s blog">
+<meta property="og:description" content="从小程序基础库版本 1.6.3 开始，小程序支持简洁的组件化编程。所有自定义组件相关特性都需要基础库版本 1.6.3 或更高。开发者可以将页面内的功能模块抽象成自定义组件，以便在不同的页面中重复使用；也可以将复杂的页面拆分成多个低耦合的模块，有助于代码维护。自定义组件在使用时与基础组件非常相似。  作为一个小程序初学者，一开始看到自定义组件时，虽然文档已经写的很详细了，整体上都能看的懂，但看完之">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/2/1.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/2/2.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/2/3.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/2/4.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/2/8.gif_gif">
+<meta property="og:image" content="http://qiniu.0x0803.top/image/blog/2/7.gif_gif">
+<meta property="og:updated_time" content="2019-10-11T07:00:46.699Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="微信小程序自定义组件实践">
+<meta name="twitter:description" content="从小程序基础库版本 1.6.3 开始，小程序支持简洁的组件化编程。所有自定义组件相关特性都需要基础库版本 1.6.3 或更高。开发者可以将页面内的功能模块抽象成自定义组件，以便在不同的页面中重复使用；也可以将复杂的页面拆分成多个低耦合的模块，有助于代码维护。自定义组件在使用时与基础组件非常相似。  作为一个小程序初学者，一开始看到自定义组件时，虽然文档已经写的很详细了，整体上都能看的懂，但看完之">
+<meta name="twitter:image" content="http://qiniu.0x0803.top/image/blog/2/1.png_blog">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"搜索博客","hits_empty":"没有找到匹配项: ${query}","hits_stats":"${time} ms 内找到 ${hits} 符合条件的内容"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://0x0803.top/2018/04/01/weapp-custom-component-practices/">
+
+
+
+
+
+  <title>微信小程序自定义组件实践 | zhuang's blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7cda0beda6b0c3a7002a11bfb03df138";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zhuang's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">小庄先生呢</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://0x0803.top/2018/04/01/weapp-custom-component-practices/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="庄彪">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhuang's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">微信小程序自定义组件实践</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-01T18:01:06+00:00">
+                2018-04-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/微信小程序/" itemprop="url" rel="index">
+                    <span itemprop="name">微信小程序</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>从小程序基础库版本 1.6.3 开始，小程序支持简洁的组件化编程。所有自定义组件相关特性都需要基础库版本 1.6.3 或更高。<br>开发者可以将页面内的功能模块抽象成自定义组件，以便在不同的页面中重复使用；也可以将复杂的页面拆分成多个低耦合的模块，有助于代码维护。自定义组件在使用时与基础组件非常相似。</p>
+</blockquote>
+<p>作为一个小程序初学者，一开始看到<a href="https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/" target="_blank" rel="noopener">自定义组件</a>时，虽然文档已经写的很详细了，整体上都能看的懂，但看完之后感觉缺少实践理解不是很透彻，好在后来项目开发中需要自定义 PickerView，实践过后感觉熟练了不少，此时把开发过程中的一些实践配合官方文档总结下来。</p>
+<a id="more"></a>
+<h2 id="创建自定义组件"><a href="#创建自定义组件" class="headerlink" title="创建自定义组件"></a>创建自定义组件</h2><p>创建一个自定义组件十分简单，只需要在项目中点击<code>右键=&gt;新建=&gt;Component</code>，输入组件名，就会生成相应的 <code>json</code>，<code>wxml</code>，<code>wxss</code>，<code>js</code> 文件（为了方便管理，建议把自定义组件相关代码文件放在同一文件夹下面）。我们可以看到在 <code>json</code> 文件中已经将 <code>component</code> 属性设置为 <code>true</code>，代表这组文件为自定义组件。</p>
+<figure class="highlight json"><figcaption><span>index.json</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"component"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"usingComponents"</span>: &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同时，还要在 <code>wxml</code> 文件中编写组件模版，在 <code>wxss</code> 文件中加入组件样式，在 <code>js</code> 文件中写对应的组件逻辑。</p>
+<p>接下来，就要考虑下组件需要实现哪些功能。这里要实现的是一个 <code>PickerView</code>。设计如下：<br><div class="group-picture"><div class="group-picture-container"><div class="group-picture-row"><div class="group-picture-column" style="width: 50%;"><img src="http://qiniu.0x0803.top/image/blog/2/1.png_blog" alt></div><div class="group-picture-column" style="width: 50%;"><img src="http://qiniu.0x0803.top/image/blog/2/2.png_blog" alt></div></div><div class="group-picture-row"><div class="group-picture-column" style="width: 50%;"><img src="http://qiniu.0x0803.top/image/blog/2/3.png_blog" alt></div><div class="group-picture-column" style="width: 50%;"><img src="http://qiniu.0x0803.top/image/blog/2/4.png_blog" alt></div></div></div></div></p>
+<p>分析项目的实际需要，首先要有一套基本的样式，但是有些地方的高度不同，我们的项目只需要显示一列数据进行选择，暂时不需要级联的效果。需要单选和多选的功能，而且不同地方使用时对应的 <code>picker-item</code>（后面简称<code>行</code>） 显示的结构会有所不同。</p>
+<p>总结下我们需要实现以下功能：</p>
+<ul>
+<li>默认样式和结构</li>
+<li>打开和关闭</li>
+<li>自定义样式</li>
+<li>单选和多选</li>
+<li>自动滑动到选中行</li>
+<li>自定义行结构</li>
+</ul>
+<p>接下来就一一实现上面的需求。</p>
+<h2 id="需求实现"><a href="#需求实现" class="headerlink" title="需求实现"></a>需求实现</h2><p>这里就把实现时的大概步骤和实现给记录下，所有的代码在这里可以<a href="https://github.com/NoPPT/wx-picker-view" target="_blank" rel="noopener">查看和下载</a>。</p>
+<h3 id="默认样式和结构"><a href="#默认样式和结构" class="headerlink" title="默认样式和结构"></a>默认样式和结构</h3><p>按照以下目录创建文件，把所有相关的文件都放在同一文件夹下，方便统一管理，然后在文件夹下创建两个自定义组件和一个模板。<code>index</code> 提供整个 <code>picker-view</code> 相关的属性和事件。<code>item</code> 作为 <code>picker-item</code> 的容器，通过 <code>&lt;slot&gt;</code> 节点承载组件引用时的默认模板和自定义模板子节点，方便之后自定义行模板。<code>default-item</code> 就是 <code>picker-view</code> 默认的行模板了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">├── components</span><br><span class="line">│   └── picker</span><br><span class="line">│       ├── default-item.wxml</span><br><span class="line">│       ├── default-item.wxss</span><br><span class="line">│       ├── index.js</span><br><span class="line">│       ├── index.json</span><br><span class="line">│       ├── index.wxml</span><br><span class="line">│       ├── index.wxss</span><br><span class="line">│       ├── item.js</span><br><span class="line">│       ├── item.json</span><br><span class="line">│       ├── item.wxml</span><br><span class="line">│       └── item.wxss</span><br></pre></td></tr></table></figure>
+<h3 id="打开和关闭"><a href="#打开和关闭" class="headerlink" title="打开和关闭"></a>打开和关闭</h3><p>简单点实现就是通过 <code>wx:if=&quot;&quot;</code>来判断是否显示组件，不过效果太生硬，还是要添加点动画效果，这里使用的是微信提供的 API：<a href="https://developers.weixin.qq.com/miniprogram/dev/api/api-animation.html#wxcreateanimationobject" target="_blank" rel="noopener">wx.createAnimation</a>。在 <code>index.js</code> 中添加组件属性 <code>show</code>，然后监听 <code>show</code> 值的变化，判断是打开还是关闭状态，执行不同的动画效果。这里有一点需要注意的是每次都需要重新使用 <code>wx.createAnimation</code> 生成动画实例，因为 <code>export</code> 方法每次调用后会清掉之前的动画操作。除设置 <code>show</code> 属性的值外，还可以在引用组件的地方通过 <code>selectComponent(&quot;#custom-id&quot;)</code> 方法获取组件实例节点，执行 <code>show()</code> 和 <code>hide()</code>方法来控制组件的显示状态。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// properties</span></span><br><span class="line">show: &#123;</span><br><span class="line">  type: <span class="built_in">Boolean</span>,</span><br><span class="line">  value: <span class="literal">false</span>,</span><br><span class="line">  observer: <span class="string">'_onChangeShow'</span></span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line"><span class="comment">// methods</span></span><br><span class="line">_onChangeShow: <span class="function"><span class="keyword">function</span> (<span class="params">newVal, oldVal</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (newVal !== oldVal) &#123;</span><br><span class="line">    <span class="keyword">if</span> (newVal) &#123;</span><br><span class="line">      <span class="keyword">this</span>.show();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">this</span>.hide();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">_initShowAnimate: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> that = <span class="keyword">this</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> showAnimate = wx.createAnimation(&#123;</span><br><span class="line">    duration: that.animateTime,</span><br><span class="line">    timingFunction: <span class="string">'ease'</span></span><br><span class="line">  &#125;);</span><br><span class="line">  showAnimate.bottom(<span class="string">'0rpx'</span>).opacity(<span class="number">1</span>).step();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> bgShowAnimate = wx.createAnimation(&#123;</span><br><span class="line">    duration: that.animateTime,</span><br><span class="line">    timingFunction: <span class="string">'ease'</span></span><br><span class="line">  &#125;);</span><br><span class="line">  bgShowAnimate.backgroundColor(<span class="string">'rgba(0, 0, 0, 0.7)'</span>).step();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123; showAnimate, bgShowAnimate &#125;;</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">_initHideAnimate: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> that = <span class="keyword">this</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> hideAnimate = wx.createAnimation(&#123;</span><br><span class="line">    duration: that.animateTime,</span><br><span class="line">    timingFunction: <span class="string">'ease'</span></span><br><span class="line">  &#125;)</span><br><span class="line">  hideAnimate.bottom(<span class="string">'-586rpx'</span>).opacity(<span class="number">0</span>).step();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> bgHideAnimate = wx.createAnimation(&#123;</span><br><span class="line">    duration: that.animateTime,</span><br><span class="line">    timingFunction: <span class="string">'ease'</span></span><br><span class="line">  &#125;)</span><br><span class="line">  bgHideAnimate.backgroundColor(<span class="string">'rgba(0, 0, 0, 0)'</span>).step();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123; hideAnimate, bgHideAnimate &#125;;</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">show: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; showAnimate, bgShowAnimate &#125; = <span class="keyword">this</span>._initShowAnimate();</span><br><span class="line">  <span class="keyword">this</span>.setData(&#123;</span><br><span class="line">    animation: showAnimate.export(),</span><br><span class="line">    bgAnimation: bgShowAnimate.export(),</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">hide: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!<span class="keyword">this</span>.data.show) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> &#123; hideAnimate, bgHideAnimate &#125; = <span class="keyword">this</span>._initHideAnimate();</span><br><span class="line">  <span class="keyword">this</span>.setData(&#123;</span><br><span class="line">    animation: hideAnimate.export(),</span><br><span class="line">    bgAnimation: bgHideAnimate.export(),</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> that = <span class="keyword">this</span>;</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    that.triggerEvent(<span class="string">"hide"</span>, &#123;&#125;, &#123;&#125;)</span><br><span class="line">    that.setData(&#123;</span><br><span class="line">      show: <span class="literal">false</span></span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;, that.animateTime);</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>使用已注册的自定义组件前，首先要在页面的 <code>json</code> 文件中进行引用声明。此时需要提供每个自定义组件的标签名和对应的自定义组件文件路径。这样，在页面的 <code>wxml</code> 中就可以像使用基础组件一样使用自定义组件。节点名即自定义组件的标签名，节点属性即传递给组件的属性值。自定义组件的 <code>wxml</code> 节点结构在与数据结合之后，将被插入到引用位置内。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// index.json</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"component"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"usingComponents"</span>: &#123;</span><br><span class="line">    <span class="attr">"item"</span>: <span class="string">"./item"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- item.wxml --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">id</span>=<span class="string">'into-&#123;&#123;key&#125;&#125;'</span> <span class="attr">class</span>=<span class="string">"item"</span> <span class="attr">bindtap</span>=<span class="string">'_onTapPickerItem'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">slot</span>&gt;</span><span class="tag">&lt;/<span class="name">slot</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>picker-item</code> 作为行模板的容器，绑定点击事件，这样就不用关心行结构，只需要处理好 <code>picker-item</code> 在点击时同 <code>picker-view</code> 之间的交互逻辑就好了。同样的，我们提供一个默认行模板，用于满足基本的使用需求。可以根据项目中的需求来决定默认的行模板。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- default-item.wxml --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span> <span class="attr">name</span>=<span class="string">'default-item'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">'default-item-container'</span> <span class="attr">style</span>=<span class="string">"background-color: &#123;&#123;choose ? '#2089ff' : '#fff'&#125;&#125;;"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">text</span> <span class="attr">class</span>=<span class="string">'defaulte-item-text'</span> <span class="attr">style</span>=<span class="string">"color: &#123;&#123;choose ? '#fff' : '#333'&#125;&#125;"</span>&gt;</span>&#123;&#123; title &#125;&#125;<span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这样，我们的 <code>picker-view</code> 的就如下所示：使用 <code>scroll-view</code> 组件作为承载 <code>picker-item</code> 的容器。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- index.wxml --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">wx:if</span>=<span class="string">"&#123;&#123;show&#125;&#125;"</span> <span class="attr">class</span>=<span class="string">"action-container"</span> <span class="attr">animation</span>=<span class="string">"&#123;&#123;bgAnimation&#125;&#125;"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">"list-container"</span> <span class="attr">animation</span>=<span class="string">"&#123;&#123;animation&#125;&#125;"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">"tool-bar"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">text</span> <span class="attr">class</span>=<span class="string">'cancel-text'</span> <span class="attr">bindtap</span>=<span class="string">'onTapClear'</span>&gt;</span>取消<span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">text</span> <span class="attr">wx:if</span>=<span class="string">"&#123;&#123;multiple&#125;&#125;"</span> <span class="attr">class</span>=<span class="string">'all-text'</span> <span class="attr">bindtap</span>=<span class="string">'onTapAll'</span>&gt;</span>全选<span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">text</span> <span class="attr">class</span>=<span class="string">'ok-text all-text'</span> <span class="attr">bindtap</span>=<span class="string">'onTapOk'</span>&gt;</span>确认<span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scroll-view</span> <span class="attr">class</span>=<span class="string">'scroll'</span> <span class="attr">scroll-y</span> <span class="attr">scroll-into-view</span>=<span class="string">"&#123;&#123;defaultView&#125;&#125;"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">item</span> <span class="attr">id</span>=<span class="string">"&#123;&#123;'into-' + index&#125;&#125;"</span> <span class="attr">wx:for</span>=<span class="string">"&#123;&#123;items&#125;&#125;"</span> <span class="attr">wx:key</span>=<span class="string">"&#123;&#123;item.name&#125;&#125;"</span> <span class="attr">key</span>=<span class="string">"&#123;&#123;index&#125;&#125;"</span> <span class="attr">bindselect</span>=<span class="string">"onTapPickerItem"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">template</span> <span class="attr">is</span>=<span class="string">"default-item"</span> <span class="attr">data</span>=<span class="string">"&#123;&#123; choose: item.choose, title: item.name&#125;&#125;"</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">scroll-view</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* index.wxss */</span></span><br><span class="line"><span class="selector-class">.action-container</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: fixed;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100vw</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100vh</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: transparent;</span><br><span class="line">  <span class="attribute">z-index</span>: <span class="number">1000</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.list-container</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">bottom</span>: -<span class="number">586</span>rpx;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100vw</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">586</span>rpx;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#fff</span>;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="attribute">flex-direction</span>: column;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">z-index</span>: <span class="number">1010</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.scroll</span> &#123;</span><br><span class="line">  <span class="attribute">flex</span>: <span class="number">1</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">496</span>rpx;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100vw</span>;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="attribute">flex-direction</span>: column;</span><br><span class="line">  <span class="attribute">box-sizing</span>: border-box;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="自定义样式"><a href="#自定义样式" class="headerlink" title="自定义样式"></a>自定义样式</h3><p>在微信提供的文档<a href="https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/wxml-wxss.html" target="_blank" rel="noopener">组件模版和样式</a>中，提到可以在 <code>Component</code> 中用 <code>externalClasses</code> 定义段定义若干个外部样式类。这个特性从小程序基础库版本 <code>1.9.90</code> 开始支持。这里的话考虑到组件要支持低版本，而且 <code>externalClasses</code> 使用起来不够灵活。所以这里还是通过属性来实现自定义高度的需求。实践中发现的一个问题是，设置 <code>scroll-view</code> 的高度 <code>height: 100%</code> 虽然也能实现自动填充高度，但是在部分机型上展示有问题。所以还是监听高度属性的变化，然后计算 <code>scroll-view</code> 的高度，并更新。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// properties</span></span><br><span class="line">height: &#123;</span><br><span class="line">  type: <span class="built_in">String</span>,</span><br><span class="line">  value: <span class="string">'586rpx'</span>,</span><br><span class="line">  observer: <span class="string">'_onChangeHeight'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//methods</span></span><br><span class="line">_onChangeHeight: <span class="function"><span class="keyword">function</span> (<span class="params">newVal, oldVal</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (newVal &amp;&amp; newVal !== oldVal) &#123;</span><br><span class="line">    <span class="keyword">const</span> height = (newVal.split(<span class="string">'rpx'</span>)[<span class="number">0</span>] - <span class="number">90</span>) + <span class="string">'rpx'</span>;</span><br><span class="line">    <span class="keyword">this</span>.setData(&#123;</span><br><span class="line">      containerHeight: height</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line"><span class="comment">//wxml</span></span><br><span class="line">&lt;scroll-view <span class="class"><span class="keyword">class</span></span>=<span class="string">'scroll'</span> style=<span class="string">"height: &#123;&#123;containerHeight&#125;&#125;;"</span> scroll-y&gt;</span><br><span class="line">&lt;<span class="regexp">/scroll-view&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="单选和多选"><a href="#单选和多选" class="headerlink" title="单选和多选"></a>单选和多选</h3><p>我们已经监听的 <code>picker-item</code> 的点击事件 <code>bindselect=&quot;onTapPickerItem&quot;</code>，只需要在每次点击时更新下当前行数据的选中状态。这里在实现时使用的方法是在每行的数据结构中增加 <code>choose</code> 属性用于存储行的选中状态。这样只需要处理好每次选中时数据的更新就好了，然后重新渲染组件。在取消的时候恢复原始的数据状态，点击确认时把当前的数据传递到使用 <code>picker-view</code> 的页面。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// index.js</span></span><br><span class="line">onTapPickerItem: <span class="function"><span class="keyword">function</span> (<span class="params">res</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.handleTapItem(res.detail.key);</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">handleTapItem: <span class="function"><span class="keyword">function</span> (<span class="params">index</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (index == <span class="literal">undefined</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> that = <span class="keyword">this</span>;</span><br><span class="line">  <span class="keyword">const</span> newDatas = <span class="keyword">this</span>._changeDataChoose(<span class="keyword">this</span>.selIndex, index);</span><br><span class="line">  <span class="keyword">this</span>.setData(&#123;</span><br><span class="line">    items: newDatas</span><br><span class="line">  &#125;, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (that.data.custom) &#123;</span><br><span class="line">      that.changeSelectItem();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">onTapOk: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.changeSelectItem(<span class="string">'confirm'</span>);</span><br><span class="line">  <span class="keyword">this</span>.hide();</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">changeSelectItem: <span class="function"><span class="keyword">function</span> (<span class="params">type = <span class="string">'change'</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> items = <span class="keyword">this</span>.data.items;</span><br><span class="line">  <span class="keyword">let</span> current = <span class="keyword">this</span>.selIndex;</span><br><span class="line">  <span class="keyword">if</span> (type === <span class="string">'cancel'</span>) &#123;</span><br><span class="line">    items = <span class="keyword">this</span>.defaultItems;</span><br><span class="line">    current = <span class="keyword">this</span>.defaultSelect;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (type === <span class="string">'confirm'</span>) &#123;</span><br><span class="line">    <span class="keyword">this</span>.defaultItems = <span class="literal">undefined</span>;</span><br><span class="line">    <span class="keyword">this</span>.defaultSelect = <span class="literal">undefined</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">this</span>.triggerEvent(<span class="string">"change"</span>, &#123;</span><br><span class="line">    current,</span><br><span class="line">    items,</span><br><span class="line">    type</span><br><span class="line">  &#125;, &#123;&#125;)</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">_changeDataChoose: <span class="function"><span class="keyword">function</span> (<span class="params">lastIndex, currentIndex</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> lastDatas = <span class="keyword">this</span>.data.items;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.data.multiple) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> currentIndex != <span class="string">'object'</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (lastDatas[currentIndex].choose) &#123;</span><br><span class="line">        lastDatas[currentIndex].choose = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">const</span> index = <span class="keyword">this</span>.selIndex.indexOf(currentIndex)</span><br><span class="line">        <span class="keyword">this</span>.selIndex.splice(index, <span class="number">1</span>);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        lastDatas[currentIndex].choose = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">this</span>.selIndex = [...this.selIndex, currentIndex];</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">this</span>.selIndex = lastIndex;</span><br><span class="line">      lastIndex.forEach(<span class="function">(<span class="params">value, index</span>) =&gt;</span> &#123;</span><br><span class="line">        lastDatas[value].choose = <span class="literal">true</span>;</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (lastIndex &gt;= <span class="number">0</span> &amp;&amp; lastIndex &lt; lastDatas.length) &#123;</span><br><span class="line">      lastDatas[lastIndex].choose = <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (currentIndex &gt;= <span class="number">0</span> &amp;&amp; currentIndex &lt; lastDatas.length) &#123;</span><br><span class="line">      lastDatas[currentIndex].choose = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">this</span>.selIndex = currentIndex;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> lastDatas;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="自动滑动到选中行"><a href="#自动滑动到选中行" class="headerlink" title="自动滑动到选中行"></a>自动滑动到选中行</h3><p>主要是使用 <code>scroll-view</code> 提供的属性 <code>scroll-into-view=&quot;&quot;</code>，在每次打开 <code>picker-view</code> 时设置 <code>defaultView</code> 的值为当前选中的行，需要注意的一点是 <code>scroll-into-view</code> 对应的值值应为某子元素 id，id 不能以数字开头。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">show: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; showAnimate, bgShowAnimate &#125; = <span class="keyword">this</span>._initShowAnimate();</span><br><span class="line">  <span class="keyword">const</span> defaultView = <span class="string">'into-'</span> + <span class="built_in">Number</span>(<span class="keyword">this</span>.data.current);</span><br><span class="line">  <span class="keyword">this</span>.setData(&#123;</span><br><span class="line">    animation: showAnimate.export(),</span><br><span class="line">    bgAnimation: bgShowAnimate.export(),</span><br><span class="line">    defaultView: defaultView</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<h3 id="自定义行模板"><a href="#自定义行模板" class="headerlink" title="自定义行模板"></a>自定义行模板</h3><p>自定义行模板时主要需要处理的是，如何把选中的状态更新逻辑给抽取出来，这样使用时就只需要提供一套自定义的模板就行了。<a href="https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/relations.html" target="_blank" rel="noopener">组件间关系</a> 这一节提到：自定义组件有相互间的关系，相互间的通信往往比较复杂。此时在组件定义时加入 <code>relations</code> 定义段，可以解决这样的问题。在 <code>index</code> 和 <code>item</code> 两个组件定义中都加入 <code>relations</code>定义，<code>index</code> 作为父组件，在有 <code>linked</code> 子组建时更新下属性 <code>custom</code> 的值，作为是否使用自定义的行结构的标识。 <code>item</code> 作为子组件，在 <code>linked</code> 时保存父组件的引用，这样可以在有点击事件时调用对应的父组件里的方法。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// index.js</span></span><br><span class="line">relations: &#123;</span><br><span class="line">  <span class="string">'./item'</span>: &#123;</span><br><span class="line">    type: <span class="string">'child'</span>, <span class="comment">// 关联的目标节点应为子节点</span></span><br><span class="line">    linked: <span class="function"><span class="keyword">function</span> (<span class="params">target</span>) </span>&#123;</span><br><span class="line">      <span class="comment">// 每次有item被插入时执行，target是该节点实例对象，触发在该节点attached生命周期之后</span></span><br><span class="line">      <span class="keyword">if</span> (!<span class="keyword">this</span>.data.custom) &#123;</span><br><span class="line">        <span class="keyword">this</span>.setData(&#123;</span><br><span class="line">          custom: <span class="literal">true</span></span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    linkChanged: <span class="function"><span class="keyword">function</span> (<span class="params">target</span>) </span>&#123;</span><br><span class="line">      <span class="comment">// 每次有custom-li被移动后执行，target是该节点实例对象，触发在该节点moved生命周期之后</span></span><br><span class="line">    &#125;,</span><br><span class="line">    unlinked: <span class="function"><span class="keyword">function</span> (<span class="params">target</span>) </span>&#123;</span><br><span class="line">      <span class="comment">// 每次有custom-li被移除时执行，target是该节点实例对象，触发在该节点detached生命周期之后</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// item.js</span></span><br><span class="line">relations: &#123;</span><br><span class="line">  <span class="string">'./index'</span>: &#123;</span><br><span class="line">    type: <span class="string">'parent'</span>, <span class="comment">// 关联的目标节点应为父节点</span></span><br><span class="line">    linked: <span class="function"><span class="keyword">function</span> (<span class="params">target</span>) </span>&#123;</span><br><span class="line">      <span class="comment">// 每次被插入到custom-ul时执行，target是custom-ul节点实例对象，触发在attached生命周期之后</span></span><br><span class="line">      <span class="keyword">this</span>.parent = target;</span><br><span class="line">    &#125;,</span><br><span class="line">    linkChanged: <span class="function"><span class="keyword">function</span> (<span class="params">target</span>) </span>&#123;</span><br><span class="line">      <span class="comment">// 每次被移动后执行，target是custom-ul节点实例对象，触发在moved生命周期之后</span></span><br><span class="line">    &#125;,</span><br><span class="line">    unlinked: <span class="function"><span class="keyword">function</span> (<span class="params">target</span>) </span>&#123;</span><br><span class="line">      <span class="comment">// 每次被移除时执行，target是custom-ul节点实例对象，触发在detached生命周期之后</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line"><span class="comment">// methods</span></span><br><span class="line">_onTapPickerItem: <span class="function"><span class="keyword">function</span> (<span class="params">target</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.parent) &#123;</span><br><span class="line">    <span class="keyword">this</span>.parent.handleTapItem &amp;&amp; <span class="keyword">this</span>.parent.handleTapItem(<span class="keyword">this</span>.data.key);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.triggerEvent(<span class="string">'select'</span>, &#123;</span><br><span class="line">      key: <span class="keyword">this</span>.data.key</span><br><span class="line">    &#125;, &#123;&#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>修改下 <code>index.wxml</code> 的结构。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- index.wxml --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">scroll-view</span> <span class="attr">wx:if</span>=<span class="string">"&#123;&#123;!custom&#125;&#125;"</span> <span class="attr">class</span>=<span class="string">'scroll'</span> <span class="attr">style</span>=<span class="string">"height: &#123;&#123;containerHeight&#125;&#125;;"</span> <span class="attr">scroll-y</span> <span class="attr">scroll-into-view</span>=<span class="string">"&#123;&#123;defaultView&#125;&#125;"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">item</span> <span class="attr">id</span>=<span class="string">"&#123;&#123;'into-' + index&#125;&#125;"</span> <span class="attr">wx:for</span>=<span class="string">"&#123;&#123;items&#125;&#125;"</span> <span class="attr">wx:key</span>=<span class="string">"&#123;&#123;item.name&#125;&#125;"</span> <span class="attr">key</span>=<span class="string">"&#123;&#123;index&#125;&#125;"</span> <span class="attr">bindselect</span>=<span class="string">"onTapPickerItem"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">template</span> <span class="attr">is</span>=<span class="string">"default-item"</span> <span class="attr">data</span>=<span class="string">"&#123;&#123; choose: item.choose, title: item.name&#125;&#125;"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">scroll-view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">scroll-view</span> <span class="attr">wx:if</span>=<span class="string">"&#123;&#123;custom&#125;&#125;"</span> <span class="attr">class</span>=<span class="string">'scroll'</span> <span class="attr">style</span>=<span class="string">"height: &#123;&#123;containerHeight&#125;&#125;;"</span> <span class="attr">scroll-y</span> <span class="attr">scroll-into-view</span>=<span class="string">"&#123;&#123;defaultView&#125;&#125;"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">slot</span>&gt;</span><span class="tag">&lt;/<span class="name">slot</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">scroll-view</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="使用自定义组件"><a href="#使用自定义组件" class="headerlink" title="使用自定义组件"></a>使用自定义组件</h2><p>在页面中使用自定义组件，首先在 <code>.json</code> 添加文件中引用：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"usingComponents"</span>: &#123;</span><br><span class="line">    <span class="attr">"picker"</span>: <span class="string">"/components/picker/index"</span>,</span><br><span class="line">    // 如果需要自定义行结构就添加 item</span><br><span class="line">    "picker-item": "/components/picker/item"</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">Page(&#123;</span><br><span class="line">  data: &#123;</span><br><span class="line">    visible: <span class="literal">false</span>,</span><br><span class="line">    items: [</span><br><span class="line">      &#123; <span class="attr">name</span>: <span class="string">'1'</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">name</span>: <span class="string">'2'</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">name</span>: <span class="string">'3'</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">name</span>: <span class="string">'4'</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">name</span>: <span class="string">'5'</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">name</span>: <span class="string">'6'</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">name</span>: <span class="string">'7'</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">name</span>: <span class="string">'8'</span> &#125;,</span><br><span class="line">    ],</span><br><span class="line">    current: []</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  onTapShowActionSheet: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.setData(&#123;</span><br><span class="line">      visible: <span class="literal">true</span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  onChangeSelect: <span class="function"><span class="keyword">function</span> (<span class="params">target</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.setData(&#123;</span><br><span class="line">      current: target.detail.current,</span><br><span class="line">      items: target.detail.items</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--index.wxml--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">bindtap</span>=<span class="string">'onTapShowActionSheet'</span>&gt;</span>显示ActionSheet<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">picker</span> <span class="attr">show</span>=<span class="string">"&#123;&#123;visible&#125;&#125;"</span> <span class="attr">bindchange</span>=<span class="string">"onChangeSelect"</span> <span class="attr">items</span>=<span class="string">"&#123;&#123;items&#125;&#125;"</span> <span class="attr">current</span>=<span class="string">"&#123;&#123;current&#125;&#125;"</span> <span class="attr">height</span>=<span class="string">"800rpx"</span> <span class="attr">multiple</span>&gt;</span></span><br><span class="line">     <span class="comment">&lt;!-- 如果需要自定义行结构就在这里添加 picker-item --&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">picker-item</span> <span class="attr">id</span>=<span class="string">"into-&#123;&#123;index&#125;&#125;"</span> <span class="attr">wx:for</span>=<span class="string">"&#123;&#123;items&#125;&#125;"</span> <span class="attr">wx:key</span>=<span class="string">"&#123;&#123;index&#125;&#125;"</span> <span class="attr">key</span>=<span class="string">"&#123;&#123;index&#125;&#125;"</span> <span class="attr">cancel-style</span>=<span class="string">'cancel-style'</span> <span class="attr">ok-style</span>=<span class="string">'ok-style'</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">block</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">text</span> <span class="attr">style</span>=<span class="string">"font-size: 40rpx; font-weight: bold; color: &#123;&#123; item.choose ? '#ff0000' : '#939393'&#125;&#125;"</span>&gt;</span>自定义-&#123;&#123;item.name&#125;&#125;<span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">text</span> <span class="attr">style</span>=<span class="string">"font-size: 40rpx; font-weight: bold; color: &#123;&#123; item.choose ? '#00ff00' : '#939393'&#125;&#125;"</span>&gt;</span>自定义-&#123;&#123;item.name&#125;&#125;<span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">text</span> <span class="attr">style</span>=<span class="string">"font-size: 40rpx; font-weight: bold; color: &#123;&#123; item.choose ? '#0000ff' : '#939393'&#125;&#125;"</span>&gt;</span>自定义-&#123;&#123;item.name&#125;&#125;<span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">block</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">picker-item</span>&gt;</span> </span><br><span class="line">    <span class="comment">&lt;!-- 如果需要自定义行结构就在这里添加 picker-item --&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">picker</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>使用效果如下：</p>
+<p><img src="http://qiniu.0x0803.top/image/blog/2/8.gif_gif" alt><br><img src="http://qiniu.0x0803.top/image/blog/2/7.gif_gif" alt></p>
+<p>到这里的话，自定义的 <code>picker-view</code> 已经基本满足项目的需求了。不过还是有一些细节需要完善。想想也是头疼，在通用性和个性化之间想要平衡好还是很麻烦的。需要花费时间在实际应用中不断完善，最终才能打造出一套符合公司使用的组件库。不过在小公司大部分项目都在不久之后就停掉了，希望小程序这个项目能从 1.0.0 版本开始，坚持下来。</p>
+<p>拖了这么久终于把这篇总结写完了，每次项目结束后都不想总结实践中遇到的问题，哎，懒癌啊~~~</p>
+<p><a href="https://github.com/NoPPT/wx-picker-view" target="_blank" rel="noopener">完整代码在这里，点一下</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    庄彪
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://0x0803.top/2018/04/01/weapp-custom-component-practices/" title="微信小程序自定义组件实践">http://0x0803.top/2018/04/01/weapp-custom-component-practices/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/自定义组件/" rel="tag"># 自定义组件</a>
+          
+            <a href="/tags/微信小程序/" rel="tag"># 微信小程序</a>
+          
+            <a href="/tags/实践/" rel="tag"># 实践</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/04/markdown-table-desc/" rel="next" title="Markdown 中表格使用及常见问题">
+                <i class="fa fa-chevron-left"></i> Markdown 中表格使用及常见问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/10/publishing-npm-packages/" rel="prev" title="上传项目到 npm">
+                上传项目到 npm <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="庄彪">
+            
+              <p class="site-author-name" itemprop="name">庄彪</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/NoPPT" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:1041036986@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建自定义组件"><span class="nav-number">1.</span> <span class="nav-text">创建自定义组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#需求实现"><span class="nav-number">2.</span> <span class="nav-text">需求实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#默认样式和结构"><span class="nav-number">2.1.</span> <span class="nav-text">默认样式和结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打开和关闭"><span class="nav-number">2.2.</span> <span class="nav-text">打开和关闭</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义样式"><span class="nav-number">2.3.</span> <span class="nav-text">自定义样式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单选和多选"><span class="nav-number">2.4.</span> <span class="nav-text">单选和多选</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自动滑动到选中行"><span class="nav-number">2.5.</span> <span class="nav-text">自动滑动到选中行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义行模板"><span class="nav-number">2.6.</span> <span class="nav-text">自定义行模板</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用自定义组件"><span class="nav-number">3.</span> <span class="nav-text">使用自定义组件</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">庄彪</span>
+
+  
+</div>
+
+
+  <div class="powered-by">津ICP备18006909号</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

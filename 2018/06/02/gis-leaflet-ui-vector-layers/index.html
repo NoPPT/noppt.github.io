@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="JavaScript,Leaflet,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="zhuang's blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="上文介绍了如何使用 Leaflet 加载地图，实际使用时我们不仅仅只加载地图，更多的会在地图上添加一些标记，结合聚合渲染等可视化效果，更清晰的呈现标记点的分布态势（比如添加银行网点的位置信息，附近的商圈信息等等）。也可以添加一些矢量图并设置不同的样式以及属性来区分不同的业务片区，更加直观的服务于业务（比如添加不同物流站点的配送信息以及站点的配送区域等等）。这些功能的实现则需要使用到 Leaflet">
+<meta name="keywords" content="JavaScript,Leaflet">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Leaflet 学习系列（三）标记以及矢量图">
+<meta property="og:url" content="http://0x0803.top/2018/06/02/gis-leaflet-ui-vector-layers/index.html">
+<meta property="og:site_name" content="zhuang&#39;s blog">
+<meta property="og:description" content="上文介绍了如何使用 Leaflet 加载地图，实际使用时我们不仅仅只加载地图，更多的会在地图上添加一些标记，结合聚合渲染等可视化效果，更清晰的呈现标记点的分布态势（比如添加银行网点的位置信息，附近的商圈信息等等）。也可以添加一些矢量图并设置不同的样式以及属性来区分不同的业务片区，更加直观的服务于业务（比如添加不同物流站点的配送信息以及站点的配送区域等等）。这些功能的实现则需要使用到 Leaflet">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://qiniu.0x0803.top/leaflet/7.png_blog">
+<meta property="og:image" content="http://qiniu.0x0803.top/leaflet/7.gif_gif">
+<meta property="og:updated_time" content="2019-10-11T07:00:46.699Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Leaflet 学习系列（三）标记以及矢量图">
+<meta name="twitter:description" content="上文介绍了如何使用 Leaflet 加载地图，实际使用时我们不仅仅只加载地图，更多的会在地图上添加一些标记，结合聚合渲染等可视化效果，更清晰的呈现标记点的分布态势（比如添加银行网点的位置信息，附近的商圈信息等等）。也可以添加一些矢量图并设置不同的样式以及属性来区分不同的业务片区，更加直观的服务于业务（比如添加不同物流站点的配送信息以及站点的配送区域等等）。这些功能的实现则需要使用到 Leaflet">
+<meta name="twitter:image" content="http://qiniu.0x0803.top/leaflet/7.png_blog">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"搜索博客","hits_empty":"没有找到匹配项: ${query}","hits_stats":"${time} ms 内找到 ${hits} 符合条件的内容"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://0x0803.top/2018/06/02/gis-leaflet-ui-vector-layers/">
+
+
+
+
+
+  <title>Leaflet 学习系列（三）标记以及矢量图 | zhuang's blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7cda0beda6b0c3a7002a11bfb03df138";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zhuang's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">小庄先生呢</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://0x0803.top/2018/06/02/gis-leaflet-ui-vector-layers/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="庄彪">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhuang's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Leaflet 学习系列（三）标记以及矢量图</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-02T08:34:52+00:00">
+                2018-06-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/GIS/" itemprop="url" rel="index">
+                    <span itemprop="name">GIS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="/2018/05/27/gis-leaflet-tutorials-map-layer/">上文</a>介绍了如何使用 Leaflet 加载地图，实际使用时我们不仅仅只加载地图，更多的会在地图上添加一些标记，结合聚合渲染等可视化效果，更清晰的呈现标记点的分布态势（比如添加银行网点的位置信息，附近的商圈信息等等）。也可以添加一些矢量图并设置不同的样式以及属性来区分不同的业务片区，更加直观的服务于业务（比如添加不同物流站点的配送信息以及站点的配送区域等等）。这些功能的实现则需要使用到 Leaflet 提供的 UI Layers 和 Vector Layers。</p>
+<p>UI Layers 中提供的类有：</p>
+<ul>
+<li><a href="https://leafletjs.com/reference-1.0.3.html#marker" target="_blank" rel="noopener">Marker</a> 用于在地图上添加可点击和移动的图标</li>
+<li><a href="https://leafletjs.com/reference-1.0.3.html#popup" target="_blank" rel="noopener">Popup</a> 用于在地图的某个点打开弹出窗口</li>
+<li><a href="https://leafletjs.com/reference-1.0.3.html#tooltip" target="_blank" rel="noopener">Tooltip</a> 用于在地图的某个点显示少量文字</li>
+</ul>
+<a id="more"></a>
+<p>Vector Layers 中常用的类有：</p>
+<ul>
+<li><a href="https://leafletjs.com/reference-1.0.3.html#polyline" target="_blank" rel="noopener">Polyline</a> 用于在地图上绘制折线</li>
+<li><a href="https://leafletjs.com/reference-1.0.3.html#polygon" target="_blank" rel="noopener">Polygon</a> 用于在地图上绘制多边形</li>
+<li><a href="https://leafletjs.com/reference-1.0.3.html#circle" target="_blank" rel="noopener">Circle</a> 用于在地图上绘制圆</li>
+</ul>
+<p>接下来我们就使用这些类来实现一些简单的功能。</p>
+<h2 id="Marker"><a href="#Marker" class="headerlink" title="Marker"></a>Marker</h2><h3 id="初始化方法"><a href="#初始化方法" class="headerlink" title="初始化方法"></a>初始化方法</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">L.marker(&lt;LatLng&gt; latlng, &lt;Marker options&gt; options?)</span><br><span class="line"></span><br><span class="line">// 更多 options 可选属性，以及默认值</span><br><span class="line">L.marker(latlng, &#123;</span><br><span class="line">    icon: L.Icon.Default, // 默认值为 L.Icon.Default，可使用 L.icon() 自定义图标</span><br><span class="line">    draggable: false, // 设置为 true 可鼠标点击后拖动</span><br><span class="line">    keyboard: true, // 是否可以在点击标记后，按键盘按键制表，即在标记周围显示选中框</span><br><span class="line">    title: '', // 鼠标悬停在标记上是浏览器工具提示的文本</span><br><span class="line">    alt: '', // 图标图像的 alt 属性文本</span><br><span class="line">    zIndexOffset: 0, // 默认情况下根据经纬度自动显示标记的层级，设置的值越高，则显示在比其值低的标记上面</span><br><span class="line">    opacity: 1.0, // 透明度</span><br><span class="line">    riseOnHover: false, // 设置为 true 时在鼠标在移动到标记上时自动显示在最顶层</span><br><span class="line">    riseOffset: 250, // riseOnHover 对应的 z-index 偏移量</span><br><span class="line">    pane: 'markerPane', // 标记将添加到 map 对应的 pane 上</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>基本使用例子，调用初始化方法，并设置其经纬度，然后添加到地图上。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> marker = L.marker([<span class="number">31.23037</span>, <span class="number">121.4737</span>]).addTo(mymap);</span><br></pre></td></tr></table></figure>
+<h3 id="自定义标记"><a href="#自定义标记" class="headerlink" title="自定义标记"></a>自定义标记</h3><p>如果想要自定义标记显示的样式，可以设置 options 中的 icon 属性为自定义图标 <a href="https://leafletjs.com/reference-1.0.3.html#icon" target="_blank" rel="noopener">L.Icon</a>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> icon = L.icon(&#123;</span><br><span class="line">  iconUrl: <span class="string">"./images/apple-touch-icon-next.png"</span>,</span><br><span class="line">  iconSize: [<span class="number">60</span>, <span class="number">60</span>],</span><br><span class="line">  iconAnchor: [<span class="number">30</span>, <span class="number">30</span>]</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> customMarker = L.marker([<span class="number">31.23037</span>, <span class="number">121.4837</span>], &#123;</span><br><span class="line">  icon</span><br><span class="line">&#125;).addTo(mymap);</span><br></pre></td></tr></table></figure>
+<h2 id="Path"><a href="#Path" class="headerlink" title="Path"></a>Path</h2><p>一个抽象类，虽然我们不会直接使用 <a href="https://leafletjs.com/reference-1.0.3.html#path" target="_blank" rel="noopener">Path</a>，但它包含矢量图（多边形、折线、圆）之间共用的 <code>options</code> 和 <code>constants</code>。所以我们需要知道这些常用选项有哪些，方便自定义矢量图的样式。</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>类型</th>
+<th>默认值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>stroke</td>
+<td>Boolean</td>
+<td>true</td>
+<td>是否绘制路径描边，设置为 false 禁用多边形和圆的边框</td>
+</tr>
+<tr>
+<td>color</td>
+<td>String</td>
+<td>‘#3388ff’</td>
+<td>描边颜色</td>
+</tr>
+<tr>
+<td>weight</td>
+<td>Number</td>
+<td>3</td>
+<td>描边的宽度，单位像素 px</td>
+</tr>
+<tr>
+<td>opacity</td>
+<td>Number</td>
+<td>1.0</td>
+<td>描边的透明度</td>
+</tr>
+<tr>
+<td>lineCap</td>
+<td>String</td>
+<td>‘round’</td>
+<td>路径线结束处的样式</td>
+</tr>
+<tr>
+<td>lineJoin</td>
+<td>String</td>
+<td>‘round’</td>
+<td>两条路径线相交处的样式</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>setStyle(<path options> style)</path></td>
+<td>更改路径的外观</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://leafletjs.com/reference-1.0.3.html#path" target="_blank" rel="noopener">更多选项和方法</a></p>
+<h2 id="Polyline"><a href="#Polyline" class="headerlink" title="Polyline"></a>Polyline</h2><p>扩展 Path 类用于绘制线。</p>
+<h3 id="初始化方法-1"><a href="#初始化方法-1" class="headerlink" title="初始化方法"></a>初始化方法</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">L.polyline(&lt;LatLng[]&gt; latlngs, &lt;Polyline options&gt; options?)</span><br></pre></td></tr></table></figure>
+<h3 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>返回值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>toGeoJSON()</td>
+<td>Object</td>
+<td>返回 GeoJSON 类型数据</td>
+</tr>
+<tr>
+<td>isEmpty()</td>
+<td>Boolean</td>
+<td>返回该折线是否有经纬度信息</td>
+</tr>
+<tr>
+<td>addLatLng(<latlng> latlng)</latlng></td>
+<td>this</td>
+<td>在折线上增加到该点的路径</td>
+</tr>
+<tr>
+<td>getLatLngs()</td>
+<td>LatLng[]</td>
+<td>返回折线上点的信息</td>
+</tr>
+<tr>
+<td>setLatLngs(&lt;LatLng[]&gt; latlngs)</td>
+<td>this</td>
+<td>重置折线所有点</td>
+</tr>
+<tr>
+<td>getCenter()</td>
+<td>LatLng</td>
+<td>返回该线的中心点</td>
+</tr>
+</tbody>
+</table>
+<h3 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> latlngs = [</span><br><span class="line">  [<span class="number">31.23337</span>, <span class="number">121.4737</span>],</span><br><span class="line">  [<span class="number">31.23437</span>, <span class="number">121.4747</span>],</span><br><span class="line">  [<span class="number">31.23537</span>, <span class="number">121.4727</span>]</span><br><span class="line">];</span><br><span class="line"><span class="keyword">var</span> polyline = L.polyline(latlngs, &#123; <span class="attr">color</span>: <span class="string">"red"</span> &#125;).addTo(mymap);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> polylineCenter = polyline.getCenter();</span><br></pre></td></tr></table></figure>
+<h2 id="Polygon"><a href="#Polygon" class="headerlink" title="Polygon"></a>Polygon</h2><p>扩展 Polyline 类，用于绘制多边形，在创建多边形时传入的点中最后一个点不应该等于第一个点。</p>
+<h3 id="初始化方法-2"><a href="#初始化方法-2" class="headerlink" title="初始化方法"></a>初始化方法</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">L.polygon(&lt;LatLng[]&gt; latlngs, &lt;Polyline options&gt; options?)</span><br></pre></td></tr></table></figure>
+<h3 id="使用-2"><a href="#使用-2" class="headerlink" title="使用"></a>使用</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> latlngs = [</span><br><span class="line">  [<span class="number">31.23437</span>, <span class="number">121.4757</span>],</span><br><span class="line">  [<span class="number">31.23537</span>, <span class="number">121.4757</span>],</span><br><span class="line">  [<span class="number">31.23637</span>, <span class="number">121.4747</span>],</span><br><span class="line">  [<span class="number">31.23737</span>, <span class="number">121.4787</span>]</span><br><span class="line">];</span><br><span class="line"><span class="keyword">var</span> polygon = L.polygon(latlngs, &#123; <span class="attr">color</span>: <span class="string">"blue"</span> &#125;).addTo(mymap);</span><br></pre></td></tr></table></figure>
+<h2 id="Circle"><a href="#Circle" class="headerlink" title="Circle"></a>Circle</h2><h3 id="初始化方法-3"><a href="#初始化方法-3" class="headerlink" title="初始化方法"></a>初始化方法</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">L.circle(&lt;LatLng&gt; latlng, &lt;Circle options&gt; options?)</span><br><span class="line"></span><br><span class="line">// options </span><br><span class="line">&#123;</span><br><span class="line">    radius: Number // 圆的半径，单位米，必须</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="常用方法-1"><a href="#常用方法-1" class="headerlink" title="常用方法"></a>常用方法</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>返回值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>setRadius(<number> radius)</number></td>
+<td>this</td>
+<td>设置圆的半径</td>
+</tr>
+<tr>
+<td>getRadius()</td>
+<td>Number</td>
+<td>获取圆的半径</td>
+</tr>
+<tr>
+<td>getBounds()</td>
+<td>LatLngBounds</td>
+<td>返回圆在地图上显示的地理区域</td>
+</tr>
+</tbody>
+</table>
+<h3 id="使用-3"><a href="#使用-3" class="headerlink" title="使用"></a>使用</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> circle = L.circle([<span class="number">31.22537</span>, <span class="number">121.4727</span>], &#123;</span><br><span class="line">  radius: <span class="number">400</span>,</span><br><span class="line">  color: <span class="string">"#2af"</span></span><br><span class="line">&#125;).addTo(mymap);</span><br></pre></td></tr></table></figure>
+<h2 id="Popup"><a href="#Popup" class="headerlink" title="Popup"></a>Popup</h2><p>用于在地图的某些地方打开弹出窗口。</p>
+<h3 id="初始化方法-4"><a href="#初始化方法-4" class="headerlink" title="初始化方法"></a>初始化方法</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">L.popup(&lt;Popup options&gt; options?, &lt;Layer&gt; source?)</span><br></pre></td></tr></table></figure>
+<h3 id="常用方法-2"><a href="#常用方法-2" class="headerlink" title="常用方法"></a>常用方法</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>返回值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>setLatLng(<latlng> latlng)</latlng></td>
+<td>this</td>
+<td>设置popup在某点上打开</td>
+</tr>
+<tr>
+<td>setContent(htmlContent)</td>
+<td>this</td>
+<td>设置弹框的内容</td>
+</tr>
+<tr>
+<td>openOn(<map> map)</map></td>
+<td>this</td>
+<td>在地图上打开弹框并关闭上一个显示的弹框</td>
+</tr>
+<tr>
+<td>openPopup(<latlng> latlng?)</latlng></td>
+<td>this</td>
+<td>打开弹框</td>
+</tr>
+<tr>
+<td>closePopup()</td>
+<td>this</td>
+<td>关闭弹框</td>
+</tr>
+<tr>
+<td>bindPopup(content, <popup options> options?)</popup></td>
+<td>this</td>
+<td>绑定弹框到某图层对象</td>
+</tr>
+<tr>
+<td>unbindPopup()</td>
+<td>this</td>
+<td>解绑</td>
+</tr>
+</tbody>
+</table>
+<h3 id="使用-4"><a href="#使用-4" class="headerlink" title="使用"></a>使用</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> popup = L.popup()</span><br><span class="line">  .setLatLng([<span class="number">31.23037</span>, <span class="number">121.4637</span>])</span><br><span class="line">  .setContent(<span class="string">"&lt;p&gt;Hello world!&lt;br /&gt;This is a nice popup.&lt;/p&gt;"</span>)</span><br><span class="line">  .openOn(mymap);</span><br></pre></td></tr></table></figure>
+<h2 id="Tooltip"><a href="#Tooltip" class="headerlink" title="Tooltip"></a>Tooltip</h2><p>用于在地图的某个点显示少量文字</p>
+<h3 id="初始化方法-5"><a href="#初始化方法-5" class="headerlink" title="初始化方法"></a>初始化方法</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">L.tooltip(&lt;Tooltip options&gt; options?, &lt;Layer&gt; source?)</span><br></pre></td></tr></table></figure>
+<h3 id="使用-5"><a href="#使用-5" class="headerlink" title="使用"></a>使用</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">marker.bindTooltip(<span class="string">"my tooltip text"</span>).openTooltip();</span><br></pre></td></tr></table></figure>
+<p>上述代码添加后的效果如图所示：</p>
+<p><img src="http://qiniu.0x0803.top/leaflet/7.png_blog" alt></p>
+<h2 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h2><p>上述只是介绍了这些类的基本使用方法，正如文章开头所述，标记往往需要结合聚合渲染等可视化效果来呈现标记点的分布态势。而矢量图也需要我们手动去设置区域的关键点信息的话又不是很方便，所以希望能够在地图上画出不同的区域。接下来就看下如果实现矢量图的绘制编辑，以及点聚合的效果。</p>
+<h3 id="绘制编辑"><a href="#绘制编辑" class="headerlink" title="绘制编辑"></a>绘制编辑</h3><p>首先我们需要了解几个插件，分别是 <a href="https://github.com/Leaflet/Leaflet.draw" target="_blank" rel="noopener">Leaflet.draw</a>、<a href="https://github.com/Leaflet/Leaflet.Editable" target="_blank" rel="noopener">Leaflet.Editable</a>、<a href="https://github.com/makinacorpus/Leaflet.GeometryUtil" target="_blank" rel="noopener">Leaflet.GeometryUtil</a> 和 <a href="https://github.com/makinacorpus/Leaflet.Snap" target="_blank" rel="noopener">Leaflet.Snap</a>。其中 Leaflet.draw、Leaflet.Editable 都提供了矢量图的绘制以及编辑功能，Leaflet.draw 同时提供了一些 UI 控件，而 Leaflet.Editable 只提供了一些 API，使用起来更加灵活。Leaflet.GeometryUtil 提供了一些 API 用于计算几何之间的关系，配合使用 Leaflet.Snap 可以实现在编辑几何图形时捕捉关键点并吸附的功能。</p>
+<h4 id="下载源文件并引用"><a href="#下载源文件并引用" class="headerlink" title="下载源文件并引用"></a>下载源文件并引用</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">"/path/to/leaflet.geometryutil.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line">&lt;script src=<span class="string">"/path/to/Leaflet.Editable.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line">&lt;script src=<span class="string">"/path/to/leaflet.snap.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<h4 id="绘制"><a href="#绘制" class="headerlink" title="绘制"></a>绘制</h4><p>修改 <code>mymap</code> 初始化方法，增加 <code>editable</code> 属性为 <code>true</code><br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> mymap = L.map(<span class="string">'mapid'</span>, &#123;</span><br><span class="line">    editable: <span class="literal">true</span></span><br><span class="line">&#125;).setView([<span class="number">31.23037</span>, <span class="number">121.47370</span>], <span class="number">15</span>);</span><br></pre></td></tr></table></figure></p>
+<p>然后在控件的点击事件中增加以下代码，根据需求分别调用不同的 API 即可。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 开始画线</span></span><br><span class="line">mymap.editTools.startPolyline();</span><br><span class="line"><span class="comment">// 开始画多边形</span></span><br><span class="line">mymap.editTools.startPolygon();</span><br><span class="line"><span class="comment">// 开始添加标注</span></span><br><span class="line">mymap.editTools.startMarker();</span><br><span class="line"><span class="comment">// 开始画矩形</span></span><br><span class="line">mymap.editTools.startRectangle();</span><br><span class="line"><span class="comment">// 开始画圆</span></span><br><span class="line">mymap.editTools.startCircle();</span><br></pre></td></tr></table></figure>
+<h4 id="编辑"><a href="#编辑" class="headerlink" title="编辑"></a>编辑</h4><p>而如果想要在一个已经完成的几何图形启用编辑功能也很简单，获取该对象并调用以下代码就可以了。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">polyline.enableEdit();</span><br></pre></td></tr></table></figure>
+<h4 id="点吸附"><a href="#点吸附" class="headerlink" title="点吸附"></a>点吸附</h4><p>在编辑状态时如果想要增加点吸附功能的话，则需要使用 Leaflet.Snap 配合 Leaflet.Editable 的编辑状态事件来实现相关功能。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建 snap 显示的方格，并添加计算的 layer，</span></span><br><span class="line"><span class="keyword">var</span> snapMarker = L.marker(map.getCenter(), &#123;</span><br><span class="line">  icon: map.editTools.createVertexIcon(&#123;</span><br><span class="line">    className: <span class="string">"leaflet-div-icon leaflet-drawing-icon"</span></span><br><span class="line">  &#125;),</span><br><span class="line">  opacity: <span class="number">1</span>,</span><br><span class="line">  zIndexOffset: <span class="number">1000</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> snap = <span class="keyword">new</span> L.Handler.MarkerSnap(map);</span><br><span class="line">snap.watchMarker(snapMarker);</span><br><span class="line"><span class="comment">// 如果符合可吸附的规则，则添加辅助标记到地图上，不符合则移除。</span></span><br><span class="line">snapMarker.on(<span class="string">"snap"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  snapMarker.addTo(map);</span><br><span class="line">&#125;);</span><br><span class="line">snapMarker.on(<span class="string">"unsnap"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  snapMarker.remove();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在编辑状态更改时修改 snap 参考的 layer,</span></span><br><span class="line"><span class="keyword">var</span> followMouse = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">  snapMarker.setLatLng(e.latlng);</span><br><span class="line">&#125;;</span><br><span class="line">mymap.on(<span class="string">"editable:vertex:dragstart"</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">  snap.watchMarker(e.vertex);</span><br><span class="line">&#125;);</span><br><span class="line">mymap.on(<span class="string">"editable:vertex:dragend"</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">  snap.unwatchMarker(e.vertex);</span><br><span class="line">&#125;);</span><br><span class="line">mymap.on(<span class="string">"editable:drawing:start"</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.on(<span class="string">"mousemove"</span>, followMouse);</span><br><span class="line">&#125;);</span><br><span class="line">mymap.on(<span class="string">"editable:drawing:end"</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.off(<span class="string">"mousemove"</span>, followMouse);</span><br><span class="line">  snapMarker.remove();</span><br><span class="line">  snap.addGuideLayer(e.layer);</span><br><span class="line">  e.layer.disableEdit();</span><br><span class="line">&#125;);</span><br><span class="line">mymap.on(<span class="string">"editable:drawing:click"</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="comment">//当处于新增状态是触发</span></span><br><span class="line">  <span class="keyword">var</span> latlng = snapMarker.getLatLng();</span><br><span class="line">  e.latlng.lat = latlng.lat;</span><br><span class="line">  e.latlng.lng = latlng.lng;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="点聚合"><a href="#点聚合" class="headerlink" title="点聚合"></a>点聚合</h3><p>使用 <a href="https://github.com/Leaflet/Leaflet.markercluster" target="_blank" rel="noopener">Leaflet.markercluster</a> 可以很方便的让我们做出点聚合的效果。</p>
+<h4 id="下载文件并引用"><a href="#下载文件并引用" class="headerlink" title="下载文件并引用"></a>下载文件并引用</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;link rel=<span class="string">"stylesheet"</span> href=<span class="string">"path/to/MarkerCluster.css"</span> /&gt;</span><br><span class="line">&lt;link rel=<span class="string">"stylesheet"</span> href=<span class="string">"path/to/MarkerCluster.Default.css"</span> /&gt;</span><br><span class="line">&lt;script src=<span class="string">"path/to/leaflet.markercluster.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<h4 id="添加标记"><a href="#添加标记" class="headerlink" title="添加标记"></a>添加标记</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 生成点聚合对象</span></span><br><span class="line"><span class="keyword">var</span> markers = L.markerClusterGroup();</span><br><span class="line"></span><br><span class="line"><span class="comment">// addressPoints 数据结构可根据实际情况组织，主要是为了方便生成标记</span></span><br><span class="line"><span class="comment">// 生成 marker 对象并添加到标记群组对象里面</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; addressPoints.length; i++) &#123;</span><br><span class="line">  <span class="keyword">var</span> a = addressPoints[i];</span><br><span class="line">  <span class="keyword">var</span> title = a[<span class="number">2</span>];</span><br><span class="line">  <span class="keyword">var</span> marker = L.marker(<span class="keyword">new</span> L.LatLng(a[<span class="number">0</span>], a[<span class="number">1</span>]), &#123; <span class="attr">title</span>: title &#125;);</span><br><span class="line">  marker.bindPopup(title);</span><br><span class="line">  markers.addLayer(marker);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// markers 添加到地图上</span></span><br><span class="line">mymap.addLayer(markers);</span><br></pre></td></tr></table></figure>
+<h2 id="实际效果"><a href="#实际效果" class="headerlink" title="实际效果"></a>实际效果</h2><p>你可以在这里查看<a href="/leaflet.html">完整 Demo</a></p>
+<p><img src="http://qiniu.0x0803.top/leaflet/7.gif_gif" alt></p>
+<p>以上就是关于标记以及矢量图使用的一些总结了，主要介绍了一些类的基础知识和常用方法，以及如何使用三方插件实现一些简单的需求场景，但是我们发现到这里除了使用官方 API 就是使用三方插件，我们自己几乎没有写什么代码，虽然 Leaflet 相关的插件足以满足大部分需求，但是如果只是简单调用 API 的话，那么我们做的东西价值极低，对自身的进步也没有什么提升。想要实现更高级的东西往往需要我们自定义一些插件，接下来就学一下怎么实现自定义插件。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    庄彪
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://0x0803.top/2018/06/02/gis-leaflet-ui-vector-layers/" title="Leaflet 学习系列（三）标记以及矢量图">http://0x0803.top/2018/06/02/gis-leaflet-ui-vector-layers/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/Leaflet/" rel="tag"># Leaflet</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/27/gis-leaflet-tutorials-map-layer/" rel="next" title="Leaflet 学习系列（二）加载地图">
+                <i class="fa fa-chevron-left"></i> Leaflet 学习系列（二）加载地图
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/05/gis-leaflet-tutorials-extends/" rel="prev" title="Leaflet 学习系列（四）如何写插件理论篇">
+                Leaflet 学习系列（四）如何写插件理论篇 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="庄彪">
+            
+              <p class="site-author-name" itemprop="name">庄彪</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/NoPPT" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:1041036986@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Marker"><span class="nav-number">1.</span> <span class="nav-text">Marker</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化方法"><span class="nav-number">1.1.</span> <span class="nav-text">初始化方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用"><span class="nav-number">1.2.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义标记"><span class="nav-number">1.3.</span> <span class="nav-text">自定义标记</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Path"><span class="nav-number">2.</span> <span class="nav-text">Path</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Polyline"><span class="nav-number">3.</span> <span class="nav-text">Polyline</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化方法-1"><span class="nav-number">3.1.</span> <span class="nav-text">初始化方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用方法"><span class="nav-number">3.2.</span> <span class="nav-text">常用方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-1"><span class="nav-number">3.3.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Polygon"><span class="nav-number">4.</span> <span class="nav-text">Polygon</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化方法-2"><span class="nav-number">4.1.</span> <span class="nav-text">初始化方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-2"><span class="nav-number">4.2.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Circle"><span class="nav-number">5.</span> <span class="nav-text">Circle</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化方法-3"><span class="nav-number">5.1.</span> <span class="nav-text">初始化方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用方法-1"><span class="nav-number">5.2.</span> <span class="nav-text">常用方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-3"><span class="nav-number">5.3.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Popup"><span class="nav-number">6.</span> <span class="nav-text">Popup</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化方法-4"><span class="nav-number">6.1.</span> <span class="nav-text">初始化方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用方法-2"><span class="nav-number">6.2.</span> <span class="nav-text">常用方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-4"><span class="nav-number">6.3.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tooltip"><span class="nav-number">7.</span> <span class="nav-text">Tooltip</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化方法-5"><span class="nav-number">7.1.</span> <span class="nav-text">初始化方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-5"><span class="nav-number">7.2.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进阶"><span class="nav-number">8.</span> <span class="nav-text">进阶</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#绘制编辑"><span class="nav-number">8.1.</span> <span class="nav-text">绘制编辑</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#下载源文件并引用"><span class="nav-number">8.1.1.</span> <span class="nav-text">下载源文件并引用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#绘制"><span class="nav-number">8.1.2.</span> <span class="nav-text">绘制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编辑"><span class="nav-number">8.1.3.</span> <span class="nav-text">编辑</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#点吸附"><span class="nav-number">8.1.4.</span> <span class="nav-text">点吸附</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#点聚合"><span class="nav-number">8.2.</span> <span class="nav-text">点聚合</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#下载文件并引用"><span class="nav-number">8.2.1.</span> <span class="nav-text">下载文件并引用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加标记"><span class="nav-number">8.2.2.</span> <span class="nav-text">添加标记</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实际效果"><span class="nav-number">9.</span> <span class="nav-text">实际效果</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">庄彪</span>
+
+  
+</div>
+
+
+  <div class="powered-by">津ICP备18006909号</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

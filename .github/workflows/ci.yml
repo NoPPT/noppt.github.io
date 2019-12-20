@@ -21,4 +21,7 @@ jobs:
             ls -al
             hexo clean
             hexo generate
+            rm -rf /usr/share/nginx/html/blog/
             cp -r ./public/ /usr/share/nginx/html/blog/
+            cd /usr/share/nginx/html/blog/
+            ls -al

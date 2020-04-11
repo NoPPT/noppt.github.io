@@ -46,7 +46,7 @@ page:
   tags: 标签
 
 footer:
-  powered: "津ICP备18006909号"
+  powered: "<a class=\"theme-link\" target=\"_blank\" href=\"http://www.beian.miit.gov.cn\">津ICP备18006909号-1</a>"
   theme: 主题
 
 counter:
